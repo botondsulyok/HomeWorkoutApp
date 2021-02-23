@@ -3,4 +3,5 @@
     <string name="title_workouts">Workouts</string>
     <string name="title_exercises">Exercises</string>
     <string name="title_plans">Plans</string>
+    <string name="menu_settings">Settings</string>
 </resources>
