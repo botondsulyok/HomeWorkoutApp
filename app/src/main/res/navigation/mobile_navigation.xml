@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_workouts">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="hu.bme.aut.android.homeworkoutapp.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_workouts"
+        android:name="hu.bme.aut.android.homeworkoutapp.ui.workouts.WorkoutsFragment"
+        android:label="@string/title_workouts"
+        tools:layout="@layout/fragment_workouts" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="hu.bme.aut.android.homeworkoutapp.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_exercises"
+        android:name="hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesFragment"
+        android:label="@string/title_exercises"
+        tools:layout="@layout/fragment_exercises" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="hu.bme.aut.android.homeworkoutapp.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_plans"
+        android:name="hu.bme.aut.android.homeworkoutapp.ui.plans.PlansFragment"
+        android:label="@string/title_plans"
+        tools:layout="@layout/fragment_plans" />
 </navigation>

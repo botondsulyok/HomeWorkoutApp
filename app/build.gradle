@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -39,8 +41,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.navigation:navigation-fragment:2.3.3'
-    implementation 'androidx.navigation:navigation-ui:2.3.3'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
@@ -48,4 +50,15 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //rainbowcake
+    implementation "co.zsmb:rainbow-cake-core:1.3.0"
+    implementation "co.zsmb:rainbow-cake-dagger:1.3.0"
+
+    //dagger
+    implementation 'com.google.dagger:dagger:2.32'
+    kapt 'com.google.dagger:dagger-compiler:2.32'
+
+
+
 }
