@@ -5,6 +5,7 @@ import co.zsmb.rainbowcake.dagger.ViewModelKey
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import hu.bme.aut.android.homeworkoutapp.ui.welcome.WelcomeViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.WorkoutsViewModel
 
 @Module
@@ -14,5 +15,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(WorkoutsViewModel::class)
     abstract fun bindWorkoutsViewModel(workoutsViewModel: WorkoutsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(WelcomeViewModel::class)
+    abstract fun bindWelcomeViewModel(welcomeViewModel: WelcomeViewModel): ViewModel
 
 }

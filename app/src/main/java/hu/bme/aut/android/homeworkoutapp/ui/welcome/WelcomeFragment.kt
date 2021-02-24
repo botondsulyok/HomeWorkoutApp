@@ -1,18 +1,19 @@
 package hu.bme.aut.android.homeworkoutapp.ui.welcome
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import co.zsmb.rainbowcake.base.RainbowCakeFragment
+import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
+import co.zsmb.rainbowcake.extensions.exhaustive
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import hu.bme.aut.android.homeworkoutapp.MainActivity
@@ -20,7 +21,10 @@ import hu.bme.aut.android.homeworkoutapp.databinding.FragmentWelcomeBinding
 import hu.bme.aut.android.homeworkoutapp.utils.Credentials
 
 
-class WelcomeFragment : Fragment() {
+class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>() {
+
+    override fun provideViewModel() = getViewModelFromFactory()
+    override fun getViewResource() = 0
 
     companion object {
         const val RC_SIGN_IN_GOOGLE = 100
@@ -50,16 +54,11 @@ class WelcomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mainActivity = activity as? MainActivity
-
-        mainActivity?.setToolbarAndBottomNavigationViewVisible(false)
     }
 
     override fun onStart() {
         super.onStart()
-        if(auth.currentUser != null) {
-            val action = WelcomeFragmentDirections.actionLogin()
-            findNavController().navigate(action)
-        }
+        viewModel.checkUserLoggedIn()
     }
 
     override fun onDestroyView() {
@@ -76,9 +75,9 @@ class WelcomeFragment : Fragment() {
                 .requestEmail()
                 .build()
 
-            val mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+            val mGoogleSignInClient = mainActivity?.let { it1 -> GoogleSignIn.getClient(it1, gso) }
 
-            val signInIntent = mGoogleSignInClient.signInIntent
+            val signInIntent = mGoogleSignInClient?.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN_GOOGLE)
         }
 
@@ -91,8 +90,8 @@ class WelcomeFragment : Fragment() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
-                Toast.makeText(activity, "Logging in...", Toast.LENGTH_LONG).show()
-                firebaseAuthWithGoogle(account?.idToken.toString())
+                val credential = GoogleAuthProvider.getCredential(account?.idToken.toString(), null)
+                viewModel.loginWithGoogle(credential)
             } catch (e: ApiException) {
                 Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
@@ -100,19 +99,32 @@ class WelcomeFragment : Fragment() {
 
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnSuccessListener {
+    override fun render(viewState: WelcomeViewState) {
+        binding.progressBarWelcome.visibility = View.GONE
+        binding.btnSignInWithGoogle.isEnabled = true
+        when(viewState) {
+            is LoggedOut -> {
+                mainActivity?.setToolbarAndBottomNavigationViewVisible(false)
+            }
+            is LoggingIn -> {
+                binding.progressBarWelcome.visibility = View.VISIBLE
+                binding.btnSignInWithGoogle.isEnabled = false
+            }
+            is LoginFailed -> {
+                AlertDialog.Builder(context)
+                    .setTitle("Authentication Failed")
+                    .setMessage(viewState.message)
+                    .setNeutralButton("OK", null)
+                    .show()
+                return
+            }
+            is LoggedIn -> {
                 mainActivity?.setToolbarAndBottomNavigationViewVisible(true)
                 val action = WelcomeFragmentDirections.actionLogin()
                 findNavController().navigate(action)
             }
-            .addOnFailureListener {
-                Snackbar.make(binding.root, "Authentication Failed", Snackbar.LENGTH_SHORT).show()
-            }
+        }.exhaustive
     }
-
 
 
 }

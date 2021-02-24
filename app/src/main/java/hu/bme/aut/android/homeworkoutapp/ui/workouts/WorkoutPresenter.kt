@@ -1,7 +1,7 @@
 package hu.bme.aut.android.homeworkoutapp.ui.workouts
 
 import co.zsmb.rainbowcake.withIOContext
-import hu.bme.aut.android.homeworkoutapp.domain.interactors.WorkoutsInteractor
+import hu.bme.aut.android.homeworkoutapp.domain.workouts.WorkoutsInteractor
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.Workout
 import kotlinx.coroutines.delay
 import javax.inject.Inject
