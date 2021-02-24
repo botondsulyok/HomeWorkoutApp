@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_workouts">
+    app:startDestination="@+id/navigation_welcome">
 
     <fragment
         android:id="@+id/navigation_workouts"
@@ -22,4 +22,28 @@
         android:name="hu.bme.aut.android.homeworkoutapp.ui.plans.PlansFragment"
         android:label="@string/title_plans"
         tools:layout="@layout/fragment_plans" />
+    <fragment
+        android:id="@+id/navigation_welcome"
+        android:name="hu.bme.aut.android.homeworkoutapp.ui.welcome.WelcomeFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_welcome" >
+        <action
+            android:id="@+id/action_login"
+            app:destination="@id/navigation_workouts"
+            app:enterAnim="@anim/fragment_close_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit"
+            app:popUpTo="@id/navigation_welcome"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_navigation_welcome"
+        app:destination="@id/navigation_welcome"
+        app:enterAnim="@anim/fragment_close_enter"
+        app:exitAnim="@anim/fragment_close_exit"
+        app:popEnterAnim="@anim/fragment_close_enter"
+        app:popExitAnim="@anim/fragment_close_exit"
+        app:popUpTo="@id/navigation_welcome"
+        app:popUpToInclusive="true" />
 </navigation>
