@@ -1,4 +1,4 @@
-package hu.bme.aut.android.homeworkoutapp.domain.welcome
+package hu.bme.aut.android.homeworkoutapp.domain.interactors
 
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
@@ -7,11 +7,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class WelcomeInteractor @Inject constructor() {
+class UserInteractor @Inject constructor() {
 
     private val auth = FirebaseAuth.getInstance()
 
-    fun loginWithGoogle(
+    fun signInWithGoogle(
         credential: AuthCredential,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit
@@ -27,6 +27,10 @@ class WelcomeInteractor @Inject constructor() {
 
     fun getCurrentUser(): FirebaseUser? {
         return auth.currentUser
+    }
+
+    fun signOut() {
+        auth.signOut()
     }
 
 }

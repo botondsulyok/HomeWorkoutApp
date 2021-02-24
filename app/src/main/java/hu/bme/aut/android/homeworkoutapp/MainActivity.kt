@@ -12,9 +12,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import hu.bme.aut.android.homeworkoutapp.databinding.ActivityMainBinding
+import hu.bme.aut.android.homeworkoutapp.ui.welcome.WelcomeFragment
 import hu.bme.aut.android.homeworkoutapp.ui.welcome.WelcomeFragmentDirections
+import hu.bme.aut.android.homeworkoutapp.utils.Credentials
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,8 +50,17 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.action_main_settings -> {
+
                 // TODO show a popup menu, or a dialog fragment
+                // TODO sign out egy külön fragmenten belül majd, és ezt is kiszervezni a UserInteractorba
                 FirebaseAuth.getInstance().signOut()
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(Credentials.serverClientId)
+                    .requestEmail()
+                    .build()
+                val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+                mGoogleSignInClient?.signOut()
+
                 val action = WelcomeFragmentDirections.actionGlobalNavigationWelcome()
                 findNavController(R.id.nav_host_fragment).navigate(action)
                 true

@@ -1,4 +1,4 @@
-package hu.bme.aut.android.homeworkoutapp.domain.workouts.models
+package hu.bme.aut.android.homeworkoutapp.domain.models
 
 data class DomainWorkout(
     val specificData: String = "",

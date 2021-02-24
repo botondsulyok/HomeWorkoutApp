@@ -1,32 +1,29 @@
 package hu.bme.aut.android.homeworkoutapp.ui.welcome
 
-import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.GoogleAuthProvider
 import javax.inject.Inject
 
 class WelcomeViewModel @Inject constructor(
     private val welcomePresenter: WelcomePresenter
-) : RainbowCakeViewModel<WelcomeViewState>(LoggedOut) {
+) : RainbowCakeViewModel<WelcomeViewState>(SignedOut) {
 
-    fun checkUserLoggedIn() = execute {
-        viewState = LoggingIn
+    fun checkUserSignedIn() = execute {
+        viewState = SigningIn
         viewState = if(welcomePresenter.getCurrentUser() != null) {
-            LoggedIn
+            SignedIn
         } else {
-            LoggedOut
+            SignedOut
         }
     }
 
-    fun loginWithGoogle(credential: AuthCredential) = execute {
-        viewState = LoggingIn
+    fun signInWithGoogle(credential: AuthCredential) = execute {
+        viewState = SigningIn
 
-        welcomePresenter.loginWithGoogle(
+        welcomePresenter.signInWithGoogle(
             credential,
-            { viewState = LoggedIn },
-            { viewState = LoginFailed(it) }
+            { viewState = SignedIn },
+            { viewState = SignInFailed(it) }
         )
 
     }

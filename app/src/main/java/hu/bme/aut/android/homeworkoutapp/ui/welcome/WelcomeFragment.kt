@@ -58,7 +58,7 @@ class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>(
 
     override fun onStart() {
         super.onStart()
-        viewModel.checkUserLoggedIn()
+        viewModel.checkUserSignedIn()
     }
 
     override fun onDestroyView() {
@@ -79,6 +79,7 @@ class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>(
 
             val signInIntent = mGoogleSignInClient?.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN_GOOGLE)
+
         }
 
     }
@@ -91,7 +92,7 @@ class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>(
             try {
                 val account = task.getResult(ApiException::class.java)
                 val credential = GoogleAuthProvider.getCredential(account?.idToken.toString(), null)
-                viewModel.loginWithGoogle(credential)
+                viewModel.signInWithGoogle(credential)
             } catch (e: ApiException) {
                 Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
@@ -103,22 +104,22 @@ class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>(
         binding.progressBarWelcome.visibility = View.GONE
         binding.btnSignInWithGoogle.isEnabled = true
         when(viewState) {
-            is LoggedOut -> {
+            is SignedOut -> {
                 mainActivity?.setToolbarAndBottomNavigationViewVisible(false)
             }
-            is LoggingIn -> {
+            is SigningIn -> {
                 binding.progressBarWelcome.visibility = View.VISIBLE
                 binding.btnSignInWithGoogle.isEnabled = false
             }
-            is LoginFailed -> {
+            is SignInFailed -> {
                 AlertDialog.Builder(context)
-                    .setTitle("Authentication Failed")
+                    .setTitle("Error")
                     .setMessage(viewState.message)
                     .setNeutralButton("OK", null)
                     .show()
                 return
             }
-            is LoggedIn -> {
+            is SignedIn -> {
                 mainActivity?.setToolbarAndBottomNavigationViewVisible(true)
                 val action = WelcomeFragmentDirections.actionLogin()
                 findNavController().navigate(action)

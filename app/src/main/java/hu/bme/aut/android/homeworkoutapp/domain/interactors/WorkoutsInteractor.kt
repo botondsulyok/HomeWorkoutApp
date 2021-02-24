@@ -1,7 +1,7 @@
-package hu.bme.aut.android.homeworkoutapp.domain.workouts
+package hu.bme.aut.android.homeworkoutapp.domain.interactors
 
 import hu.bme.aut.android.homeworkoutapp.data.firebase.FireBaseDataSource
-import hu.bme.aut.android.homeworkoutapp.domain.workouts.models.DomainWorkout
+import hu.bme.aut.android.homeworkoutapp.domain.models.DomainWorkout
 import javax.inject.Inject
 import javax.inject.Singleton
 

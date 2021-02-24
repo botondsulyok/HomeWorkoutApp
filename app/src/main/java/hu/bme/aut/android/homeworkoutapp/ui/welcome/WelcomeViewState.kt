@@ -2,10 +2,10 @@ package hu.bme.aut.android.homeworkoutapp.ui.welcome
 
 sealed class WelcomeViewState
 
-object LoggedOut : WelcomeViewState()
+object SignedOut : WelcomeViewState()
 
-object LoggingIn : WelcomeViewState()
+object SigningIn : WelcomeViewState()
 
-data class LoginFailed(val message: String) : WelcomeViewState()
+data class SignInFailed(val message: String) : WelcomeViewState()
 
-object LoggedIn : WelcomeViewState()
+object SignedIn : WelcomeViewState()
