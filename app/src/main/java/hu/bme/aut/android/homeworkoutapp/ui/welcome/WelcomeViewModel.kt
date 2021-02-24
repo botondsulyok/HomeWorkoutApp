@@ -6,10 +6,9 @@ import javax.inject.Inject
 
 class WelcomeViewModel @Inject constructor(
     private val welcomePresenter: WelcomePresenter
-) : RainbowCakeViewModel<WelcomeViewState>(SignedOut) {
+) : RainbowCakeViewModel<WelcomeViewState>(Loading) {
 
     fun checkUserSignedIn() = execute {
-        viewState = SigningIn
         viewState = if(welcomePresenter.getCurrentUser() != null) {
             SignedIn
         } else {

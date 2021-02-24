@@ -104,12 +104,17 @@ class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>(
         binding.progressBarWelcome.visibility = View.GONE
         binding.btnSignInWithGoogle.isEnabled = true
         when(viewState) {
+            is Loading -> {
+                binding.ivLoading.visibility = View.VISIBLE
+            }
             is SignedOut -> {
                 mainActivity?.setToolbarAndBottomNavigationViewVisible(false)
+                binding.ivLoading.visibility = View.GONE
             }
             is SigningIn -> {
                 binding.progressBarWelcome.visibility = View.VISIBLE
                 binding.btnSignInWithGoogle.isEnabled = false
+                binding.ivLoading.visibility = View.GONE
             }
             is SignInFailed -> {
                 AlertDialog.Builder(context)
@@ -117,7 +122,7 @@ class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>(
                     .setMessage(viewState.message)
                     .setNeutralButton("OK", null)
                     .show()
-                return
+                binding.ivLoading.visibility = View.GONE
             }
             is SignedIn -> {
                 mainActivity?.setToolbarAndBottomNavigationViewVisible(true)
