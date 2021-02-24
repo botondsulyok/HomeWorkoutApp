@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/primaryColor">
 
     <TextView
         android:id="@+id/tvWelcome"
@@ -13,7 +13,9 @@
         android:layout_marginTop="48dp"
         android:text="Home Workout"
         android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textStyle="bold"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,16 +24,13 @@
     <ProgressBar
         android:id="@+id/progressBarWelcome"
         style="?android:attr/progressBarStyle"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:padding="128dp"
-        android:background="@color/design_default_color_on_primary"
-        android:elevation="4dp"
-        android:visibility="gone"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSignInWithGoogle" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btnSignInWithGoogle"
@@ -48,9 +47,22 @@
         android:layout_height="0dp"
         android:padding="128dp"
         android:src="@mipmap/ic_launcher_round"
-        android:background="@color/design_default_color_on_primary"
+        android:background="?android:attr/windowBackground"
         android:elevation="4dp"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.6"
+        android:elevation="-1dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/welcome_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

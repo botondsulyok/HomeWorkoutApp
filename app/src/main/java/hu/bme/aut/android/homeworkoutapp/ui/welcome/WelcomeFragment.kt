@@ -3,9 +3,11 @@ package hu.bme.aut.android.homeworkoutapp.ui.welcome
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
@@ -54,11 +56,17 @@ class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mainActivity = activity as? MainActivity
+        mainActivity?.window?.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     override fun onStart() {
         super.onStart()
         viewModel.checkUserSignedIn()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mainActivity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     override fun onDestroyView() {
@@ -94,7 +102,7 @@ class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>(
                 val credential = GoogleAuthProvider.getCredential(account?.idToken.toString(), null)
                 viewModel.signInWithGoogle(credential)
             } catch (e: ApiException) {
-                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+                Log.e("Auth", e.message.toString())
             }
         }
 
