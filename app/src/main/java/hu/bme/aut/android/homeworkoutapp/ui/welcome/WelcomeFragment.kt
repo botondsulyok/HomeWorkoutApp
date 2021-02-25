@@ -56,7 +56,6 @@ class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mainActivity = activity as? MainActivity
-        mainActivity?.window?.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     override fun onStart() {
@@ -116,6 +115,7 @@ class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>(
                 binding.ivLoading.visibility = View.VISIBLE
             }
             is SignedOut -> {
+                mainActivity?.window?.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
                 mainActivity?.setToolbarAndBottomNavigationViewVisible(false)
                 binding.ivLoading.visibility = View.GONE
             }
