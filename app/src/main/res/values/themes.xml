@@ -10,17 +10,12 @@
         <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
         <item name="colorOnSecondary">@color/secondaryTextColor</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryDark</item>
         <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/accentColor</item>
+        <item name="colorPrimaryText">@color/primaryTextColor</item>
+
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
-    </style>
-
-    <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
-    </style>
-
-    <style name="ThemeOverlay.App.BottomNavigationView" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/secondaryColor</item>
     </style>
 
 </resources>

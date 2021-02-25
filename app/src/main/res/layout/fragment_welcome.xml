@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryColor">
+    android:background="?attr/colorPrimary">
 
     <TextView
         android:id="@+id/tvWelcome"
@@ -13,7 +13,7 @@
         android:layout_marginTop="48dp"
         android:text="Home Workout"
         android:textAlignment="center"
-        android:textColor="@android:color/white"
+        android:textColor="?attr/colorOnPrimary"
         android:textAppearance="?attr/textAppearanceHeadline6"
         android:textStyle="bold"
         android:textSize="36sp"
