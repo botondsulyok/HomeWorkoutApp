@@ -13,7 +13,7 @@ class WorkoutPresenter @Inject constructor(
     suspend fun getWorkouts(): List<Workout> = withIOContext {
         //workoutsInteractor.getWorkouts()
 
-        delay(3000)
+        //delay(3000)
 
         listOf()
     }

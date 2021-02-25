@@ -5,11 +5,11 @@ import javax.inject.Inject
 
 class WorkoutsViewModel @Inject constructor(
     private val workoutPresenter: WorkoutPresenter
-) : RainbowCakeViewModel<WorkoutsViewState>(WorkoutsLoading) {
+) : RainbowCakeViewModel<WorkoutsViewState>(Loading) {
 
     fun loadWorkouts() = execute {
-        viewState = WorkoutsLoading
-        viewState = WorkoutsReady(workoutPresenter.getWorkouts())
+        viewState = Loading
+        viewState = Ready(workoutPresenter.getWorkouts())
     }
 
 }

@@ -6,13 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".ui.workouts.WorkoutsFragment">
 
-
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Create new workout"
+        android:textColor="?attr/colorOnSecondary"
+        app:iconTint="?attr/colorOnSecondary"
+        app:icon="@drawable/ic_baseline_add_24"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        android:backgroundTint="?attr/colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -53,10 +53,10 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
 
     override fun render(viewState: WorkoutsViewState) {
         when(viewState) {
-            is WorkoutsLoading -> {
+            is Loading -> {
                 binding.progressBar.visibility = View.VISIBLE
             }
-            is WorkoutsReady -> {
+            is Ready -> {
                 binding.progressBar.visibility = View.GONE
             }
         }.exhaustive
