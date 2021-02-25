@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
@@ -37,7 +38,10 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // TODO Setup views
+        binding.btnCreateWorkout.setOnClickListener {
+            val action = WorkoutsFragmentDirections.actionNavigationWorkoutsToNewWorkoutFragment()
+            findNavController().navigate(action)
+        }
 
     }
 

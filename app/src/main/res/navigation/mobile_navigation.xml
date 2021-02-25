@@ -9,7 +9,15 @@
         android:id="@+id/navigation_workouts"
         android:name="hu.bme.aut.android.homeworkoutapp.ui.workouts.WorkoutsFragment"
         android:label="@string/title_workouts"
-        tools:layout="@layout/fragment_workouts" />
+        tools:layout="@layout/fragment_workouts" >
+        <action
+            android:id="@+id/action_navigation_workouts_to_newWorkoutFragment"
+            app:destination="@id/newWorkoutFragment"
+            app:enterAnim="@anim/fragment_close_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_exercises"
@@ -46,4 +54,9 @@
         app:popExitAnim="@anim/fragment_close_exit"
         app:popUpTo="@id/mobile_navigation"
         app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/newWorkoutFragment"
+        android:name="hu.bme.aut.android.homeworkoutapp.ui.newworkout.NewWorkoutFragment"
+        android:label="fragment_new_workout"
+        tools:layout="@layout/fragment_new_workout" />
 </navigation>

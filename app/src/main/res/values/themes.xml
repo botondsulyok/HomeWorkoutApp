@@ -17,6 +17,12 @@
         <item name="colorPrimaryText">@color/primaryTextColor</item>
 
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
+
+        <item name="borderlessButtonStyle">@style/Widget.App.Button.TextButton</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.App.Button.OutlinedButton</item>
+        <item name="materialButtonStyle">@style/Widget.App.Button</item>
+
+        <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
     </style>
 
 </resources>
