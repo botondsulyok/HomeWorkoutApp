@@ -2,19 +2,19 @@
     <!-- Base application theme. -->
     <style name="Theme.HomeWorkoutApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorPrimaryVariant">@color/primaryLightColor</item>
-        <item name="colorOnPrimary">@color/primaryTextColor</item>
+        <item name="colorPrimary">@color/primaryColorNight</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColorNight</item>
+        <item name="colorPrimaryVariant">@color/primaryLightColorNight</item>
+        <item name="colorOnPrimary">@color/primaryTextColorNight</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/secondaryColor</item>
-        <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
-        <item name="colorOnSecondary">@color/secondaryTextColor</item>
+        <item name="colorSecondary">@color/secondaryColorNight</item>
+        <item name="colorSecondaryVariant">@color/secondaryLightColorNight</item>
+        <item name="colorOnSecondary">@color/secondaryTextColorNight</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
-        <item name="colorAccent">@color/accentColor</item>
-        <item name="colorPrimaryText">@color/primaryTextColor</item>
+        <item name="colorAccent">@color/accentColorNight</item>
+        <item name="colorOnPrimaryAlpha">@color/primaryTextColorAlphaNight</item>
 
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
 

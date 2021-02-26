@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="colorPrimaryText" format="reference"/>
+    <attr name="colorOnPrimaryAlpha" format="reference"/>
 
 </resources>

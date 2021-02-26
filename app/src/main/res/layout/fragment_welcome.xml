@@ -13,7 +13,7 @@
         android:layout_marginTop="48dp"
         android:text="Home Workout"
         android:textAlignment="center"
-        android:textColor="?attr/colorOnPrimary"
+        android:textColor="?attr/colorOnSecondary"
         android:textAppearance="?attr/textAppearanceHeadline6"
         android:textStyle="bold"
         android:textSize="36sp"
