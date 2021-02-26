@@ -13,7 +13,7 @@ import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewWorkoutBinding
 class NewWorkoutFragment : RainbowCakeFragment<NewWorkoutViewState, NewWorkoutViewModel>() {
 
     override fun provideViewModel() = getViewModelFromFactory()
-    override fun getViewResource() = R.layout.fragment_new_workout
+    override fun getViewResource() = 0
 
     private var _binding: FragmentNewWorkoutBinding? = null
     private val binding get() = _binding!!

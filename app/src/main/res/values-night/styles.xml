@@ -16,6 +16,7 @@
         <item name="colorAccent">@color/accentColorNight</item>
         <item name="colorOnPrimaryAlpha">@color/primaryTextColorAlphaNight</item>
 
+
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
 
         <item name="borderlessButtonStyle">@style/Widget.App.Button.TextButton</item>
@@ -23,6 +24,8 @@
         <item name="materialButtonStyle">@style/Widget.App.Button</item>
 
         <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
+
+        <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
     </style>
 
 </resources>
