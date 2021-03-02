@@ -20,7 +20,6 @@ class WelcomeViewModel @Inject constructor(
 
     fun signInWithGoogle(credential: AuthCredential) = execute {
         viewState = SigningIn
-
         val result = welcomePresenter.signInWithGoogle(credential)
         viewState = when(result) {
             is ResultSuccess -> {

@@ -37,6 +37,16 @@
                 android:hint="Title" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/btnCreate"
+            app:layout_constraintEnd_toEndOf="@+id/btnCreate"
+            app:layout_constraintStart_toStartOf="@+id/btnCreate"
+            app:layout_constraintTop_toTopOf="@+id/btnCreate" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -19,6 +19,7 @@ import hu.bme.aut.android.homeworkoutapp.databinding.ActivityMainBinding
 import hu.bme.aut.android.homeworkoutapp.ui.welcome.WelcomeFragment
 import hu.bme.aut.android.homeworkoutapp.ui.welcome.WelcomeFragmentDirections
 import hu.bme.aut.android.homeworkoutapp.utils.Credentials
+import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
+        hideKeyboard()
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 

@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewWorkoutBinding
 import hu.bme.aut.android.homeworkoutapp.ui.newworkout.models.UiNewWorkout
-import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
+import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
 
 class NewWorkoutFragment : RainbowCakeFragment<NewWorkoutViewState, NewWorkoutViewModel>() {
 
@@ -45,11 +47,23 @@ class NewWorkoutFragment : RainbowCakeFragment<NewWorkoutViewState, NewWorkoutVi
 
     override fun render(viewState: NewWorkoutViewState) {
         when(viewState) {
-            is Ready -> {
-
+            is Initial -> {
+                binding.progressBar.visibility = View.GONE
+                binding.btnCreate.visibility = View.VISIBLE
             }
             is Uploading -> {
-
+                hideKeyboard()
+                binding.progressBar.visibility = View.VISIBLE
+                binding.btnCreate.visibility = View.INVISIBLE
+            }
+            is UploadFailed -> {
+                binding.progressBar.visibility = View.GONE
+                binding.btnCreate.visibility = View.VISIBLE
+                Toast.makeText(activity, "Upload failed", Toast.LENGTH_LONG).show()
+            }
+            is UploadSuccess -> {
+                findNavController().popBackStack()
+                return
             }
         }.exhaustive
     }

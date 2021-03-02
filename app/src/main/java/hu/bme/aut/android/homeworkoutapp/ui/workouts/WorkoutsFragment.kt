@@ -77,7 +77,7 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
             is Loading -> {
                 binding.progressBar.visibility = View.VISIBLE
             }
-            is Ready -> {
+            is Loaded -> {
                 binding.progressBar.visibility = View.GONE
             }
         }.exhaustive

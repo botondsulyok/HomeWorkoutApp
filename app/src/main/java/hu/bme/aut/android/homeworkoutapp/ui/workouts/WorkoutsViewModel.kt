@@ -9,7 +9,7 @@ class WorkoutsViewModel @Inject constructor(
 
     fun loadWorkouts() = execute {
         viewState = Loading
-        viewState = Ready(workoutPresenter.getWorkouts())
+        viewState = Loaded(workoutPresenter.getWorkouts())
     }
 
 }
