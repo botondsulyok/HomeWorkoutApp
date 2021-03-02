@@ -101,7 +101,7 @@ class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>(
                 val credential = GoogleAuthProvider.getCredential(account?.idToken.toString(), null)
                 viewModel.signInWithGoogle(credential)
             } catch (e: ApiException) {
-                Log.e("Auth", e.message.toString())
+                Log.e("Google Auth Error", e.message.toString())
             }
         }
 

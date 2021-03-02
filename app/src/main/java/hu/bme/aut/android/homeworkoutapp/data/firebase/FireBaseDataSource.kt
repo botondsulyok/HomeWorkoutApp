@@ -1,15 +1,16 @@
 package hu.bme.aut.android.homeworkoutapp.data.firebase
 
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
+import hu.bme.aut.android.homeworkoutapp.data.Result
+import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainWorkout
 import kotlinx.coroutines.tasks.await
+import java.lang.Exception
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,17 +23,18 @@ class FireBaseDataSource @Inject constructor() {
     private val db = Firebase.firestore
 
     suspend fun signInWithGoogle(
-        credential: AuthCredential,
-        onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        auth.signInWithCredential(credential)
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener {
-                onFailure("Authentication failed")
-            }
+        credential: AuthCredential
+    ): Result<Unit, Exception> {
+        return try {
+            auth.signInWithCredential(credential).await()
+            ResultSuccess(Unit)
+        }
+        catch (e: ExecutionException) {
+            ResultFailure(e)
+        }
+        catch (e: InterruptedException) {
+            ResultFailure(e)
+        }
     }
 
     suspend fun getCurrentUser(): FirebaseUser? {
@@ -43,7 +45,7 @@ class FireBaseDataSource @Inject constructor() {
         auth.signOut()
     }
 
-    suspend fun addWorkout(workout: DomainWorkout): DomainWorkout? {
+    suspend fun addWorkout(workout: DomainWorkout): Result<Unit, Exception> {
         val userId = auth.currentUser?.uid.toString()
 
         val newWorkoutRef = db
@@ -58,40 +60,14 @@ class FireBaseDataSource @Inject constructor() {
             newWorkoutRef
                 .set(newWorkout)
                 .await()
-            newWorkout
+            ResultSuccess(Unit)
         } catch (e: ExecutionException) {
-            null
+            ResultFailure(e)
         } catch (e: InterruptedException) {
-            null
+            ResultFailure(e)
         }
 
     }
-
-    /*fun addWorkout(workout: DomainWorkout): Task<Void> {
-        val userId = auth.currentUser?.uid.toString()
-
-        val newWorkoutRef = db
-            .collection("userdata")
-            .document(userId)
-            .collection("workouts")
-            .document()
-
-        val newWorkout = workout.copy(id = newWorkoutRef.id)
-
-        return newWorkoutRef
-                .set(newWorkout)
-
-        /*
-        // in the viewmodel
-        addWorkout(workout)
-            .addOnSuccessListener {
-                //move to the next screen
-            }
-            .addOnFailureListener {
-                //show error
-            }
-         */
-    }*/
 
     suspend fun getWorkouts(): List<DomainWorkout> {
         return listOf()
