@@ -3,8 +3,7 @@ package hu.bme.aut.android.homeworkoutapp.ui.workouts
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
-import hu.bme.aut.android.homeworkoutapp.ui.welcome.SignInFailed
-import hu.bme.aut.android.homeworkoutapp.ui.welcome.SignedIn
+import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import javax.inject.Inject
 
 class WorkoutsViewModel @Inject constructor(
@@ -19,10 +18,21 @@ class WorkoutsViewModel @Inject constructor(
                 Loaded(result.value)
             }
             is ResultFailure -> {
-                LoadingFailed(result.reason.message.toString())
+                Failed(result.reason.message.toString())
             }
         }
+    }
 
+    fun deleteWorkout(workout: UiWorkout) = execute {
+        viewState = Loading
+        when(val result = workoutPresenter.deleteWorkout(workout)) {
+            is ResultSuccess -> {
+                getWorkouts()
+            }
+            is ResultFailure -> {
+                viewState = Failed(result.reason.message.toString())
+            }
+        }
     }
 
 }

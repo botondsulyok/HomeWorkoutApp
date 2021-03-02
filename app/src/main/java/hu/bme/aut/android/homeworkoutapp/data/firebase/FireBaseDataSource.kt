@@ -22,17 +22,18 @@ class FireBaseDataSource @Inject constructor() {
 
     private val db = Firebase.firestore
 
+    private var userId = auth.currentUser?.uid.toString()
+
     suspend fun signInWithGoogle(
         credential: AuthCredential
     ): Result<Unit, Exception> {
         return try {
             auth.signInWithCredential(credential).await()
+            userId = auth.currentUser?.uid.toString()
             ResultSuccess(Unit)
-        }
-        catch (e: ExecutionException) {
+        } catch (e: ExecutionException) {
             ResultFailure(e)
-        }
-        catch (e: InterruptedException) {
+        } catch (e: InterruptedException) {
             ResultFailure(e)
         }
     }
@@ -43,11 +44,30 @@ class FireBaseDataSource @Inject constructor() {
 
     suspend fun signOut() {
         auth.signOut()
+        userId = auth.currentUser?.uid.toString()
+    }
+
+    suspend fun getWorkouts(): Result<List<DomainWorkout>, Exception> {
+        val workoutsRef = db
+            .collection("userdata")
+            .document(userId)
+            .collection("workouts")
+
+        return try {
+            val workoutsSnapshot = workoutsRef.get().await()
+            val workouts = workoutsSnapshot.documents.map {
+                it.toObject<DomainWorkout>() ?: DomainWorkout()
+            }
+            ResultSuccess(workouts)
+        } catch (e: ExecutionException) {
+            ResultFailure(e)
+        } catch (e: InterruptedException) {
+            ResultFailure(e)
+        }
+
     }
 
     suspend fun addWorkout(workout: DomainWorkout): Result<Unit, Exception> {
-        val userId = auth.currentUser?.uid.toString()
-
         val newWorkoutRef = db
             .collection("userdata")
             .document(userId)
@@ -67,26 +87,22 @@ class FireBaseDataSource @Inject constructor() {
 
     }
 
-    suspend fun getWorkouts(): Result<List<DomainWorkout>, Exception> {
-        val userId = auth.currentUser?.uid.toString()
-
-        val workoutsRef = db
+    suspend fun deleteWorkout(workout: DomainWorkout): Result<Unit, Exception> {
+        val deleteWorkoutRef = db
             .collection("userdata")
             .document(userId)
             .collection("workouts")
+            .document(workout.id)
 
         return try {
-            val workoutsSnapshot = workoutsRef.get().await()
-            val workouts = workoutsSnapshot.documents.map {
-                it.toObject<DomainWorkout>() ?: DomainWorkout()
-            }
-            ResultSuccess(workouts)
+            deleteWorkoutRef.delete().await()
+            ResultSuccess(Unit)
         } catch (e: ExecutionException) {
-        ResultFailure(e)
+            ResultFailure(e)
         } catch (e: InterruptedException) {
-        ResultFailure(e)
+            ResultFailure(e)
         }
-
     }
+
 
 }

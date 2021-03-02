@@ -20,4 +20,8 @@ class WorkoutsInteractor @Inject constructor(
         return fireBaseDataSource.addWorkout(workout)
     }
 
+    suspend fun deleteWorkout(workout: DomainWorkout): Result<Unit, Exception> {
+        return fireBaseDataSource.deleteWorkout(workout)
+    }
+
 }

@@ -73,15 +73,21 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
                 binding.progressBar.visibility = View.GONE
                 recyclerViewAdapter.submitList(viewState.workoutsList)
             }
-            is LoadingFailed -> {
-                Toast.makeText(activity, "Couldn't load workouts", Toast.LENGTH_LONG).show()
+            is Failed -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(activity, viewState.message, Toast.LENGTH_LONG).show()
             }
         }.exhaustive
 
     }
 
-    override fun onItemClick(position: Int, view: View, uiWorkout: UiWorkout?, viewHolder: WorkoutsRecyclerViewAdapter.ViewHolder): Boolean {
+    override fun onItemClick(workout: UiWorkout): Boolean {
         // TODO
+        return true
+    }
+
+    override fun onItemLongClick(workout: UiWorkout): Boolean {
+        viewModel.deleteWorkout(workout)
         return true
     }
 

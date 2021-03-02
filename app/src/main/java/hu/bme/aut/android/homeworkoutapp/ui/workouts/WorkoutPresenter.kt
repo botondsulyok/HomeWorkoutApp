@@ -24,16 +24,22 @@ class WorkoutPresenter @Inject constructor(
         }
     }
 
+    suspend fun deleteWorkout(workout: UiWorkout): Result<Unit, Exception> = withIOContext {
+        workoutsInteractor.deleteWorkout(workout.toDomainWorkout())
+    }
+
 }
 
 private fun UiWorkout.toDomainWorkout(): DomainWorkout {
     return DomainWorkout(
+        id = id,
         name = name
     )
 }
 
 private fun DomainWorkout.toUiWorkout(): UiWorkout {
     return UiWorkout(
+        id = id,
         name = name
     )
 }

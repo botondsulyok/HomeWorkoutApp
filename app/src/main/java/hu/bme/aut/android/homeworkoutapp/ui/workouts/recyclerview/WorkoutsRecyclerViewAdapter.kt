@@ -12,7 +12,8 @@ import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 class WorkoutsRecyclerViewAdapter : ListAdapter<UiWorkout, WorkoutsRecyclerViewAdapter.ViewHolder>(WorkoutsDiffCallback) {
 
     interface WorkoutItemClickListener {
-        fun onItemClick(position: Int, view: View, uiWorkout: UiWorkout?, viewHolder: WorkoutsRecyclerViewAdapter.ViewHolder): Boolean
+        fun onItemClick(workout: UiWorkout): Boolean
+        fun onItemLongClick(workout: UiWorkout): Boolean
     }
 
     var workoutClickListener: WorkoutItemClickListener? = null
@@ -29,18 +30,21 @@ class WorkoutsRecyclerViewAdapter : ListAdapter<UiWorkout, WorkoutsRecyclerViewA
 
     inner class ViewHolder(private val binding: WorkoutsRowBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private lateinit var uiWorkout: UiWorkout
+        private lateinit var workout: UiWorkout
 
         init {
-            itemView.setOnClickListener {view ->
-                workoutClickListener?.onItemClick(adapterPosition, view, uiWorkout, this)
+            itemView.setOnClickListener {
+                workoutClickListener?.onItemClick(workout)
+            }
+            itemView.setOnLongClickListener {
+                workoutClickListener?.onItemLongClick(workout)
                 true
             }
         }
 
         fun bind(w: UiWorkout) {
-            uiWorkout = w
-            binding.tvWorkoutNameWorkoutsRow.text = uiWorkout.name
+            workout = w
+            binding.tvWorkoutNameWorkoutsRow.text = workout.name
         }
 
     }
