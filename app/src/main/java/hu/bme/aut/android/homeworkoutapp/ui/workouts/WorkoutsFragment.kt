@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
@@ -46,15 +47,6 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
         recyclerViewAdapter.workoutClickListener = this
         binding.workoutsRecyclerView.adapter = recyclerViewAdapter
 
-
-        //TODO
-        val l = mutableListOf(UiWorkout("1", "Alma"))
-        for(i in 0..100) {
-            l.add(UiWorkout("${i + 1}", "Workout${i + 1}"))
-        }
-        recyclerViewAdapter.submitList(l)
-
-
         binding.btnCreateWorkout.setOnClickListener {
             val action = WorkoutsFragmentDirections.actionNavigationWorkoutsToNewWorkoutFragment()
             findNavController().navigate(action)
@@ -69,7 +61,7 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
 
     override fun onStart() {
         super.onStart()
-        viewModel.loadWorkouts()
+        viewModel.getWorkouts()
     }
 
     override fun render(viewState: WorkoutsViewState) {
@@ -79,6 +71,10 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
             }
             is Loaded -> {
                 binding.progressBar.visibility = View.GONE
+                recyclerViewAdapter.submitList(viewState.workoutsList)
+            }
+            is LoadingFailed -> {
+                Toast.makeText(activity, "Couldn't load workouts", Toast.LENGTH_LONG).show()
             }
         }.exhaustive
 
