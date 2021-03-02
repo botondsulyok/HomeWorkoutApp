@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentWorkoutsBinding
-import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.Workout
+import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.recyclerview.WorkoutsRecyclerViewAdapter
 
 
@@ -49,9 +48,9 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
 
 
         //TODO
-        val l = mutableListOf(Workout("1", "Alma"))
+        val l = mutableListOf(UiWorkout("1", "Alma"))
         for(i in 0..100) {
-            l.add(Workout("${i + 1}", "Alma${i + 1}"))
+            l.add(UiWorkout("${i + 1}", "Workout${i + 1}"))
         }
         recyclerViewAdapter.submitList(l)
 
@@ -85,7 +84,7 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
 
     }
 
-    override fun onItemClick(position: Int, view: View, workout: Workout?, viewHolder: WorkoutsRecyclerViewAdapter.ViewHolder): Boolean {
+    override fun onItemClick(position: Int, view: View, uiWorkout: UiWorkout?, viewHolder: WorkoutsRecyclerViewAdapter.ViewHolder): Boolean {
         // TODO
         return true
     }

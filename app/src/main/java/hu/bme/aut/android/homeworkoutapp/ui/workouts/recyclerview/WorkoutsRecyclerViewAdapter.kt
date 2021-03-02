@@ -3,17 +3,16 @@ package hu.bme.aut.android.homeworkoutapp.ui.workouts.recyclerview
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.marginTop
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hu.bme.aut.android.homeworkoutapp.databinding.WorkoutsRowBinding
-import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.Workout
+import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 
-class WorkoutsRecyclerViewAdapter : ListAdapter<Workout, WorkoutsRecyclerViewAdapter.ViewHolder>(WorkoutsDiffCallback) {
+class WorkoutsRecyclerViewAdapter : ListAdapter<UiWorkout, WorkoutsRecyclerViewAdapter.ViewHolder>(WorkoutsDiffCallback) {
 
     interface WorkoutItemClickListener {
-        fun onItemClick(position: Int, view: View, workout: Workout?, viewHolder: WorkoutsRecyclerViewAdapter.ViewHolder): Boolean
+        fun onItemClick(position: Int, view: View, uiWorkout: UiWorkout?, viewHolder: WorkoutsRecyclerViewAdapter.ViewHolder): Boolean
     }
 
     var workoutClickListener: WorkoutItemClickListener? = null
@@ -30,28 +29,28 @@ class WorkoutsRecyclerViewAdapter : ListAdapter<Workout, WorkoutsRecyclerViewAda
 
     inner class ViewHolder(private val binding: WorkoutsRowBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private lateinit var workout: Workout
+        private lateinit var uiWorkout: UiWorkout
 
         init {
             itemView.setOnClickListener {view ->
-                workoutClickListener?.onItemClick(adapterPosition, view, workout, this)
+                workoutClickListener?.onItemClick(adapterPosition, view, uiWorkout, this)
                 true
             }
         }
 
-        fun bind(w: Workout) {
-            workout = w
-            binding.tvWorkoutNameWorkoutsRow.text = workout.name
+        fun bind(w: UiWorkout) {
+            uiWorkout = w
+            binding.tvWorkoutNameWorkoutsRow.text = uiWorkout.name
         }
 
     }
 
-    object WorkoutsDiffCallback: DiffUtil.ItemCallback<Workout>() {
-        override fun areItemsTheSame(oldItem: Workout, newItem: Workout): Boolean {
+    object WorkoutsDiffCallback: DiffUtil.ItemCallback<UiWorkout>() {
+        override fun areItemsTheSame(oldItem: UiWorkout, newItem: UiWorkout): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Workout, newItem: Workout): Boolean {
+        override fun areContentsTheSame(oldItem: UiWorkout, newItem: UiWorkout): Boolean {
             return oldItem == newItem
         }
     }

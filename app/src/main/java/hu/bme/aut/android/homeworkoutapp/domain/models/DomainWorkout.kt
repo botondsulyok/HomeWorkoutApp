@@ -1,6 +1,6 @@
 package hu.bme.aut.android.homeworkoutapp.domain.models
 
 data class DomainWorkout(
-    val specificData: String = "",
+    val id: String = "",
     val name: String = "",
 )
