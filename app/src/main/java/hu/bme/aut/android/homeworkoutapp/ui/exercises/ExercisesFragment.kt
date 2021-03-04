@@ -49,9 +49,8 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
         binding.exercisesRecyclerView.adapter = recyclerViewAdapter
 
         binding.fabCreateExercise.setOnClickListener {
-            // TODO
-            //val action = WorkoutsFragmentDirections.actionNavigationWorkoutsToNewWorkoutFragment()
-            //findNavController().navigate(action)
+            val action = ExercisesFragmentDirections.actionNavigationExercisesToNewExerciseFragment()
+            findNavController().navigate(action)
         }
 
     }
