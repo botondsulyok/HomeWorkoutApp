@@ -44,7 +44,7 @@ class WorkoutsRecyclerViewAdapter : ListAdapter<UiWorkout, WorkoutsRecyclerViewA
 
         fun bind(w: UiWorkout) {
             workout = w
-            binding.tvWorkoutNameWorkoutsRow.text = workout.name
+            binding.tvWorkoutName.text = workout.name
         }
 
     }

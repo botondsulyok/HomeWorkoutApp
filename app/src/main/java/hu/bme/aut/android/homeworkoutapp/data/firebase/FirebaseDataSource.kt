@@ -11,7 +11,9 @@ import com.google.firebase.ktx.Firebase
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.Result
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
+import hu.bme.aut.android.homeworkoutapp.data.models.FirebaseExercise
 import hu.bme.aut.android.homeworkoutapp.data.models.FirebaseWorkout
+import hu.bme.aut.android.homeworkoutapp.domain.models.DomainExercise
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainWorkout
 import hu.bme.aut.android.homeworkoutapp.ui.newworkout.models.UiNewWorkout
 import kotlinx.coroutines.tasks.await
@@ -20,7 +22,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FireBaseDataSource @Inject constructor() {
+class FirebaseDataSource @Inject constructor() {
 
     private val auth = Firebase.auth
 
@@ -103,6 +105,60 @@ class FireBaseDataSource @Inject constructor() {
         }
     }
 
+    suspend fun getExercises(): Result<List<DomainExercise>, Exception> {
+        val exercisesRef = db
+                .collection("userdata")
+                .document(userId)
+                .collection("exercises")
+                .orderBy("creation", Query.Direction.DESCENDING)
+
+        return try {
+            val workoutsSnapshot = exercisesRef.get().await()
+            val workouts = workoutsSnapshot.documents.map {
+                it.toObject<FirebaseExercise>()?.toDomainExercise() ?: DomainExercise()
+            }
+            ResultSuccess(workouts)
+        } catch (e: Exception) {
+            ResultFailure(e)
+        }
+
+    }
+
+    suspend fun addExercise(exercise: DomainExercise): Result<Unit, Exception> {
+        val newExerciseRef = db
+                .collection("userdata")
+                .document(userId)
+                .collection("exercises")
+                .document()
+
+        val newExercise = exercise.toFirebaseExercise(newExerciseRef.id)
+
+        return try {
+            newExerciseRef.set(newExercise).await()
+            ResultSuccess(Unit)
+        } catch (e: Exception) {
+            ResultFailure(e)
+        }
+
+    }
+
+    suspend fun deleteExercise(exercise: DomainExercise): Result<Unit, Exception> {
+        val deleteExercise = exercise.toFirebaseExercise()
+
+        val deleteExerciseRef = db
+                .collection("userdata")
+                .document(userId)
+                .collection("exercises")
+                .document(deleteExercise.id)
+
+        return try {
+            deleteExerciseRef.delete().await()
+            ResultSuccess(Unit)
+        } catch (e: Exception) {
+            ResultFailure(e)
+        }
+    }
+
 
 }
 
@@ -117,5 +173,19 @@ private fun FirebaseWorkout.toDomainWorkout(): DomainWorkout {
     return DomainWorkout(
         id = id,
         name = name
+    )
+}
+
+private fun DomainExercise.toFirebaseExercise(id: String = this.id): FirebaseExercise {
+    return FirebaseExercise(
+            id = id,
+            name = name
+    )
+}
+
+private fun FirebaseExercise.toDomainExercise(): DomainExercise {
+    return DomainExercise(
+            id = id,
+            name = name
     )
 }

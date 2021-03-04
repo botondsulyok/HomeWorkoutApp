@@ -4,28 +4,93 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import hu.bme.aut.android.homeworkoutapp.R
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
+import co.zsmb.rainbowcake.base.RainbowCakeFragment
+import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
+import co.zsmb.rainbowcake.extensions.exhaustive
+import hu.bme.aut.android.homeworkoutapp.MainActivity
+import hu.bme.aut.android.homeworkoutapp.databinding.FragmentExercisesBinding
+import hu.bme.aut.android.homeworkoutapp.databinding.FragmentWorkoutsBinding
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview.ExercisesRecyclerViewAdapter
 
-class ExercisesFragment : Fragment() {
 
-    private lateinit var exerciseViewModel: ExerciseViewModel
+class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewModel>(), ExercisesRecyclerViewAdapter.ExerciseItemClickListener {
+
+    override fun provideViewModel() = getViewModelFromFactory()
+    override fun getViewResource() = 0
+
+    private var _binding: FragmentExercisesBinding? = null
+    private val binding get() = _binding!!
+
+    private var mainActivity: MainActivity? = null
+
+    private val recyclerViewAdapter = ExercisesRecyclerViewAdapter()
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
-        exerciseViewModel =
-                ViewModelProvider(this).get(ExerciseViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_exercises, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        exerciseViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+    ): View {
+        _binding = FragmentExercisesBinding.inflate(inflater, container, false)
+        return binding.root
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        recyclerViewAdapter.exerciseClickListener = this
+        binding.exercisesRecyclerView.adapter = recyclerViewAdapter
+
+        binding.fabCreateExercise.setOnClickListener {
+            // TODO
+            //val action = WorkoutsFragmentDirections.actionNavigationWorkoutsToNewWorkoutFragment()
+            //findNavController().navigate(action)
+        }
+
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mainActivity = activity as? MainActivity
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.getExercises()
+    }
+
+    override fun render(viewState: ExercisesViewState) {
+        when(viewState) {
+            is Loading -> {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+            is Loaded -> {
+                binding.progressBar.visibility = View.GONE
+                recyclerViewAdapter.submitList(viewState.exercisesList)
+            }
+            is Failed -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(activity, viewState.message, Toast.LENGTH_LONG).show()
+            }
+        }.exhaustive
+
+    }
+
+    override fun onItemClick(exercise: UiExercise): Boolean {
+        // TODO
+        return true
+    }
+
+    override fun onItemLongClick(exercise: UiExercise): Boolean {
+        viewModel.deleteExercise(exercise)
+        return true
+    }
+
 }
