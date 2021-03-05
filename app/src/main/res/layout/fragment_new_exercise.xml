@@ -34,6 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Name" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -69,56 +70,48 @@
             app:layout_constraintStart_toStartOf="@+id/btnCreate"
             app:layout_constraintTop_toTopOf="@+id/btnCreate" />
 
-        <RadioGroup
-            android:id="@+id/radioGroupRepsOrTime"
-            android:layout_width="200dp"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutReps"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:checkedButton="@+id/radio_button_reps"
-            app:layout_constraintEnd_toEndOf="@+id/etRepsOrDuration"
-            app:layout_constraintEnd_toStartOf="@+id/etRepsOrDuration"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintBottom_toBottomOf="@+id/radioGroupRepsOrTime"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCategories">
 
-            <RadioButton
-                android:id="@+id/radio_button_reps"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etReps"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Reps" />
+                android:layout_height="wrap_content"
+                android:hint="Reps" />
 
-            <RadioButton
-                android:id="@+id/radio_button_duration"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Duration" />
-
-        </RadioGroup>
-
-
-        <EditText
-            android:id="@+id/etRepsOrDuration"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            app:layout_constraintBottom_toBottomOf="@+id/radioGroupRepsOrTime"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/radioGroupRepsOrTime"
-            app:layout_constraintTop_toTopOf="@+id/radioGroupRepsOrTime" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btnAttachVideo"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Attach video"
             app:icon="@drawable/ic_baseline_add_a_photo_24"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroupRepsOrTime" />
+            app:layout_constraintTop_toBottomOf="@+id/btnSetDuration" />
+
+        <Button
+            android:id="@+id/btnSetDuration"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Set duration"
+            app:icon="@drawable/ic_baseline_timer_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
