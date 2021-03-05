@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Create"
+            android:text="@string/btn_create"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnAttachVideo" />
@@ -33,7 +33,7 @@
                 android:id="@+id/etName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name" />
+                android:hint="@string/hint_name" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,7 +45,7 @@
             android:layout_marginStart="64dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="64dp"
-            android:hint="Category"
+            android:hint="@string/hint_category"
             android:labelFor="@id/autoCompleteTextViewExerciseCategories"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +76,6 @@
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/radioGroupRepsOrTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCategories">
@@ -85,7 +84,7 @@
                 android:id="@+id/etReps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Reps" />
+                android:hint="@string/hint_reps" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Attach video"
+            android:text="@string/btn_attach_video"
             app:icon="@drawable/ic_baseline_add_a_photo_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Set duration"
+            android:text="@string/btn_set_duration"
             app:icon="@drawable/ic_baseline_timer_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
