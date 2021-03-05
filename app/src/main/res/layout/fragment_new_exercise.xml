@@ -12,18 +12,18 @@
             android:id="@+id/btnCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:text="Create"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/btnAttachVideo" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
+            android:id="@+id/textInputLayoutName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +36,29 @@
                 android:hint="Name" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutCategories"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="64dp"
+            android:hint="Category"
+            android:labelFor="@id/autoCompleteTextViewExerciseCategories"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutName">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextViewExerciseCategories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dropDownHeight="300dp"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
@@ -45,6 +68,57 @@
             app:layout_constraintEnd_toEndOf="@+id/btnCreate"
             app:layout_constraintStart_toStartOf="@+id/btnCreate"
             app:layout_constraintTop_toTopOf="@+id/btnCreate" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupRepsOrTime"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:checkedButton="@+id/radio_button_reps"
+            app:layout_constraintEnd_toEndOf="@+id/etTimeOrReps"
+            app:layout_constraintEnd_toStartOf="@+id/etTimeOrReps"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCategories">
+
+            <RadioButton
+                android:id="@+id/radio_button_reps"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Reps" />
+
+            <RadioButton
+                android:id="@+id/radio_button_duration"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Duration" />
+
+        </RadioGroup>
+
+
+        <EditText
+            android:id="@+id/etTimeOrReps"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            app:layout_constraintBottom_toBottomOf="@+id/radioGroupRepsOrTime"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/radioGroupRepsOrTime"
+            app:layout_constraintTop_toTopOf="@+id/radioGroupRepsOrTime" />
+
+        <Button
+            android:id="@+id/btnAttachVideo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Attach video"
+            app:icon="@drawable/ic_add_24dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupRepsOrTime" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

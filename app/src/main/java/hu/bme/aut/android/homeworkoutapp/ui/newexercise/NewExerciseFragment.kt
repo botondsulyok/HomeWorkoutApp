@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
+import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewExerciseBinding
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
@@ -41,6 +44,10 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
             val workout = UiNewExercise(name = binding.etName.text.toString())
             viewModel.addWorkout(workout)
         }
+
+        val adapter = ArrayAdapter(requireContext(), R.layout.exercise_categories_list_item,  resources.getStringArray(R.array.exercise_categories_array))
+        (binding.textInputLayoutCategories.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+
 
     }
 
