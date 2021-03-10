@@ -17,6 +17,11 @@
         <item name="colorOnPrimaryAlpha">@color/primaryTextColorAlphaNight</item>
 
 
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+
+        <item name="android:textCursorDrawable">@drawable/cursor_color</item>
+
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
 
         <item name="borderlessButtonStyle">@style/Widget.App.Button.TextButton</item>

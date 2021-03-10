@@ -17,6 +17,11 @@
         <item name="colorOnPrimaryAlpha">@color/primaryTextColorAlpha</item>
 
 
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+
+        <item name="android:textCursorDrawable">@drawable/cursor_color</item>
+
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
 
         <item name="borderlessButtonStyle">@style/Widget.App.Button.TextButton</item>
@@ -44,7 +49,7 @@
     </style>
 
     <style name="Widget.App.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Button.TextButton</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Button.OutlinedButton</item>
         <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
     </style>
 
@@ -56,6 +61,10 @@
 
     <style name="ThemeOverlay.App.Button.TextButton" parent="">
         <item name="colorPrimary">?attr/colorSecondary</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Button.OutlinedButton" parent="">
+        <item name="colorPrimary">?attr/colorOnPrimaryAlpha</item>
     </style>
 
     <style name="ThemeOverlay.App.Button" parent="">
@@ -89,5 +98,16 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">12dp</item>
     </style>
+
+
+
+    <style name="Widget.App.TextInputLayout.OutlinedBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="hintTextColor">?attr/colorOnSurface</item>
+        <item name="boxStrokeColor">@color/boxstrokecolor_selector</item>
+    </style>
+
+
+
 
 </resources>
