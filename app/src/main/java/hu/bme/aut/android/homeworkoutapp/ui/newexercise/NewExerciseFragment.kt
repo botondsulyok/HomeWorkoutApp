@@ -51,7 +51,6 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     }
 
-
     override fun render(viewState: NewExerciseViewState) {
         when(viewState) {
             is Initial -> {
