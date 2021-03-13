@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="exercise_categories_array">
+
+    <string-array name="exercise_categories_entries">
         <item>Cardio</item>
         <item>Chest</item>
         <item>Back</item>
@@ -16,4 +17,22 @@
         <item>Triceps</item>
         <item>Forearms</item>
     </string-array>
+
+    <string-array name="exercise_categories_values">
+        <item>cardio</item>
+        <item>chest</item>
+        <item>back</item>
+        <item>arms</item>
+        <item>abdominals</item>
+        <item>legs</item>
+        <item>shoulders</item>
+        <item>calves</item>
+        <item>hamstrings</item>
+        <item>quadriceps</item>
+        <item>glutes</item>
+        <item>biceps</item>
+        <item>triceps</item>
+        <item>forearms</item>
+    </string-array>
+
 </resources>

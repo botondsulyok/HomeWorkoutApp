@@ -10,7 +10,7 @@ class NewExerciseViewModel @Inject constructor(
     private val newExercisePresenter: NewExercisePresenter
 ) : RainbowCakeViewModel<NewExerciseViewState>(Initial) {
 
-    fun addWorkout(exercise: UiNewExercise) = execute {
+    fun addExercise(exercise: UiNewExercise) = execute {
         viewState = Uploading
         val result = newExercisePresenter.addExercise(exercise)
         viewState = when(result) {

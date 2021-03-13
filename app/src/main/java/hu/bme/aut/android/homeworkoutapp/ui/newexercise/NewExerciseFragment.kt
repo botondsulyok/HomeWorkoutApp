@@ -33,6 +33,11 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         return binding.root
     }
 
+    private val exercise: UiNewExercise
+        get() {
+            return UiNewExercise(name = binding.etName.text.toString())
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -41,14 +46,11 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                 binding.etName.error = "Add a name!"
                 return@setOnClickListener
             }
-            val workout = UiNewExercise(name = binding.etName.text.toString())
-            viewModel.addWorkout(workout)
+            viewModel.addExercise(exercise)
         }
 
-        val adapter = ArrayAdapter(requireContext(), R.layout.exercise_categories_list_item,  resources.getStringArray(R.array.exercise_categories_array))
+        val adapter = ArrayAdapter(requireContext(), R.layout.exercise_categories_list_item,  resources.getStringArray(R.array.exercise_categories_entries))
         (binding.textInputLayoutCategories.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-
-
     }
 
     override fun render(viewState: NewExerciseViewState) {
