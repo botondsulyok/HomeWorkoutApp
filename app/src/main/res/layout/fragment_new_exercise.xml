@@ -214,17 +214,35 @@
                 android:gravity="center"
                 android:visibility="gone">
 
-                <ImageView
-                    android:id="@+id/ivExerciseThumbnail"
+                <RelativeLayout
+                    android:id="@+id/rlExerciseVideoThumbnail"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:scaleType="centerCrop"
-                    android:visibility="gone" />
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <ImageButton
+                        android:id="@+id/ibExercisePlay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:elevation="6dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:foregroundTint="?attr/colorOnPrimary"
+                        android:src="@drawable/ic_baseline_play_arrow_24" />
+
+                    <ImageView
+                        android:id="@+id/ivExerciseThumbnail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop" />
+
+                </RelativeLayout>
 
                 <VideoView
                     android:id="@+id/vvExerciseVideo"
                     android:layout_width="wrap_content"
-                    android:layout_height="250dp"
+                    android:layout_height="match_parent"
                     android:visibility="gone" />
 
             </RelativeLayout>

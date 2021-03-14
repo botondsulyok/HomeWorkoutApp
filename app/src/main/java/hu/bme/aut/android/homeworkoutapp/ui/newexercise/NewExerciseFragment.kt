@@ -66,14 +66,14 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
         setVideoPlayback()
 
-        binding.ivExerciseThumbnail.setOnClickListener {
-            binding.ivExerciseThumbnail.visibility = View.GONE
+        binding.ibExercisePlay.setOnClickListener {
+            binding.rlExerciseVideoThumbnail.visibility = View.GONE
             binding.vvExerciseVideo.visibility = View.VISIBLE
             binding.vvExerciseVideo.start()
         }
 
         binding.vvExerciseVideo.setOnCompletionListener {
-            binding.ivExerciseThumbnail.visibility = View.VISIBLE
+            binding.rlExerciseVideoThumbnail.visibility = View.VISIBLE
             binding.vvExerciseVideo.visibility = View.GONE
         }
 
@@ -83,7 +83,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                     pause()
                 }
                 else {
-                    resume()
+                    start()
                 }
             }
         }
@@ -157,7 +157,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                 .load(it)
                 .into(binding.ivExerciseThumbnail)
             binding.rlExerciseVideo.visibility = View.VISIBLE
-            binding.ivExerciseThumbnail.visibility = View.VISIBLE
+            binding.rlExerciseVideoThumbnail.visibility = View.VISIBLE
             binding.btnAttachVideo.text = "Change Video"
         }
     }
