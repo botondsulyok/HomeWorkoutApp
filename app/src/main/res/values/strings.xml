@@ -8,7 +8,7 @@
     <string name="hint_name">Name</string>
     <string name="hint_category">Category</string>
     <string name="hint_reps">Reps</string>
-    <string name="btn_attach_video">Attach video</string>
+    <string name="btn_create_video">Create video</string>
     <string name="btn_set_duration">Set duration</string>
     <string name="hint_title">Title</string>
     <string name="btn_create_new_workout">Create new workout</string>
