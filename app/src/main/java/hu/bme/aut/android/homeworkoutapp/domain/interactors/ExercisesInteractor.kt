@@ -5,6 +5,7 @@ import hu.bme.aut.android.homeworkoutapp.domain.models.DomainExercise
 import javax.inject.Inject
 import javax.inject.Singleton
 import hu.bme.aut.android.homeworkoutapp.data.Result
+import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewExercise
 
 @Singleton
 class ExercisesInteractor @Inject constructor(
@@ -15,7 +16,7 @@ class ExercisesInteractor @Inject constructor(
         return firebaseDataSource.getExercises()
     }
 
-    suspend fun addExercise(exercise: DomainExercise): Result<Unit, Exception> {
+    suspend fun addExercise(exercise: DomainNewExercise): Result<Unit, Exception> {
         return firebaseDataSource.addExercise(exercise)
     }
 

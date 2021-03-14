@@ -2,6 +2,7 @@ package hu.bme.aut.android.homeworkoutapp.utils
 
 import android.app.Activity
 import android.content.Context
+import android.text.Editable
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -27,3 +28,5 @@ fun View.setAllEnabled(enabled: Boolean) {
             child -> child.setAllEnabled(enabled)
     }
 }
+
+fun Editable?.toInt() = this.toString().toInt()

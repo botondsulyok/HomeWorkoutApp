@@ -19,8 +19,10 @@ import com.bumptech.glide.Glide
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewExerciseBinding
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
+import hu.bme.aut.android.homeworkoutapp.utils.Duration
 import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
 import hu.bme.aut.android.homeworkoutapp.utils.setAllEnabled
+import hu.bme.aut.android.homeworkoutapp.utils.toInt
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 
@@ -39,10 +41,18 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     private var _binding: FragmentNewExerciseBinding? = null
     private val binding get() = _binding!!
 
-    //TODO
     private val exercise: UiNewExercise
         get() {
-            return UiNewExercise(name = binding.etName.text.toString())
+            return UiNewExercise(
+                name = binding.etName.text.toString(),
+                reps = binding.etReps.text.toInt(),
+                duration = Duration(
+                    binding.etDurationHour.text.toInt(),
+                    binding.etDurationMinute.text.toInt(),
+                    binding.etDurationMinute.text.toInt()),
+                categoryEntry = binding.autoCompleteTextViewExerciseCategories.text.toString(),
+                videoUri = videoUri
+            )
         }
 
     private var videoUri: Uri? = null
@@ -107,7 +117,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                 R.array.exercise_categories_entries
             )
         )
-        (binding.textInputLayoutCategories.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+        binding.autoCompleteTextViewExerciseCategories.setAdapter(adapter)
     }
 
     override fun render(viewState: NewExerciseViewState) {

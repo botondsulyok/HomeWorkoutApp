@@ -1,12 +1,12 @@
-package hu.bme.aut.android.homeworkoutapp.ui.newexercise.models
+package hu.bme.aut.android.homeworkoutapp.domain.models
 
 import android.net.Uri
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
 
-data class UiNewExercise(
+data class DomainNewExercise(
     val name: String = "",
     val reps: Int = 0,
     val duration: Duration = Duration(),
-    val categoryEntry: String = "",
+    val categoryValue: String = "",
     val videoUri: Uri? = null
 )

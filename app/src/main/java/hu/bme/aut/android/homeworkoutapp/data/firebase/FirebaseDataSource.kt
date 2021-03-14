@@ -3,21 +3,22 @@ package hu.bme.aut.android.homeworkoutapp.data.firebase
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.Result
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.data.models.FirebaseExercise
 import hu.bme.aut.android.homeworkoutapp.data.models.FirebaseWorkout
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainExercise
+import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewExercise
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainWorkout
-import hu.bme.aut.android.homeworkoutapp.ui.newworkout.models.UiNewWorkout
 import kotlinx.coroutines.tasks.await
-import java.util.concurrent.ExecutionException
+import java.net.URLEncoder
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,6 +28,8 @@ class FirebaseDataSource @Inject constructor() {
     private val auth = Firebase.auth
 
     private val db = Firebase.firestore
+
+    private val storage = Firebase.storage.reference
 
     private var userId = auth.currentUser?.uid.toString()
 
@@ -124,22 +127,30 @@ class FirebaseDataSource @Inject constructor() {
 
     }
 
-    suspend fun addExercise(exercise: DomainExercise): Result<Unit, Exception> {
-        val newExerciseRef = db
+    suspend fun addExercise(exercise: DomainNewExercise): Result<Unit, Exception> {
+        return try {
+            var videoPath = ""
+            if(exercise.videoUri != null) {
+                val newVideoName = "${URLEncoder.encode(UUID.randomUUID().toString(), "UTF-8")}.mp4"
+                videoPath = "userdata/${userId}/exercises/$newVideoName"
+                val newVideoRef = storage.child(videoPath)
+                newVideoRef.putFile(exercise.videoUri).await()
+            }
+
+            val newExerciseRef = db
                 .collection("userdata")
                 .document(userId)
                 .collection("exercises")
                 .document()
 
-        val newExercise = exercise.toFirebaseExercise(newExerciseRef.id)
+            val newExercise = exercise.toFirebaseExercise(newExerciseRef.id, videoPath)
 
-        return try {
             newExerciseRef.set(newExercise).await()
             ResultSuccess(Unit)
-        } catch (e: Exception) {
+        }
+        catch (e: Exception) {
             ResultFailure(e)
         }
-
     }
 
     suspend fun deleteExercise(exercise: DomainExercise): Result<Unit, Exception> {
@@ -176,16 +187,36 @@ private fun FirebaseWorkout.toDomainWorkout(): DomainWorkout {
     )
 }
 
-private fun DomainExercise.toFirebaseExercise(id: String = this.id): FirebaseExercise {
+private fun DomainExercise.toFirebaseExercise(videoPath: String = ""): FirebaseExercise {
     return FirebaseExercise(
-            id = id,
-            name = name
+        id = id,
+        name = name,
+        reps = reps,
+        duration = duration,
+        categoryValue = categoryValue,
+        videoPath = videoPath
     )
 }
 
-private fun FirebaseExercise.toDomainExercise(): DomainExercise {
+private fun DomainNewExercise.toFirebaseExercise(id: String, videoPath: String): FirebaseExercise {
+    return FirebaseExercise(
+        id = id,
+        name = name,
+        reps = reps,
+        duration = duration,
+        categoryValue = categoryValue,
+        videoPath = videoPath
+    )
+}
+
+// TODO
+private fun FirebaseExercise.toDomainExercise(videoUrl: String = ""): DomainExercise {
     return DomainExercise(
-            id = id,
-            name = name
+        id = id,
+        name = name,
+        reps = reps,
+        duration = duration,
+        categoryValue = categoryValue,
+        videoUrl = videoUrl
     )
 }
