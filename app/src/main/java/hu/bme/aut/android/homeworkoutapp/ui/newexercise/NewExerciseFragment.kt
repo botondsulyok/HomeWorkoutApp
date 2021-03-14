@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
+import com.bumptech.glide.Glide
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewExerciseBinding
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
@@ -63,15 +64,27 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.vvExercise.apply {
-            videoUri?.let {
-                setVideoURI(it)
-                visibility = View.VISIBLE
-                start()
-                binding.btnAttachVideo.text = "Change Video"
-            }
+        setVideoPlayback()
+
+        binding.ivExerciseThumbnail.setOnClickListener {
+            binding.ivExerciseThumbnail.visibility = View.GONE
+            binding.vvExerciseVideo.visibility = View.VISIBLE
+            binding.vvExerciseVideo.start()
+        }
+
+        binding.vvExerciseVideo.setOnCompletionListener {
+            binding.ivExerciseThumbnail.visibility = View.VISIBLE
+            binding.vvExerciseVideo.visibility = View.GONE
+        }
+
+        binding.vvExerciseVideo.apply {
             setOnClickListener {
-                start()
+                if(isPlaying) {
+                    pause()
+                }
+                else {
+                    resume()
+                }
             }
         }
 
@@ -133,12 +146,19 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             videoUri = data?.data
-            videoUri?.let {
-                binding.vvExercise.setVideoURI(it)
-                binding.vvExercise.visibility = View.VISIBLE
-                binding.vvExercise.start()
-                binding.btnAttachVideo.text = "Change Video"
-            }
+            setVideoPlayback()
+        }
+    }
+
+    private fun setVideoPlayback() {
+        videoUri?.let {
+            binding.vvExerciseVideo.setVideoURI(it)
+            Glide.with(requireContext())
+                .load(it)
+                .into(binding.ivExerciseThumbnail)
+            binding.rlExerciseVideo.visibility = View.VISIBLE
+            binding.ivExerciseThumbnail.visibility = View.VISIBLE
+            binding.btnAttachVideo.text = "Change Video"
         }
     }
 
