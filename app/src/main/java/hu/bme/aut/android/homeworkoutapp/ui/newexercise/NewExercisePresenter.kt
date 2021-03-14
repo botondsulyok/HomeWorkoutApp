@@ -19,11 +19,8 @@ class NewExercisePresenter @Inject constructor(
     }
 
     private fun UiNewExercise.toDomainNewExercise(): DomainNewExercise {
-        // TODO categoryValue
-
         val categoriesEntryList = context.resources.getStringArray(R.array.exercise_categories_entries)
         val categoriesValuesList = context.resources.getStringArray(R.array.exercise_categories_values)
-
         return DomainNewExercise(
             name = name,
             duration = duration,

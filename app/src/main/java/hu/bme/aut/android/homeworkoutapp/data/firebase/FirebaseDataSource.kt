@@ -130,11 +130,13 @@ class FirebaseDataSource @Inject constructor() {
     suspend fun addExercise(exercise: DomainNewExercise): Result<Unit, Exception> {
         return try {
             var videoPath = ""
+            var videoUrl = ""
             if(exercise.videoUri != null) {
                 val newVideoName = "${URLEncoder.encode(UUID.randomUUID().toString(), "UTF-8")}.mp4"
                 videoPath = "userdata/${userId}/exercises/$newVideoName"
                 val newVideoRef = storage.child(videoPath)
                 newVideoRef.putFile(exercise.videoUri).await()
+                videoUrl = newVideoRef.downloadUrl.await().toString()
             }
 
             val newExerciseRef = db
@@ -143,7 +145,7 @@ class FirebaseDataSource @Inject constructor() {
                 .collection("exercises")
                 .document()
 
-            val newExercise = exercise.toFirebaseExercise(newExerciseRef.id, videoPath)
+            val newExercise = exercise.toFirebaseExercise(newExerciseRef.id, videoPath, videoUrl)
 
             newExerciseRef.set(newExercise).await()
             ResultSuccess(Unit)
@@ -187,30 +189,30 @@ private fun FirebaseWorkout.toDomainWorkout(): DomainWorkout {
     )
 }
 
-private fun DomainExercise.toFirebaseExercise(videoPath: String = ""): FirebaseExercise {
+private fun DomainExercise.toFirebaseExercise(): FirebaseExercise {
     return FirebaseExercise(
         id = id,
         name = name,
         reps = reps,
         duration = duration,
         categoryValue = categoryValue,
-        videoPath = videoPath
+        videoUrl = videoUrl
     )
 }
 
-private fun DomainNewExercise.toFirebaseExercise(id: String, videoPath: String): FirebaseExercise {
+private fun DomainNewExercise.toFirebaseExercise(id: String, videoPath: String, videoUrl:String): FirebaseExercise {
     return FirebaseExercise(
         id = id,
         name = name,
         reps = reps,
         duration = duration,
         categoryValue = categoryValue,
-        videoPath = videoPath
+        videoPath = videoPath,
+        videoUrl = videoUrl
     )
 }
 
-// TODO
-private fun FirebaseExercise.toDomainExercise(videoUrl: String = ""): DomainExercise {
+private fun FirebaseExercise.toDomainExercise(): DomainExercise {
     return DomainExercise(
         id = id,
         name = name,
