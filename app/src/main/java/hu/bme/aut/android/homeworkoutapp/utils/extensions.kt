@@ -29,4 +29,10 @@ fun View.setAllEnabled(enabled: Boolean) {
     }
 }
 
-fun Editable?.toInt() = this.toString().toInt()
+fun Editable?.toInt(): Int {
+    return if(this == null || this.isEmpty()) {
+        0
+    } else {
+        this.toString().toInt()
+    }
+}
