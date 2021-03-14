@@ -4,6 +4,7 @@ import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class NewExerciseViewModel @Inject constructor(
@@ -21,6 +22,10 @@ class NewExerciseViewModel @Inject constructor(
                 UploadFailed(result.reason.message.toString())
             }
         }
+    }
+
+    fun toInitialState() {
+        viewState = Initial
     }
 
 }

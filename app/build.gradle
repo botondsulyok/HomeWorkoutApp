@@ -85,5 +85,8 @@ dependencies {
     implementation "com.github.permissions-dispatcher:permissionsdispatcher:${permissions_dispatcher_version}"
     kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:${permissions_dispatcher_version}"
 
+    //scalable videoview
+    implementation 'com.yqritc:android-scalablevideoview:1.0.4'
+
 
 }

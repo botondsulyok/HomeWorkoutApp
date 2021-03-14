@@ -10,9 +10,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Toast
+import android.widget.*
 import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
@@ -21,6 +19,7 @@ import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewExerciseBinding
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
+import hu.bme.aut.android.homeworkoutapp.utils.setAllEnabled
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 
@@ -33,10 +32,24 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     companion object {
         const val RC_VIDEO_CAPTURE = 100
+        const val KEY_VIDEO_URI = "101"
     }
 
     private var _binding: FragmentNewExerciseBinding? = null
     private val binding get() = _binding!!
+
+    //TODO
+    private val exercise: UiNewExercise
+        get() {
+            return UiNewExercise(name = binding.etName.text.toString())
+        }
+
+    private var videoUri: Uri? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        videoUri = savedInstanceState?.getParcelable(KEY_VIDEO_URI)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,13 +60,20 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         return binding.root
     }
 
-    private val exercise: UiNewExercise
-        get() {
-            return UiNewExercise(name = binding.etName.text.toString())
-        }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.vvExercise.apply {
+            videoUri?.let {
+                setVideoURI(it)
+                visibility = View.VISIBLE
+                start()
+                binding.btnAttachVideo.text = "Change Video"
+            }
+            setOnClickListener {
+                start()
+            }
+        }
 
         binding.btnAttachVideo.setOnClickListener {
             if (requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -80,18 +100,19 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     override fun render(viewState: NewExerciseViewState) {
         when(viewState) {
             is Initial -> {
+                binding.root.setAllEnabled(true)
                 binding.progressBar.visibility = View.GONE
                 binding.btnCreate.visibility = View.VISIBLE
             }
             is Uploading -> {
                 hideKeyboard()
+                binding.root.setAllEnabled(false)
                 binding.progressBar.visibility = View.VISIBLE
                 binding.btnCreate.visibility = View.INVISIBLE
             }
             is UploadFailed -> {
-                binding.progressBar.visibility = View.GONE
-                binding.btnCreate.visibility = View.VISIBLE
                 Toast.makeText(activity, "Upload failed", Toast.LENGTH_LONG).show()
+                viewModel.toInitialState()
             }
             is UploadSuccess -> {
                 findNavController().popBackStack()
@@ -109,10 +130,21 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_VIDEO_CAPTURE && resultCode == RESULT_OK) {
-            val videoUri: Uri? = data?.data
-            //videoView.setVideoURI(videoUri)
+            videoUri = data?.data
+            videoUri?.let {
+                binding.vvExercise.setVideoURI(it)
+                binding.vvExercise.visibility = View.VISIBLE
+                binding.vvExercise.start()
+                binding.btnAttachVideo.text = "Change Video"
+            }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(KEY_VIDEO_URI, videoUri)
     }
 
 }

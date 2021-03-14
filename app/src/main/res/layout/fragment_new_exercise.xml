@@ -16,13 +16,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 android:text="General"
                 android:textAlignment="textStart"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/vvExercise" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutName"
@@ -203,6 +203,15 @@
                 app:layout_constraintEnd_toEndOf="@+id/tvDuration"
                 app:layout_constraintStart_toStartOf="@+id/tvDuration"
                 app:layout_constraintTop_toBottomOf="@+id/tvDuration" />
+
+            <VideoView
+                android:id="@+id/vvExercise"
+                android:layout_width="wrap_content"
+                android:layout_height="250dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
