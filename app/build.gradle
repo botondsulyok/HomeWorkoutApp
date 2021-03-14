@@ -80,5 +80,10 @@ dependencies {
     //kotlin
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.1"
 
+    //permission dispatcher
+    def permissions_dispatcher_version = "4.8.0"
+    implementation "com.github.permissions-dispatcher:permissionsdispatcher:${permissions_dispatcher_version}"
+    kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:${permissions_dispatcher_version}"
+
 
 }

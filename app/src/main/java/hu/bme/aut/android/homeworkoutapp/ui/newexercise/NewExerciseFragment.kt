@@ -1,6 +1,12 @@
 package hu.bme.aut.android.homeworkoutapp.ui.newexercise
 
+import android.Manifest
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,19 +21,27 @@ import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewExerciseBinding
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.RuntimePermissions
 
+
+@RuntimePermissions
 class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExerciseViewModel>() {
 
     override fun provideViewModel() = getViewModelFromFactory()
     override fun getViewResource() = 0
 
+    companion object {
+        const val RC_VIDEO_CAPTURE = 100
+    }
+
     private var _binding: FragmentNewExerciseBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNewExerciseBinding.inflate(inflater, container, false)
         return binding.root
@@ -41,6 +55,12 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.btnAttachVideo.setOnClickListener {
+            if (requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+                captureVideoWithPermissionCheck()
+            }
+        }
+
         binding.btnCreate.setOnClickListener {
             if(binding.etName.text?.isEmpty() == true) {
                 binding.etName.error = "Add a name!"
@@ -49,7 +69,11 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
             viewModel.addExercise(exercise)
         }
 
-        val adapter = ArrayAdapter(requireContext(), R.layout.exercise_categories_list_item,  resources.getStringArray(R.array.exercise_categories_entries))
+        val adapter = ArrayAdapter(
+            requireContext(), R.layout.exercise_categories_list_item, resources.getStringArray(
+                R.array.exercise_categories_entries
+            )
+        )
         (binding.textInputLayoutCategories.editText as? AutoCompleteTextView)?.setAdapter(adapter)
     }
 
@@ -74,6 +98,21 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                 return
             }
         }.exhaustive
+    }
+
+    @NeedsPermission(Manifest.permission.CAMERA)
+    fun captureVideo() {
+        val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+        if (takeVideoIntent.resolveActivity(requireContext().packageManager) != null) {
+            startActivityForResult(takeVideoIntent, RC_VIDEO_CAPTURE)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == RC_VIDEO_CAPTURE && resultCode == RESULT_OK) {
+            val videoUri: Uri? = data?.data
+            //videoView.setVideoURI(videoUri)
+        }
     }
 
 }

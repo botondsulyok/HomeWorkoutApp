@@ -90,14 +90,14 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDuration">
+                app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etReps"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:hint="@string/hint_reps" />
+                    android:hint="@string/hint_reps"
+                    android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -190,6 +190,19 @@
                 app:layout_constraintEnd_toEndOf="@+id/btnCreate"
                 app:layout_constraintStart_toStartOf="@+id/btnCreate"
                 app:layout_constraintTop_toTopOf="@+id/btnCreate" />
+
+            <TextView
+                android:id="@+id/tvDurationDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Optional, you can add/change it later or specify for each workout."
+                android:textAlignment="textStart"
+                android:textSize="10dp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="@+id/tvDuration"
+                app:layout_constraintStart_toStartOf="@+id/tvDuration"
+                app:layout_constraintTop_toBottomOf="@+id/tvDuration" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
