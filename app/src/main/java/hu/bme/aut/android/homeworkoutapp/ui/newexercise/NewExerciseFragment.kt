@@ -36,6 +36,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     companion object {
         const val RC_VIDEO_CAPTURE = 100
         const val KEY_VIDEO_URI = "101"
+        const val KEY_DURATION_VALUES = "102"
     }
 
     private var _binding: FragmentNewExerciseBinding? = null
@@ -80,6 +81,11 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         binding.npDurationMinutes.maxValue = 59
         binding.npDurationSeconds.minValue = 0
         binding.npDurationSeconds.maxValue = 59
+
+        val durationList = savedInstanceState?.getIntegerArrayList(KEY_DURATION_VALUES)
+        binding.npDurationHours.value = durationList?.get(0) ?: 0
+        binding.npDurationMinutes.value = durationList?.get(1) ?: 0
+        binding.npDurationSeconds.value = durationList?.get(2) ?: 0
 
         setVideoPlayback()
 
@@ -182,7 +188,12 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(KEY_VIDEO_URI, videoUri)
-        
+        outState.putIntegerArrayList(
+                KEY_DURATION_VALUES,
+                arrayListOf(
+                        binding.npDurationHours.value,
+                        binding.npDurationMinutes.value,
+                        binding.npDurationSeconds.value))
     }
 
 }
