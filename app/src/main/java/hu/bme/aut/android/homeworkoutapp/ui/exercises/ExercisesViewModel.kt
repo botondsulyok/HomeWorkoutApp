@@ -25,7 +25,7 @@ class ExercisesViewModel @Inject constructor(
 
     fun deleteExercise(exercise: UiExercise) = execute {
         viewState = Loading
-        when(val result = exercisesPresenter.deletExercise(exercise)) {
+        when(val result = exercisesPresenter.deleteExercise(exercise)) {
             is ResultSuccess -> {
                 getExercises()
             }
