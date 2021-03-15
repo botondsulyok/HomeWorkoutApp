@@ -82,13 +82,15 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
 
     }
 
-    override fun onItemClick(exercise: UiExercise): Boolean {
+    override fun onItemClick(exercise: UiExercise?): Boolean {
         // TODO
         return true
     }
 
-    override fun onItemLongClick(exercise: UiExercise): Boolean {
-        viewModel.deleteExercise(exercise)
+    override fun onItemLongClick(exercise: UiExercise?): Boolean {
+        if (exercise != null) {
+            viewModel.deleteExercise(exercise)
+        }
         return true
     }
 
