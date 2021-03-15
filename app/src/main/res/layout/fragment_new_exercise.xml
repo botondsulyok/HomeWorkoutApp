@@ -91,7 +91,7 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription">
+                app:layout_constraintTop_toBottomOf="@+id/npDurationHours">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etReps"
@@ -125,7 +125,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps" />
+                app:layout_constraintTop_toBottomOf="@+id/tvDurationHoursLabel" />
 
             <NumberPicker
                 android:id="@+id/npDurationMinutes"
@@ -134,27 +134,28 @@
                 app:layout_constraintEnd_toStartOf="@+id/npDurationSeconds"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/npDurationHours"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps" />
+                app:layout_constraintTop_toBottomOf="@+id/tvDurationMinutesLabel" />
 
             <NumberPicker
                 android:id="@+id/npDurationSeconds"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/npDurationHours"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/npDurationMinutes"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps" />
+                app:layout_constraintTop_toBottomOf="@+id/tvDurationSecondsLabel" />
 
 
             <Button
                 android:id="@+id/btnCreate"
                 android:layout_width="200dp"
                 android:layout_height="60dp"
-                android:layout_marginTop="54dp"
+                android:layout_marginTop="32dp"
                 android:text="@string/btn_create"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/npDurationHours" />
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -221,6 +222,45 @@
                     android:visibility="gone" />
 
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvDurationHoursLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:maxLines="1"
+                android:text="Hours"
+                android:textSize="11dp"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/npDurationHours"
+                app:layout_constraintStart_toStartOf="@+id/npDurationHours"
+                app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription" />
+
+            <TextView
+                android:id="@+id/tvDurationMinutesLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:maxLines="1"
+                android:text="Minutes"
+                android:textSize="11dp"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/npDurationMinutes"
+                app:layout_constraintStart_toStartOf="@+id/npDurationMinutes"
+                app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription" />
+
+            <TextView
+                android:id="@+id/tvDurationSecondsLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:maxLines="1"
+                android:text="Seconds"
+                android:textSize="11dp"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/npDurationSeconds"
+                app:layout_constraintStart_toStartOf="@+id/npDurationSeconds"
+                app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
