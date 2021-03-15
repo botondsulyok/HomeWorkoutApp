@@ -116,61 +116,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCategories" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutDurationHour"
-                android:layout_width="90dp"
+            <NumberPicker
+                android:id="@+id/npDurationHours"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                app:layout_constraintEnd_toStartOf="@+id/textInputLayoutDurationMinute"
+                app:layout_constraintEnd_toStartOf="@+id/npDurationMinutes"
                 app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps">
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etDurationHour"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:hint="Hours" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutDurationMinute"
-                android:layout_width="90dp"
+            <NumberPicker
+                android:id="@+id/npDurationMinutes"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:layout_constraintEnd_toStartOf="@+id/textInputLayoutDurationSecond"
+                app:layout_constraintEnd_toStartOf="@+id/npDurationSeconds"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textInputLayoutDurationHour"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps">
+                app:layout_constraintStart_toEndOf="@+id/npDurationHours"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etDurationMinute"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:hint="Minutes" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutDurationSecond"
-                android:layout_width="90dp"
+            <NumberPicker
+                android:id="@+id/npDurationSeconds"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textInputLayoutDurationMinute"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps">
+                app:layout_constraintStart_toEndOf="@+id/npDurationMinutes"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etDurationSecond"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:hint="Seconds" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/btnCreate"
@@ -180,7 +154,7 @@
                 android:text="@string/btn_create"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutDurationMinute" />
+                app:layout_constraintTop_toBottomOf="@+id/npDurationHours" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -209,11 +183,11 @@
                 android:id="@+id/rlExerciseVideo"
                 android:layout_width="0dp"
                 android:layout_height="250dp"
+                android:gravity="center"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:gravity="center"
-                android:visibility="gone">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <RelativeLayout
                     android:id="@+id/rlExerciseVideoThumbnail"
@@ -225,10 +199,10 @@
                         android:id="@+id/ibExercisePlay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:elevation="6dp"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:backgroundTint="?attr/colorPrimary"
+                        android:elevation="6dp"
                         android:foregroundTint="?attr/colorOnPrimary"
                         android:src="@drawable/ic_baseline_play_arrow_24" />
 

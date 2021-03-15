@@ -47,9 +47,9 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                 name = binding.etName.text.toString(),
                 reps = binding.etReps.text.toInt(),
                 duration = Duration(
-                    binding.etDurationHour.text.toInt(),
-                    binding.etDurationMinute.text.toInt(),
-                    binding.etDurationMinute.text.toInt()),
+                    binding.npDurationHours.value,
+                    binding.npDurationMinutes.value,
+                    binding.npDurationSeconds.value),
                 categoryEntry = binding.autoCompleteTextViewExerciseCategories.text.toString(),
                 videoUri = videoUri
             )
@@ -73,6 +73,13 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.npDurationHours.minValue = 0
+        binding.npDurationHours.maxValue = 24
+        binding.npDurationMinutes.minValue = 0
+        binding.npDurationMinutes.maxValue = 59
+        binding.npDurationSeconds.minValue = 0
+        binding.npDurationSeconds.maxValue = 59
 
         setVideoPlayback()
 
@@ -175,6 +182,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(KEY_VIDEO_URI, videoUri)
+        
     }
 
 }

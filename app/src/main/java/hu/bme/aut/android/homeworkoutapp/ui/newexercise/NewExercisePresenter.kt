@@ -21,11 +21,18 @@ class NewExercisePresenter @Inject constructor(
     private fun UiNewExercise.toDomainNewExercise(): DomainNewExercise {
         val categoriesEntryList = context.resources.getStringArray(R.array.exercise_categories_entries)
         val categoriesValuesList = context.resources.getStringArray(R.array.exercise_categories_values)
+        val categoryValue =
+                if(categoriesEntryList.contains(categoryEntry)) {
+                    categoriesValuesList[categoriesEntryList.indexOf(categoryEntry)]
+                }
+                else {
+                    ""
+                }
         return DomainNewExercise(
             name = name,
             duration = duration,
             reps = reps,
-            categoryValue = categoriesValuesList[categoriesEntryList.indexOf(categoryEntry)],
+            categoryValue = categoryValue,
             videoUri = videoUri
         )
     }
