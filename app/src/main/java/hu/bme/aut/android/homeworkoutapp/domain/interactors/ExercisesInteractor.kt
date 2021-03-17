@@ -30,7 +30,6 @@ class ExercisesInteractor @Inject constructor(
     }
 
     suspend fun addExercise(exercise: DomainNewExercise): Result<Unit, Exception> {
-        // TODO create thumbnail
         return if(exercise.videoUri != null) {
             val bitmap = Glide.with(context).asBitmap().load(exercise.videoUri).submit().get()
             val baos = ByteArrayOutputStream()

@@ -44,16 +44,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvExerciseName"
                 tools:text="Category" />
 
-            <ImageView
-                android:id="@+id/imageView2"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="120dp"
+                android:layout_height="150dp"
+                app:contentPadding="0dp"
                 android:layout_marginTop="8dp"
-                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvExerciseCategory"
-                tools:srcCompat="@tools:sample/avatars" />
+                app:layout_constraintTop_toBottomOf="@+id/tvExerciseCategory">
+
+                <ImageView
+                    android:id="@+id/ivVideoThumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+            </com.google.android.material.card.MaterialCardView>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

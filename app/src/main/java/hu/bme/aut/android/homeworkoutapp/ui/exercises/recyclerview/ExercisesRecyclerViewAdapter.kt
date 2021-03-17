@@ -1,15 +1,20 @@
 package hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.ExercisesRowBinding
 import hu.bme.aut.android.homeworkoutapp.databinding.WorkoutsRowBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 
-class ExercisesRecyclerViewAdapter : ListAdapter<UiExercise, ExercisesRecyclerViewAdapter.ViewHolder>(ExercisesDiffCallback) {
+class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<UiExercise, ExercisesRecyclerViewAdapter.ViewHolder>(ExercisesDiffCallback) {
 
     interface ExerciseItemClickListener {
         fun onItemClick(exercise: UiExercise?): Boolean
@@ -41,6 +46,12 @@ class ExercisesRecyclerViewAdapter : ListAdapter<UiExercise, ExercisesRecyclerVi
 
         fun bind(exercise: UiExercise) {
             binding.exercise = exercise
+            Glide.with(context)
+                    .load(exercise.thumbnailUrl)
+                    .dontAnimate()
+                    .dontTransform()
+                    .placeholder(R.drawable.ic_baseline_image_placeholder_24)
+                    .into(binding.ivVideoThumbnail)
         }
 
     }

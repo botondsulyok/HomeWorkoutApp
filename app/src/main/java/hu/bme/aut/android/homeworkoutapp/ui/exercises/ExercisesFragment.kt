@@ -26,7 +26,7 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
 
     private var mainActivity: MainActivity? = null
 
-    private val recyclerViewAdapter = ExercisesRecyclerViewAdapter()
+    private lateinit var recyclerViewAdapter: ExercisesRecyclerViewAdapter
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -45,6 +45,7 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        recyclerViewAdapter = ExercisesRecyclerViewAdapter(requireContext())
         recyclerViewAdapter.exerciseClickListener = this
         binding.exercisesRecyclerView.adapter = recyclerViewAdapter
 
