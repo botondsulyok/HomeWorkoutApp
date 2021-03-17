@@ -12,4 +12,9 @@
     <string name="btn_set_duration">Set duration</string>
     <string name="hint_title">Title</string>
     <string name="btn_create_new_workout">Create new workout</string>
+    <string name="tv_duration_and_reps">%1$s, %2$s reps</string>
+    <string name="title_warning">Warning</string>
+    <string name="txt_sure_to_delet">Are you sure to delete?</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
 </resources>

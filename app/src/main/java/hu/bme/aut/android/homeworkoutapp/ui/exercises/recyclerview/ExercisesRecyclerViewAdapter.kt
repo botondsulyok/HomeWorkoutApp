@@ -3,6 +3,7 @@ package hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
@@ -19,6 +20,10 @@ class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<U
     interface ExerciseItemClickListener {
         fun onItemClick(exercise: UiExercise?): Boolean
         fun onItemLongClick(exercise: UiExercise?): Boolean
+        fun onItemDeleteClick(exercise: UiExercise?): Boolean
+        fun onEditClick(exercise: UiExercise?): Boolean
+        fun onStartClick(exercise: UiExercise?): Boolean
+
     }
 
     var exerciseClickListener: ExerciseItemClickListener? = null
@@ -42,16 +47,25 @@ class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<U
                 exerciseClickListener?.onItemLongClick(binding.exercise)
                 true
             }
+            binding.ibDelete.setOnClickListener {
+                exerciseClickListener?.onItemDeleteClick(binding.exercise)
+            }
         }
 
         fun bind(exercise: UiExercise) {
             binding.exercise = exercise
-            Glide.with(context)
-                    .load(exercise.thumbnailUrl)
-                    .dontAnimate()
-                    .dontTransform()
-                    .placeholder(R.drawable.ic_baseline_image_placeholder_24)
-                    .into(binding.ivVideoThumbnail)
+            if(exercise.thumbnailUrl.isEmpty()) {
+                binding.cardViewVideoThumbnail.visibility = View.GONE
+            }
+            else {
+                Glide.with(context)
+                        .load(exercise.thumbnailUrl)
+                        .dontAnimate()
+                        .dontTransform()
+                        .placeholder(R.drawable.ic_baseline_image_placeholder_24)
+                        .into(binding.ivVideoThumbnail)
+            }
+
         }
 
     }

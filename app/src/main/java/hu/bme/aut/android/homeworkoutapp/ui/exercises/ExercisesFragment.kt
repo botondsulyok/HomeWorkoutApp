@@ -1,5 +1,7 @@
 package hu.bme.aut.android.homeworkoutapp.ui.exercises
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
 import hu.bme.aut.android.homeworkoutapp.MainActivity
+import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentExercisesBinding
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentWorkoutsBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
@@ -84,14 +87,36 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
     }
 
     override fun onItemClick(exercise: UiExercise?): Boolean {
-        // TODO
+        // TODO expand
         return true
     }
 
     override fun onItemLongClick(exercise: UiExercise?): Boolean {
-        if (exercise != null) {
-            viewModel.deleteExercise(exercise)
-        }
+        // TODO elemek átrendezése
+        return true
+    }
+
+    override fun onItemDeleteClick(exercise: UiExercise?): Boolean {
+        AlertDialog.Builder(context)
+            .setTitle(getString(R.string.title_warning))
+            .setMessage(getString(R.string.txt_sure_to_delet))
+            .setPositiveButton(getString(R.string.btn_yes)) { dialogInterface: DialogInterface, i: Int ->
+                if (exercise != null) {
+                    viewModel.deleteExercise(exercise)
+                }
+            }
+            .setNegativeButton(getString(R.string.btn_no), null)
+            .show()
+        return true
+    }
+
+    override fun onEditClick(exercise: UiExercise?): Boolean {
+        // TODO show bottomsheet dialogfragment
+        return true
+    }
+
+    override fun onStartClick(exercise: UiExercise?): Boolean {
+        // TODO
         return true
     }
 
