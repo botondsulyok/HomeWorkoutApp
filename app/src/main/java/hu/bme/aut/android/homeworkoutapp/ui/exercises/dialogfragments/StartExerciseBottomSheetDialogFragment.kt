@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentStartExerciseBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
@@ -15,20 +16,27 @@ class StartExerciseBottomSheetDialogFragment
     : BottomSheetDialogFragment() {
 
     companion object {
-        const val EDIT_EXERCISE = "EDIT_EXERCISE"
-        private const val KEY_DURATION_VALUES = "100"
+        const val START_EXERCISE = "START_EXERCISE"
+        const val EXERCISE_VALUE = "100"
     }
 
     private var _binding: FragmentStartExerciseBinding? = null
     private val binding get() = _binding!!
 
-    var exercise = UiExercise()
-
     var save: (UiExercise) -> Unit = { }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //if (savedInstanceState != null) dismiss()
+    var exercise = UiExercise()
+
+    private val updatedExercise: UiExercise
+    get() {
+        return exercise.copy(
+            reps = binding.etReps.text.toInt(),
+            duration = Duration(
+                binding.npDurationHours.value,
+                binding.npDurationMinutes.value,
+                binding.npDurationSeconds.value
+            )
+        )
     }
 
     override fun onCreateView(
@@ -43,6 +51,12 @@ class StartExerciseBottomSheetDialogFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        exercise = if(savedInstanceState == null) {
+            arguments?.getParcelable(EXERCISE_VALUE) ?: UiExercise()
+        } else {
+            savedInstanceState.getParcelable(EXERCISE_VALUE) ?: UiExercise()
+        }
+
         binding.npDurationHours.minValue = 0
         binding.npDurationHours.maxValue = 24
         binding.npDurationMinutes.minValue = 0
@@ -50,32 +64,14 @@ class StartExerciseBottomSheetDialogFragment
         binding.npDurationSeconds.minValue = 0
         binding.npDurationSeconds.maxValue = 59
 
-        if(savedInstanceState == null) {
-            binding.npDurationHours.value = exercise.duration.hours
-            binding.npDurationMinutes.value = exercise.duration.minutes
-            binding.npDurationSeconds.value = exercise.duration.seconds
-            binding.etReps.setText(exercise.reps.toString())
-        }
-        else {
-            val durationList =
-                savedInstanceState.getIntegerArrayList(KEY_DURATION_VALUES)
-            binding.npDurationHours.value = durationList?.get(0) ?: 0
-            binding.npDurationMinutes.value = durationList?.get(1) ?: 0
-            binding.npDurationSeconds.value = durationList?.get(2) ?: 0
-        }
+        binding.npDurationHours.value = exercise.duration.hours
+        binding.npDurationMinutes.value = exercise.duration.minutes
+        binding.npDurationSeconds.value = exercise.duration.seconds
+        binding.etReps.setText(exercise.reps.toString())
 
         binding.btnStart.setOnClickListener {
             if(binding.cbSave.isChecked) {
-                save(
-                    exercise.copy(
-                        reps = binding.etReps.text.toInt(),
-                        duration = Duration(
-                            binding.npDurationHours.value,
-                            binding.npDurationMinutes.value,
-                            binding.npDurationSeconds.value
-                        )
-                    )
-                )
+                save(updatedExercise)
             }
             // TODO start, move to a fragment
         }
@@ -84,14 +80,7 @@ class StartExerciseBottomSheetDialogFragment
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putIntegerArrayList(
-            KEY_DURATION_VALUES,
-            arrayListOf(
-                binding.npDurationHours.value,
-                binding.npDurationMinutes.value,
-                binding.npDurationSeconds.value
-            )
-        )
+        outState.putParcelable(EXERCISE_VALUE, updatedExercise)
     }
 
 }

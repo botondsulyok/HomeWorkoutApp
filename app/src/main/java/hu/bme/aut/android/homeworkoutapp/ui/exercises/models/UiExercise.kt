@@ -1,7 +1,10 @@
 package hu.bme.aut.android.homeworkoutapp.ui.exercises.models
 
+import android.os.Parcelable
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class UiExercise(
         val id: String = "",
         val name: String = "",
@@ -10,4 +13,4 @@ data class UiExercise(
         val categoryEntry: String = "",
         val videoUrl: String = "",
         val thumbnailUrl: String = ""
-)
+) : Parcelable

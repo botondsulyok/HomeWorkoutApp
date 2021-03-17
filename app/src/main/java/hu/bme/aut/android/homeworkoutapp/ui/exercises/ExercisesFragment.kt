@@ -34,9 +34,9 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
     private var startExerciseBottomSheetDialogFragment = StartExerciseBottomSheetDialogFragment()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentExercisesBinding.inflate(inflater, container, false)
         return binding.root
@@ -116,8 +116,10 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
         if(exercise != null && !startExerciseBottomSheetDialogFragment.isAdded) {
             activity?.supportFragmentManager?.let { fragmentManager ->
                 startExerciseBottomSheetDialogFragment.also {
-                    it.exercise = exercise
-                }.show(fragmentManager, StartExerciseBottomSheetDialogFragment.EDIT_EXERCISE)
+                    val args = Bundle()
+                    args.putParcelable(StartExerciseBottomSheetDialogFragment.EXERCISE_VALUE, exercise)
+                    it.arguments = args
+                }.show(fragmentManager, StartExerciseBottomSheetDialogFragment.START_EXERCISE)
             }
         }
         return true

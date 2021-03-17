@@ -18,6 +18,7 @@ import co.zsmb.rainbowcake.extensions.exhaustive
 import com.bumptech.glide.Glide
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewExerciseBinding
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
 import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
@@ -35,32 +36,30 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     companion object {
         private const val RC_VIDEO_CAPTURE = 100
-        private const val KEY_VIDEO_URI = "101"
-        private const val KEY_DURATION_VALUES = "102"
+        private const val KEY_NEW_EXERCISE = "101"
     }
 
     private var _binding: FragmentNewExerciseBinding? = null
     private val binding get() = _binding!!
 
-    private val exercise: UiNewExercise
+    var exercise = UiNewExercise()
+
+    private val updatedExercise: UiNewExercise
         get() {
-            return UiNewExercise(
+            return exercise.copy(
                 name = binding.etName.text.toString(),
                 reps = binding.etReps.text.toInt(),
                 duration = Duration(
                     binding.npDurationHours.value,
                     binding.npDurationMinutes.value,
                     binding.npDurationSeconds.value),
-                categoryEntry = binding.autoCompleteTextViewExerciseCategories.text.toString(),
-                videoUri = videoUri
+                categoryEntry = binding.autoCompleteTextViewExerciseCategories.text.toString()
             )
         }
 
-    private var videoUri: Uri? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        videoUri = savedInstanceState?.getParcelable(KEY_VIDEO_URI)
+        exercise = savedInstanceState?.getParcelable(KEY_NEW_EXERCISE) ?: UiNewExercise()
     }
 
     override fun onCreateView(
@@ -82,10 +81,10 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         binding.npDurationSeconds.minValue = 0
         binding.npDurationSeconds.maxValue = 59
 
-        val durationList = savedInstanceState?.getIntegerArrayList(KEY_DURATION_VALUES)
-        binding.npDurationHours.value = durationList?.get(0) ?: 0
-        binding.npDurationMinutes.value = durationList?.get(1) ?: 0
-        binding.npDurationSeconds.value = durationList?.get(2) ?: 0
+        binding.npDurationHours.value = exercise.duration.hours
+        binding.npDurationMinutes.value = exercise.duration.minutes
+        binding.npDurationSeconds.value = exercise.duration.seconds
+        binding.etReps.setText(exercise.reps.toString())
 
         setVideoPlayback()
 
@@ -122,7 +121,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                 binding.etName.error = "Add a name!"
                 return@setOnClickListener
             }
-            viewModel.addExercise(exercise)
+            viewModel.addExercise(updatedExercise)
         }
 
         val adapter = ArrayAdapter(
@@ -168,13 +167,13 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_VIDEO_CAPTURE && resultCode == RESULT_OK) {
-            videoUri = data?.data
+            exercise = exercise.copy(videoUri = data?.data)
             setVideoPlayback()
         }
     }
 
     private fun setVideoPlayback() {
-        videoUri?.let {
+        exercise.videoUri?.let {
             binding.vvExerciseVideo.setVideoURI(it)
             Glide.with(requireContext())
                 .load(it)
@@ -187,13 +186,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(KEY_VIDEO_URI, videoUri)
-        outState.putIntegerArrayList(
-                KEY_DURATION_VALUES,
-                arrayListOf(
-                        binding.npDurationHours.value,
-                        binding.npDurationMinutes.value,
-                        binding.npDurationSeconds.value))
+        outState.putParcelable(KEY_NEW_EXERCISE, updatedExercise)
     }
 
 }
