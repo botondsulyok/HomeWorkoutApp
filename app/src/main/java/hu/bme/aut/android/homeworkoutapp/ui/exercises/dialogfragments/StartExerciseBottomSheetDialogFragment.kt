@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentStartExerciseBinding
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExerciseListener
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
 import hu.bme.aut.android.homeworkoutapp.utils.toInt
@@ -68,7 +69,7 @@ class StartExerciseBottomSheetDialogFragment
 
         binding.btnStart.setOnClickListener {
             if(binding.cbSave.isChecked) {
-                (arguments?.getSerializable(SAVE_ACTION_VALUE) as? (UiExercise) -> Unit)?.invoke(updatedExercise)
+                (arguments?.getSerializable(SAVE_ACTION_VALUE) as? ExerciseListener)?.action?.invoke(updatedExercise)
             }
             // TODO start, move to a fragment
             dismiss()

@@ -123,7 +123,7 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
                 startExerciseBottomSheetDialogFragment.also {
                     val args = Bundle()
                     args.putParcelable(StartExerciseBottomSheetDialogFragment.EXERCISE_VALUE, exercise)
-                    args.putSerializable(StartExerciseBottomSheetDialogFragment.SAVE_ACTION_VALUE, this::updateExercise as? Serializable)
+                    args.putSerializable(StartExerciseBottomSheetDialogFragment.SAVE_ACTION_VALUE, ExerciseListener(this::updateExercise))
                     it.arguments = args
                 }.show(fragmentManager, StartExerciseBottomSheetDialogFragment.START_EXERCISE)
             }
@@ -136,3 +136,5 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
     }
 
 }
+
+class ExerciseListener(val action: (UiExercise) -> Unit) : Serializable
