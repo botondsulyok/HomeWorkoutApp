@@ -15,6 +15,7 @@ import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentExercisesBinding
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentWorkoutsBinding
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.EditExerciseBottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview.ExercisesRecyclerViewAdapter
 
@@ -30,6 +31,8 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
     private var mainActivity: MainActivity? = null
 
     private lateinit var recyclerViewAdapter: ExercisesRecyclerViewAdapter
+
+    private var editExerciseBottomSheetDialogFragment = EditExerciseBottomSheetDialogFragment()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -96,7 +99,7 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
         return true
     }
 
-    override fun onItemDeleteClick(exercise: UiExercise?): Boolean {
+    override fun onDeleteClick(exercise: UiExercise?): Boolean {
         AlertDialog.Builder(context)
             .setTitle(getString(R.string.title_warning))
             .setMessage(getString(R.string.txt_sure_to_delet))
@@ -111,7 +114,13 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
     }
 
     override fun onEditClick(exercise: UiExercise?): Boolean {
-        // TODO show bottomsheet dialogfragment
+        if(exercise != null && !editExerciseBottomSheetDialogFragment.isAdded) {
+            activity?.supportFragmentManager?.let { fragmentManager ->
+                editExerciseBottomSheetDialogFragment.also {
+                    it.exercise = exercise
+                }.show(fragmentManager, EditExerciseBottomSheetDialogFragment.EDIT_EXERCISE)
+            }
+        }
         return true
     }
 

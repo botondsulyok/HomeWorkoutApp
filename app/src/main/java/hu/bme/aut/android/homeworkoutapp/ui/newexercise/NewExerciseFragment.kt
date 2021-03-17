@@ -34,9 +34,9 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     override fun getViewResource() = 0
 
     companion object {
-        const val RC_VIDEO_CAPTURE = 100
-        const val KEY_VIDEO_URI = "101"
-        const val KEY_DURATION_VALUES = "102"
+        private const val RC_VIDEO_CAPTURE = 100
+        private const val KEY_VIDEO_URI = "101"
+        private const val KEY_DURATION_VALUES = "102"
     }
 
     private var _binding: FragmentNewExerciseBinding? = null

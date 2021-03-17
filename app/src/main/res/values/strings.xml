@@ -17,4 +17,5 @@
     <string name="txt_sure_to_delet">Are you sure to delete?</string>
     <string name="btn_yes">Yes</string>
     <string name="btn_no">No</string>
+    <string name="btn_save">Save</string>
 </resources>

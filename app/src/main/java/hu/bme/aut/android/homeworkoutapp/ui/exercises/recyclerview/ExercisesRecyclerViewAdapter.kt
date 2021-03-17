@@ -1,18 +1,15 @@
 package hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.ExercisesRowBinding
-import hu.bme.aut.android.homeworkoutapp.databinding.WorkoutsRowBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 
 class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<UiExercise, ExercisesRecyclerViewAdapter.ViewHolder>(ExercisesDiffCallback) {
@@ -20,7 +17,7 @@ class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<U
     interface ExerciseItemClickListener {
         fun onItemClick(exercise: UiExercise?): Boolean
         fun onItemLongClick(exercise: UiExercise?): Boolean
-        fun onItemDeleteClick(exercise: UiExercise?): Boolean
+        fun onDeleteClick(exercise: UiExercise?): Boolean
         fun onEditClick(exercise: UiExercise?): Boolean
         fun onStartClick(exercise: UiExercise?): Boolean
 
@@ -48,7 +45,13 @@ class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<U
                 true
             }
             binding.ibDelete.setOnClickListener {
-                exerciseClickListener?.onItemDeleteClick(binding.exercise)
+                exerciseClickListener?.onDeleteClick(binding.exercise)
+            }
+            binding.ibEditDurationAndReps.setOnClickListener {
+                exerciseClickListener?.onEditClick(binding.exercise)
+            }
+            binding.ibStart.setOnClickListener {
+                exerciseClickListener?.onStartClick(binding.exercise)
             }
         }
 
