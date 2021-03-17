@@ -115,6 +115,7 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
     override fun onStartClick(exercise: UiExercise?): Boolean {
         if(exercise != null && !startExerciseBottomSheetDialogFragment.isAdded) {
             activity?.supportFragmentManager?.let { fragmentManager ->
+                startExerciseBottomSheetDialogFragment = StartExerciseBottomSheetDialogFragment()
                 startExerciseBottomSheetDialogFragment.also {
                     val args = Bundle()
                     args.putParcelable(StartExerciseBottomSheetDialogFragment.EXERCISE_VALUE, exercise)

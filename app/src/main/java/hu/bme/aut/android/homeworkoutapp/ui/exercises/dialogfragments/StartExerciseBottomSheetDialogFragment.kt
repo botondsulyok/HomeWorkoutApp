@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentStartExerciseBinding
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
 import hu.bme.aut.android.homeworkoutapp.utils.toInt
@@ -24,6 +26,8 @@ class StartExerciseBottomSheetDialogFragment
     private val binding get() = _binding!!
 
     var save: (UiExercise) -> Unit = { }
+
+    //private val viewmodel = ExercisesViewModel by viewModels()
 
     var exercise = UiExercise()
 
