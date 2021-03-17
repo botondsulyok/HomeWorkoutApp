@@ -92,13 +92,11 @@ class FirebaseDataSource @Inject constructor() {
     }
 
     suspend fun deleteWorkout(workout: DomainWorkout): Result<Unit, Exception> {
-        val deleteWorkout = workout.toFirebaseWorkout()
-
         val deleteWorkoutRef = db
             .collection("userdata")
             .document(userId)
             .collection("workouts")
-            .document(deleteWorkout.id)
+            .document(workout.id)
 
         return try {
             deleteWorkoutRef.delete().await()
@@ -166,16 +164,34 @@ class FirebaseDataSource @Inject constructor() {
 
     // TODO delete video and thumbnail
     suspend fun deleteExercise(exercise: DomainExercise): Result<Unit, Exception> {
-        val deleteExercise = exercise.toFirebaseExercise()
-
         val deleteExerciseRef = db
                 .collection("userdata")
                 .document(userId)
                 .collection("exercises")
-                .document(deleteExercise.id)
+                .document(exercise.id)
 
         return try {
             deleteExerciseRef.delete().await()
+            ResultSuccess(Unit)
+        } catch (e: Exception) {
+            ResultFailure(e)
+        }
+    }
+
+    suspend fun updateExercise(exercise: DomainExercise): Result<Unit, Exception> {
+        val updateExerciseRef = db
+            .collection("userdata")
+            .document(userId)
+            .collection("exercises")
+            .document(exercise.id)
+
+        return try {
+            val oldExerciseSnapshot = updateExerciseRef.get().await()
+            val oldExercise = oldExerciseSnapshot.toObject<FirebaseExercise>()
+            if(oldExercise != null) {
+                val newExercise = exercise.toFirebaseExercise(oldExercise)
+                updateExerciseRef.set(newExercise).await()
+            }
             ResultSuccess(Unit)
         } catch (e: Exception) {
             ResultFailure(e)
@@ -199,13 +215,15 @@ private fun FirebaseWorkout.toDomainWorkout(): DomainWorkout {
     )
 }
 
-private fun DomainExercise.toFirebaseExercise(): FirebaseExercise {
+private fun DomainExercise.toFirebaseExercise(firebaseExercise: FirebaseExercise = FirebaseExercise()): FirebaseExercise {
     return FirebaseExercise(
         id = id,
         name = name,
+        creation = firebaseExercise.creation,
         reps = reps,
         duration = duration,
         categoryValue = categoryValue,
+        videoPath = firebaseExercise.videoPath,
         videoUrl = videoUrl,
         thumbnailUrl = thumbnailUrl
     )

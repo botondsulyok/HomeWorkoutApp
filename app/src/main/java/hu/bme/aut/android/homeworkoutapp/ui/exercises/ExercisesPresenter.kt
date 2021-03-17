@@ -31,6 +31,10 @@ class ExercisesPresenter @Inject constructor(
         exerciseInteractor.deleteExercise(exercise.toDomainExercise())
     }
 
+    suspend fun updateExercise(exercise: UiExercise): Result<Unit, Exception> = withIOContext {
+        exerciseInteractor.updateExercise(exercise.toDomainExercise())
+    }
+
     private fun UiExercise.toDomainExercise(): DomainExercise {
         val categoriesEntryList = context.resources.getStringArray(R.array.exercise_categories_entries)
         val categoriesValuesList = context.resources.getStringArray(R.array.exercise_categories_values)

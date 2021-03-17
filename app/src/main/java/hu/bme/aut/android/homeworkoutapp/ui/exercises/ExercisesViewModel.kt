@@ -35,4 +35,16 @@ class ExercisesViewModel @Inject constructor(
         }
     }
 
+    fun updateExercise(exercise: UiExercise) = execute {
+        viewState = Loading
+        when(val result = exercisesPresenter.updateExercise(exercise)) {
+            is ResultSuccess -> {
+                getExercises()
+            }
+            is ResultFailure -> {
+                viewState = Failed(result.reason.message.toString())
+            }
+        }
+    }
+
 }

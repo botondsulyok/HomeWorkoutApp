@@ -1,15 +1,11 @@
 package hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentStartExerciseBinding
-import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
 import hu.bme.aut.android.homeworkoutapp.utils.toInt
@@ -20,14 +16,11 @@ class StartExerciseBottomSheetDialogFragment
     companion object {
         const val START_EXERCISE = "START_EXERCISE"
         const val EXERCISE_VALUE = "100"
+        const val SAVE_ACTION_VALUE = "101"
     }
 
     private var _binding: FragmentStartExerciseBinding? = null
     private val binding get() = _binding!!
-
-    var save: (UiExercise) -> Unit = { }
-
-    //private val viewmodel = ExercisesViewModel by viewModels()
 
     var exercise = UiExercise()
 
@@ -75,9 +68,10 @@ class StartExerciseBottomSheetDialogFragment
 
         binding.btnStart.setOnClickListener {
             if(binding.cbSave.isChecked) {
-                save(updatedExercise)
+                (arguments?.getSerializable(SAVE_ACTION_VALUE) as? (UiExercise) -> Unit)?.invoke(updatedExercise)
             }
             // TODO start, move to a fragment
+            dismiss()
         }
 
     }

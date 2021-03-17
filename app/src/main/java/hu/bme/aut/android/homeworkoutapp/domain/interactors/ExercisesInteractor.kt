@@ -44,5 +44,8 @@ class ExercisesInteractor @Inject constructor(
     suspend fun deleteExercise(exercise: DomainExercise): Result<Unit, Exception> {
         return firebaseDataSource.deleteExercise(exercise)
     }
+    suspend fun updateExercise(exercise: DomainExercise): Result<Unit, Exception> {
+        return firebaseDataSource.updateExercise(exercise)
+    }
 
 }

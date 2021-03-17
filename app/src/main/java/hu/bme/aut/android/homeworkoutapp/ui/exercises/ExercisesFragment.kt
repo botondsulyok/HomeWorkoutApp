@@ -3,6 +3,7 @@ package hu.bme.aut.android.homeworkoutapp.ui.exercises
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,9 @@ import hu.bme.aut.android.homeworkoutapp.databinding.FragmentExercisesBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.StartExerciseBottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview.ExercisesRecyclerViewAdapter
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
+import java.io.Serializable
 
 
 class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewModel>(), ExercisesRecyclerViewAdapter.ExerciseItemClickListener {
@@ -119,11 +123,16 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
                 startExerciseBottomSheetDialogFragment.also {
                     val args = Bundle()
                     args.putParcelable(StartExerciseBottomSheetDialogFragment.EXERCISE_VALUE, exercise)
+                    args.putSerializable(StartExerciseBottomSheetDialogFragment.SAVE_ACTION_VALUE, this::updateExercise as? Serializable)
                     it.arguments = args
                 }.show(fragmentManager, StartExerciseBottomSheetDialogFragment.START_EXERCISE)
             }
         }
         return true
+    }
+
+    private fun updateExercise(exercise: UiExercise) {
+        viewModel.updateExercise(exercise)
     }
 
 }
