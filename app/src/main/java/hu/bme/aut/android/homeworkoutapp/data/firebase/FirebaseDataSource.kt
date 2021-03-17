@@ -133,10 +133,19 @@ class FirebaseDataSource @Inject constructor() {
             var videoUrl = ""
             if(exercise.videoUri != null) {
                 val newVideoName = "${URLEncoder.encode(UUID.randomUUID().toString(), "UTF-8")}.mp4"
-                videoPath = "userdata/${userId}/exercises/$newVideoName"
+                videoPath = "userdata/${userId}/exercises/videos/$newVideoName"
                 val newVideoRef = storage.child(videoPath)
                 newVideoRef.putFile(exercise.videoUri).await()
                 videoUrl = newVideoRef.downloadUrl.await().toString()
+            }
+
+            var thumbnailUrl = ""
+            if(exercise.thumbnailInBytes != null) {
+                val newThumbnailName = "${URLEncoder.encode(UUID.randomUUID().toString(), "UTF-8")}.jpg"
+                val thumbnailPath = "userdata/${userId}/exercises/videothumbnails/$newThumbnailName"
+                val newThumbnailRef = storage.child(thumbnailPath)
+                newThumbnailRef.putBytes(exercise.thumbnailInBytes).await()
+                thumbnailUrl = newThumbnailRef.downloadUrl.await().toString()
             }
 
             val newExerciseRef = db
@@ -145,7 +154,7 @@ class FirebaseDataSource @Inject constructor() {
                 .collection("exercises")
                 .document()
 
-            val newExercise = exercise.toFirebaseExercise(newExerciseRef.id, videoPath, videoUrl)
+            val newExercise = exercise.toFirebaseExercise(newExerciseRef.id, videoPath, videoUrl, thumbnailUrl)
 
             newExerciseRef.set(newExercise).await()
             ResultSuccess(Unit)
@@ -155,6 +164,7 @@ class FirebaseDataSource @Inject constructor() {
         }
     }
 
+    // TODO delete video and thumbnail
     suspend fun deleteExercise(exercise: DomainExercise): Result<Unit, Exception> {
         val deleteExercise = exercise.toFirebaseExercise()
 
@@ -196,11 +206,12 @@ private fun DomainExercise.toFirebaseExercise(): FirebaseExercise {
         reps = reps,
         duration = duration,
         categoryValue = categoryValue,
-        videoUrl = videoUrl
+        videoUrl = videoUrl,
+        thumbnailUrl = thumbnailUrl
     )
 }
 
-private fun DomainNewExercise.toFirebaseExercise(id: String, videoPath: String, videoUrl:String): FirebaseExercise {
+private fun DomainNewExercise.toFirebaseExercise(id: String, videoPath: String, videoUrl:String, thumbnailUrl: String): FirebaseExercise {
     return FirebaseExercise(
         id = id,
         name = name,
@@ -208,7 +219,8 @@ private fun DomainNewExercise.toFirebaseExercise(id: String, videoPath: String, 
         duration = duration,
         categoryValue = categoryValue,
         videoPath = videoPath,
-        videoUrl = videoUrl
+        videoUrl = videoUrl,
+        thumbnailUrl = thumbnailUrl
     )
 }
 
@@ -219,6 +231,7 @@ private fun FirebaseExercise.toDomainExercise(): DomainExercise {
         reps = reps,
         duration = duration,
         categoryValue = categoryValue,
-        videoUrl = videoUrl
+        videoUrl = videoUrl,
+        thumbnailUrl = thumbnailUrl
     )
 }

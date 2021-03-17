@@ -8,5 +8,6 @@ data class DomainExercise(
         val reps: Int = 0,
         val duration: Duration = Duration(),
         val categoryValue: String = "",
-        val videoUrl: String = ""
+        val videoUrl: String = "",
+        val thumbnailUrl: String = ""
 )
