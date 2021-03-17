@@ -1,15 +1,17 @@
 package hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import hu.bme.aut.android.homeworkoutapp.databinding.FragmentEditExerciseBinding
+import hu.bme.aut.android.homeworkoutapp.databinding.FragmentStartExerciseBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
-import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
+import hu.bme.aut.android.homeworkoutapp.utils.Duration
+import hu.bme.aut.android.homeworkoutapp.utils.toInt
 
-class EditExerciseBottomSheetDialogFragment()
+class StartExerciseBottomSheetDialogFragment
     : BottomSheetDialogFragment() {
 
     companion object {
@@ -17,17 +19,24 @@ class EditExerciseBottomSheetDialogFragment()
         private const val KEY_DURATION_VALUES = "100"
     }
 
-    private var _binding: FragmentEditExerciseBinding? = null
+    private var _binding: FragmentStartExerciseBinding? = null
     private val binding get() = _binding!!
 
     var exercise = UiExercise()
+
+    var save: (UiExercise) -> Unit = { }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //if (savedInstanceState != null) dismiss()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentEditExerciseBinding.inflate(inflater, container, false)
+        _binding = FragmentStartExerciseBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -55,8 +64,20 @@ class EditExerciseBottomSheetDialogFragment()
             binding.npDurationSeconds.value = durationList?.get(2) ?: 0
         }
 
-        binding.btnCreate.setOnClickListener {
-
+        binding.btnStart.setOnClickListener {
+            if(binding.cbSave.isChecked) {
+                save(
+                    exercise.copy(
+                        reps = binding.etReps.text.toInt(),
+                        duration = Duration(
+                            binding.npDurationHours.value,
+                            binding.npDurationMinutes.value,
+                            binding.npDurationSeconds.value
+                        )
+                    )
+                )
+            }
+            // TODO start, move to a fragment
         }
 
     }
@@ -68,8 +89,9 @@ class EditExerciseBottomSheetDialogFragment()
             arrayListOf(
                 binding.npDurationHours.value,
                 binding.npDurationMinutes.value,
-                binding.npDurationSeconds.value))
+                binding.npDurationSeconds.value
+            )
+        )
     }
-
 
 }

@@ -14,8 +14,7 @@ import co.zsmb.rainbowcake.extensions.exhaustive
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentExercisesBinding
-import hu.bme.aut.android.homeworkoutapp.databinding.FragmentWorkoutsBinding
-import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.EditExerciseBottomSheetDialogFragment
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.StartExerciseBottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview.ExercisesRecyclerViewAdapter
 
@@ -32,7 +31,7 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
 
     private lateinit var recyclerViewAdapter: ExercisesRecyclerViewAdapter
 
-    private var editExerciseBottomSheetDialogFragment = EditExerciseBottomSheetDialogFragment()
+    private var startExerciseBottomSheetDialogFragment = StartExerciseBottomSheetDialogFragment()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -113,19 +112,14 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
         return true
     }
 
-    override fun onEditClick(exercise: UiExercise?): Boolean {
-        if(exercise != null && !editExerciseBottomSheetDialogFragment.isAdded) {
+    override fun onStartClick(exercise: UiExercise?): Boolean {
+        if(exercise != null && !startExerciseBottomSheetDialogFragment.isAdded) {
             activity?.supportFragmentManager?.let { fragmentManager ->
-                editExerciseBottomSheetDialogFragment.also {
+                startExerciseBottomSheetDialogFragment.also {
                     it.exercise = exercise
-                }.show(fragmentManager, EditExerciseBottomSheetDialogFragment.EDIT_EXERCISE)
+                }.show(fragmentManager, StartExerciseBottomSheetDialogFragment.EDIT_EXERCISE)
             }
         }
-        return true
-    }
-
-    override fun onStartClick(exercise: UiExercise?): Boolean {
-        // TODO
         return true
     }
 

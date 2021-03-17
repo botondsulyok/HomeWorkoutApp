@@ -1,270 +1,267 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.core.widget.NestedScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="16dp">
+        <TextView
+            android:id="@+id/tvGeneral"
+            style="?attr/textAppearanceHeadline6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="General"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rlExerciseVideo" />
 
-            <TextView
-                android:id="@+id/tvGeneral"
-                style="?attr/textAppearanceHeadline6"
-                android:layout_width="0dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvGeneral">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="General"
-                android:textAlignment="textStart"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rlExerciseVideo" />
+                android:hint="@string/hint_name" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutName"
-                android:layout_width="0dp"
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutCategories"
+            style="@style/Widget.App.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="72dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="72dp"
+            android:hint="@string/hint_category"
+            android:labelFor="@id/autoCompleteTextViewExerciseCategories"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutName">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextViewExerciseCategories"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvGeneral">
+                android:dropDownHeight="300dp"
+                android:inputType="none" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_name" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/tvDuration"
+            style="?attr/textAppearanceHeadline6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:text="Duration"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAttachVideo" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutCategories"
-                style="@style/Widget.App.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="0dp"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutReps"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/npDurationHours">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etReps"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="72dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="72dp"
-                android:hint="@string/hint_category"
-                android:labelFor="@id/autoCompleteTextViewExerciseCategories"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutName">
+                android:hint="@string/hint_reps"
+                android:inputType="number" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteTextViewExerciseCategories"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:dropDownHeight="300dp"
-                    android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/btnAttachVideo"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/btn_create_video"
+            app:icon="@drawable/ic_baseline_add_a_photo_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCategories" />
 
-            <TextView
-                android:id="@+id/tvDuration"
-                style="?attr/textAppearanceHeadline6"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
-                android:text="Duration"
-                android:textAlignment="textStart"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnAttachVideo" />
+        <NumberPicker
+            android:id="@+id/npDurationHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/npDurationMinutes"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDurationHoursLabel" />
 
+        <NumberPicker
+            android:id="@+id/npDurationMinutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/npDurationSeconds"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/npDurationHours"
+            app:layout_constraintTop_toBottomOf="@+id/tvDurationMinutesLabel" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutReps"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/npDurationHours">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etReps"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_reps"
-                    android:inputType="number" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/btnAttachVideo"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/btn_create_video"
-                app:icon="@drawable/ic_baseline_add_a_photo_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCategories" />
-
-            <NumberPicker
-                android:id="@+id/npDurationHours"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/npDurationMinutes"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDurationHoursLabel" />
-
-            <NumberPicker
-                android:id="@+id/npDurationMinutes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toStartOf="@+id/npDurationSeconds"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/npDurationHours"
-                app:layout_constraintTop_toBottomOf="@+id/tvDurationMinutesLabel" />
-
-            <NumberPicker
-                android:id="@+id/npDurationSeconds"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/npDurationHours"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/npDurationMinutes"
-                app:layout_constraintTop_toBottomOf="@+id/tvDurationSecondsLabel" />
+        <NumberPicker
+            android:id="@+id/npDurationSeconds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/npDurationHours"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/npDurationMinutes"
+            app:layout_constraintTop_toBottomOf="@+id/tvDurationSecondsLabel" />
 
 
-            <Button
-                android:id="@+id/btnCreate"
-                android:layout_width="200dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="32dp"
-                android:text="@string/btn_create"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps" />
+        <Button
+            android:id="@+id/btnCreate"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/btn_create"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps" />
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="@+id/btnCreate"
-                app:layout_constraintEnd_toEndOf="@+id/btnCreate"
-                app:layout_constraintStart_toStartOf="@+id/btnCreate"
-                app:layout_constraintTop_toTopOf="@+id/btnCreate" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnCreate"
+            app:layout_constraintEnd_toEndOf="@+id/btnCreate"
+            app:layout_constraintStart_toStartOf="@+id/btnCreate"
+            app:layout_constraintTop_toTopOf="@+id/btnCreate" />
 
-            <TextView
-                android:id="@+id/tvDurationDescription"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Optional, you can add/change it later or specify for each workout."
-                android:textAlignment="textStart"
-                android:textSize="10dp"
-                android:textStyle="italic"
-                app:layout_constraintEnd_toEndOf="@+id/tvDuration"
-                app:layout_constraintStart_toStartOf="@+id/tvDuration"
-                app:layout_constraintTop_toBottomOf="@+id/tvDuration" />
+        <TextView
+            android:id="@+id/tvDurationDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Optional, you can add/change it later or specify for each workout."
+            android:textAlignment="textStart"
+            android:textSize="10dp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="@+id/tvDuration"
+            app:layout_constraintStart_toStartOf="@+id/tvDuration"
+            app:layout_constraintTop_toBottomOf="@+id/tvDuration" />
+
+        <RelativeLayout
+            android:id="@+id/rlExerciseVideo"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <RelativeLayout
-                android:id="@+id/rlExerciseVideo"
-                android:layout_width="0dp"
-                android:layout_height="250dp"
-                android:gravity="center"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:id="@+id/rlExerciseVideoThumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
-                <RelativeLayout
-                    android:id="@+id/rlExerciseVideoThumbnail"
+                <ImageButton
+                    android:id="@+id/ibExercisePlay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:elevation="6dp"
+                    android:foregroundTint="?attr/colorOnPrimary"
+                    android:src="@drawable/ic_baseline_play_arrow_24" />
+
+                <ImageView
+                    android:id="@+id/ivExerciseThumbnail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone">
-
-                    <ImageButton
-                        android:id="@+id/ibExercisePlay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:backgroundTint="?attr/colorPrimary"
-                        android:elevation="6dp"
-                        android:foregroundTint="?attr/colorOnPrimary"
-                        android:src="@drawable/ic_baseline_play_arrow_24" />
-
-                    <ImageView
-                        android:id="@+id/ivExerciseThumbnail"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop" />
-
-                </RelativeLayout>
-
-                <VideoView
-                    android:id="@+id/vvExerciseVideo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:visibility="gone" />
+                    android:scaleType="centerCrop" />
 
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tvDurationHoursLabel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:maxLines="1"
-                android:text="Hours"
-                android:textSize="11dp"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="@+id/npDurationHours"
-                app:layout_constraintStart_toStartOf="@+id/npDurationHours"
-                app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription" />
+            <VideoView
+                android:id="@+id/vvExerciseVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/tvDurationMinutesLabel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:maxLines="1"
-                android:text="Minutes"
-                android:textSize="11dp"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="@+id/npDurationMinutes"
-                app:layout_constraintStart_toStartOf="@+id/npDurationMinutes"
-                app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription" />
+        </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tvDurationSecondsLabel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:maxLines="1"
-                android:text="Seconds"
-                android:textSize="11dp"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="@+id/npDurationSeconds"
-                app:layout_constraintStart_toStartOf="@+id/npDurationSeconds"
-                app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription" />
+        <TextView
+            android:id="@+id/tvDurationHoursLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:maxLines="1"
+            android:text="Hours"
+            android:textSize="11dp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/npDurationHours"
+            app:layout_constraintStart_toStartOf="@+id/npDurationHours"
+            app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription" />
+
+        <TextView
+            android:id="@+id/tvDurationMinutesLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:maxLines="1"
+            android:text="Minutes"
+            android:textSize="11dp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/npDurationMinutes"
+            app:layout_constraintStart_toStartOf="@+id/npDurationMinutes"
+            app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription" />
+
+        <TextView
+            android:id="@+id/tvDurationSecondsLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:maxLines="1"
+            android:text="Seconds"
+            android:textSize="11dp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/npDurationSeconds"
+            app:layout_constraintStart_toStartOf="@+id/npDurationSeconds"
+            app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
-
-</layout>
+</androidx.core.widget.NestedScrollView>
