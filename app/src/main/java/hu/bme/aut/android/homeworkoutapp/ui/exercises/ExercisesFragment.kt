@@ -14,12 +14,14 @@ import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
+import hu.bme.aut.android.homeworkoutapp.databinding.ExercisesRowBinding
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentExercisesBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.StartExerciseBottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview.ExercisesRecyclerViewAdapter
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
+import kotlinx.android.synthetic.main.exercises_row.*
 import java.io.Serializable
 
 
@@ -90,11 +92,6 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
             }
         }.exhaustive
 
-    }
-
-    override fun onItemClick(exercise: UiExercise?): Boolean {
-        // TODO expand
-        return true
     }
 
     override fun onItemLongClick(exercise: UiExercise?): Boolean {

@@ -17,9 +17,11 @@
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/motionLayoutExercisesRow"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layoutDescription="@xml/exercises_row_scene">
 
             <TextView
                 android:id="@+id/tvExerciseName"
@@ -44,67 +46,78 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvExerciseName"
                 tools:text="Category" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardViewVideoThumbnail"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clExpandableViews"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="16dp"
-                app:contentPadding="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvExerciseCategory">
 
-                <ImageView
-                    android:id="@+id/ivVideoThumbnail"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    tools:srcCompat="@tools:sample/avatars" />
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewVideoThumbnail"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="16dp"
+                    app:contentPadding="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            </com.google.android.material.card.MaterialCardView>
+                    <ImageView
+                        android:id="@+id/ivVideoThumbnail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        tools:srcCompat="@tools:sample/avatars" />
 
-            <ImageButton
-                android:id="@+id/ibStart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:padding="8dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_baseline_play_arrow_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardViewVideoThumbnail" />
+                </com.google.android.material.card.MaterialCardView>
 
-            <ImageButton
-                android:id="@+id/ibDelete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                android:background="@android:color/transparent"
-                android:padding="8dp"
-                android:src="@drawable/ic_baseline_delete_24"
-                app:layout_constraintEnd_toStartOf="@+id/ibStart"
-                app:layout_constraintTop_toBottomOf="@+id/cardViewVideoThumbnail" />
+                <ImageButton
+                    android:id="@+id/ibStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_baseline_play_arrow_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardViewVideoThumbnail" />
 
-            <TextView
-                android:id="@+id/tvDetails"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@{@string/tv_duration_and_reps(exercise.duration.toString(), exercise.reps)}"
-                android:textAlignment="textStart"
-                app:layout_constraintBottom_toBottomOf="@+id/ibDelete"
-                app:layout_constraintEnd_toStartOf="@+id/ibDelete"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/ibDelete"
-                tools:text="text" />
+                <ImageButton
+                    android:id="@+id/ibDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_baseline_delete_24"
+                    app:layout_constraintEnd_toStartOf="@+id/ibStart"
+                    app:layout_constraintTop_toBottomOf="@+id/cardViewVideoThumbnail" />
+
+                <TextView
+                    android:id="@+id/tvDetails"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{@string/tv_duration_and_reps(exercise.duration.toString(), exercise.reps)}"
+                    android:textAlignment="textStart"
+                    app:layout_constraintBottom_toBottomOf="@+id/ibDelete"
+                    app:layout_constraintEnd_toStartOf="@+id/ibDelete"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/ibDelete"
+                    tools:text="text" />
 
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.motion.widget.MotionLayout>
 
 
     </com.google.android.material.card.MaterialCardView>

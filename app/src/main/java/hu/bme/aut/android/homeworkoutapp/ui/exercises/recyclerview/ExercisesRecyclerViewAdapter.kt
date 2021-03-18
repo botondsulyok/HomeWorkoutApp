@@ -15,7 +15,6 @@ import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<UiExercise, ExercisesRecyclerViewAdapter.ViewHolder>(ExercisesDiffCallback) {
 
     interface ExerciseItemClickListener {
-        fun onItemClick(exercise: UiExercise?): Boolean
         fun onItemLongClick(exercise: UiExercise?): Boolean
         fun onDeleteClick(exercise: UiExercise?): Boolean
         fun onStartClick(exercise: UiExercise?): Boolean
@@ -33,37 +32,47 @@ class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<U
     }
 
     inner class ViewHolder(private val binding: ExercisesRowBinding) : RecyclerView.ViewHolder(binding.root) {
-
+        
         init {
+
             itemView.setOnClickListener {
-                exerciseClickListener?.onItemClick(binding.exercise)
+                val exercise = binding.exercise ?: UiExercise()
+                if(binding.motionLayoutExercisesRow.currentState == R.id.exercisesRowSceneStart) {
+                    binding.motionLayoutExercisesRow.transitionToState(R.id.exercisesRowSceneEnd)
+                    if(exercise.thumbnailUrl.isEmpty()) {
+                        binding.cardViewVideoThumbnail.visibility = View.GONE
+                    }
+                    else {
+                        Glide.with(context)
+                                .load(exercise.thumbnailUrl)
+                                .dontAnimate()
+                                .dontTransform()
+                                .placeholder(R.drawable.ic_baseline_image_placeholder_24)
+                                .into(binding.ivVideoThumbnail)
+                    }
+                }
+                else {
+                    binding.motionLayoutExercisesRow.transitionToState(R.id.exercisesRowSceneStart)
+                }
             }
+
             itemView.setOnLongClickListener {
                 exerciseClickListener?.onItemLongClick(binding.exercise)
                 true
             }
+
             binding.ibDelete.setOnClickListener {
                 exerciseClickListener?.onDeleteClick(binding.exercise)
             }
+
             binding.ibStart.setOnClickListener {
                 exerciseClickListener?.onStartClick(binding.exercise)
             }
+
         }
 
         fun bind(exercise: UiExercise) {
             binding.exercise = exercise
-            if(exercise.thumbnailUrl.isEmpty()) {
-                binding.cardViewVideoThumbnail.visibility = View.GONE
-            }
-            else {
-                Glide.with(context)
-                        .load(exercise.thumbnailUrl)
-                        .dontAnimate()
-                        .dontTransform()
-                        .placeholder(R.drawable.ic_baseline_image_placeholder_24)
-                        .into(binding.ivVideoThumbnail)
-            }
-
         }
 
     }
