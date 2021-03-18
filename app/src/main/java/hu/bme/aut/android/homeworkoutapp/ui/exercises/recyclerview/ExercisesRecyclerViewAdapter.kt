@@ -32,7 +32,7 @@ class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<U
     }
 
     inner class ViewHolder(private val binding: ExercisesRowBinding) : RecyclerView.ViewHolder(binding.root) {
-        
+
         init {
 
             itemView.setOnClickListener {
