@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,6 +80,8 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         super.onViewCreated(view, savedInstanceState)
 
         initDuration()
+        setDuration()
+        binding.etReps.setText(exercise.reps.toString())
 
         setVideoPlayback()
 
@@ -102,6 +106,19 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                 }
             }
         }
+
+        binding.etReps.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+
+            override fun afterTextChanged(s: Editable?) {
+                val reps = s.toInt()
+                val duration = Duration.build(reps * exercise.videoLength.getDurationInSeconds())
+                exercise = exercise.copy(reps = reps, duration = duration)
+                setDuration()
+            }
+        })
 
         binding.btnAttachVideo.setOnClickListener {
             if (requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -132,11 +149,12 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         binding.npDurationMinutes.maxValue = 59
         binding.npDurationSeconds.minValue = 0
         binding.npDurationSeconds.maxValue = 59
+    }
 
+    private fun setDuration() {
         binding.npDurationHours.value = exercise.duration.hours
         binding.npDurationMinutes.value = exercise.duration.minutes
         binding.npDurationSeconds.value = exercise.duration.seconds
-        binding.etReps.setText(exercise.reps.toString())
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -181,15 +199,17 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_VIDEO_CAPTURE && resultCode == RESULT_OK) {
-            exercise = exercise.copy(videoUri = data?.data)
-            setVideoPlayback()
-            val mp: MediaPlayer = MediaPlayer.create(activity, exercise.videoUri)
+            val mp: MediaPlayer = MediaPlayer.create(activity, data?.data)
             val durationInSeconds = mp.duration / 1000
             mp.release()
-            val duration = Duration.build(durationInSeconds)
-            binding.npDurationHours.value = duration.hours
-            binding.npDurationMinutes.value = duration.minutes
-            binding.npDurationSeconds.value = duration.seconds
+
+            exercise = exercise.copy(videoUri = data?.data, videoLength = Duration.build(durationInSeconds))
+
+            setVideoPlayback()
+
+            binding.npDurationHours.value = exercise.duration.hours
+            binding.npDurationMinutes.value = exercise.duration.minutes
+            binding.npDurationSeconds.value = exercise.duration.seconds
             binding.etReps.setText("1")
         }
     }

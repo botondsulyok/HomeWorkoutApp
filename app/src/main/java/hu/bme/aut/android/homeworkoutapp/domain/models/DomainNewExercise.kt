@@ -10,5 +10,6 @@ data class DomainNewExercise(
     val duration: Duration = Duration(),
     val categoryValue: String = "",
     val videoUri: Uri? = null,
+    val videoLength: Duration = Duration(),
     val thumbnailInBytes: ByteArray? = null
 )

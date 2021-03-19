@@ -225,6 +225,7 @@ private fun DomainExercise.toFirebaseExercise(firebaseExercise: FirebaseExercise
         categoryValue = categoryValue,
         videoPath = firebaseExercise.videoPath,
         videoUrl = videoUrl,
+        videoLength = videoLength,
         thumbnailUrl = thumbnailUrl
     )
 }
@@ -238,6 +239,7 @@ private fun DomainNewExercise.toFirebaseExercise(id: String, videoPath: String, 
         categoryValue = categoryValue,
         videoPath = videoPath,
         videoUrl = videoUrl,
+        videoLength = videoLength,
         thumbnailUrl = thumbnailUrl
     )
 }
@@ -250,6 +252,7 @@ private fun FirebaseExercise.toDomainExercise(): DomainExercise {
         duration = duration,
         categoryValue = categoryValue,
         videoUrl = videoUrl,
+        videoLength = videoLength,
         thumbnailUrl = thumbnailUrl
     )
 }

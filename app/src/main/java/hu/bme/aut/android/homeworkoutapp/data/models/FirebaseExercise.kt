@@ -14,5 +14,6 @@ data class FirebaseExercise(
         val categoryValue: String = "",
         val videoPath: String = "",
         val videoUrl: String = "",
+        val videoLength: Duration = Duration(),
         val thumbnailUrl: String = ""
 )
