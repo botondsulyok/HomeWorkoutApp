@@ -4,7 +4,7 @@ import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -19,7 +19,6 @@ import com.bumptech.glide.Glide
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewExerciseBinding
-import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
 import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
@@ -55,7 +54,8 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                 duration = Duration(
                     binding.npDurationHours.value,
                     binding.npDurationMinutes.value,
-                    binding.npDurationSeconds.value),
+                    binding.npDurationSeconds.value
+                ),
                 categoryEntry = binding.autoCompleteTextViewExerciseCategories.text.toString()
             )
         }
@@ -77,17 +77,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.npDurationHours.minValue = 0
-        binding.npDurationHours.maxValue = 24
-        binding.npDurationMinutes.minValue = 0
-        binding.npDurationMinutes.maxValue = 59
-        binding.npDurationSeconds.minValue = 0
-        binding.npDurationSeconds.maxValue = 59
-
-        binding.npDurationHours.value = exercise.duration.hours
-        binding.npDurationMinutes.value = exercise.duration.minutes
-        binding.npDurationSeconds.value = exercise.duration.seconds
-        binding.etReps.setText(exercise.reps.toString())
+        initDuration()
 
         setVideoPlayback()
 
@@ -135,6 +125,20 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         binding.autoCompleteTextViewExerciseCategories.setAdapter(adapter)
     }
 
+    private fun initDuration() {
+        binding.npDurationHours.minValue = 0
+        binding.npDurationHours.maxValue = 24
+        binding.npDurationMinutes.minValue = 0
+        binding.npDurationMinutes.maxValue = 59
+        binding.npDurationSeconds.minValue = 0
+        binding.npDurationSeconds.maxValue = 59
+
+        binding.npDurationHours.value = exercise.duration.hours
+        binding.npDurationMinutes.value = exercise.duration.minutes
+        binding.npDurationSeconds.value = exercise.duration.seconds
+        binding.etReps.setText(exercise.reps.toString())
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mainActivity = activity as? MainActivity
@@ -179,14 +183,22 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         if (requestCode == RC_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             exercise = exercise.copy(videoUri = data?.data)
             setVideoPlayback()
+            val mp: MediaPlayer = MediaPlayer.create(activity, exercise.videoUri)
+            val durationInSeconds = mp.duration / 1000
+            mp.release()
+            val duration = Duration.build(durationInSeconds)
+            binding.npDurationHours.value = duration.hours
+            binding.npDurationMinutes.value = duration.minutes
+            binding.npDurationSeconds.value = duration.seconds
+            binding.etReps.setText("1")
         }
     }
 
     private fun setVideoPlayback() {
-        exercise.videoUri?.let {
-            binding.vvExerciseVideo.setVideoURI(it)
+        if(exercise.videoUri != null) {
+            binding.vvExerciseVideo.setVideoURI(exercise.videoUri)
             Glide.with(requireContext())
-                .load(it)
+                .load(exercise.videoUri)
                 .into(binding.ivExerciseThumbnail)
             binding.rlExerciseVideo.visibility = View.VISIBLE
             binding.rlExerciseVideoThumbnail.visibility = View.VISIBLE

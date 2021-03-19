@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream
 @Parcelize
 data class UiNewExercise(
     val name: String = "",
-    val reps: Int = 0,
+    val reps: Int = 1,
     val duration: Duration = Duration(),
     val categoryEntry: String = "",
     val videoUri: Uri? = null
