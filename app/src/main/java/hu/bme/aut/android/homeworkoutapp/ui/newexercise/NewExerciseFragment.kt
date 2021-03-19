@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
@@ -107,18 +108,37 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
             }
         }
 
-        binding.etReps.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
-
-            override fun afterTextChanged(s: Editable?) {
-                val reps = s.toInt()
-                val duration = Duration.build(reps * exercise.videoLength.getDurationInSeconds())
-                exercise = exercise.copy(reps = reps, duration = duration)
-                setDuration()
+        binding.etReps.apply {
+            addTextChangedListener {
+                if(updatedExercise.videoLength.getDurationInSeconds() !=  0 && hasFocus()) {
+                    exercise = updatedExercise.copy(duration = calculateDuration())
+                    setDuration()
+                }
             }
-        })
+        }
+
+        binding.npDurationHours.setOnValueChangedListener { picker, oldVal, newVal ->
+            // TODO legyen custom view
+            if(updatedExercise.videoLength.getDurationInSeconds() !=  0) {
+                binding.etReps.clearFocus()
+                hideKeyboard()
+                binding.etReps.setText(calculateReps().toString())
+            }
+        }
+        binding.npDurationMinutes.setOnValueChangedListener { picker, oldVal, newVal ->
+            if(updatedExercise.videoLength.getDurationInSeconds() !=  0) {
+                binding.etReps.clearFocus()
+                hideKeyboard()
+                binding.etReps.setText(calculateReps().toString())
+            }
+        }
+        binding.npDurationSeconds.setOnValueChangedListener { picker, oldVal, newVal ->
+            if(updatedExercise.videoLength.getDurationInSeconds() !=  0) {
+                binding.etReps.clearFocus()
+                hideKeyboard()
+                binding.etReps.setText(calculateReps().toString())
+            }
+        }
 
         binding.btnAttachVideo.setOnClickListener {
             if (requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -141,6 +161,12 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         )
         binding.autoCompleteTextViewExerciseCategories.setAdapter(adapter)
     }
+
+    private fun calculateDuration() =
+        Duration.build(updatedExercise.reps * updatedExercise.videoLength.getDurationInSeconds())
+
+    private fun calculateReps() =
+        updatedExercise.duration.getDurationInSeconds() / updatedExercise.videoLength.getDurationInSeconds()
 
     private fun initDuration() {
         binding.npDurationHours.minValue = 0
@@ -207,10 +233,12 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
             setVideoPlayback()
 
-            binding.npDurationHours.value = exercise.duration.hours
-            binding.npDurationMinutes.value = exercise.duration.minutes
-            binding.npDurationSeconds.value = exercise.duration.seconds
-            binding.etReps.setText("1")
+            if(binding.etReps.text.toInt() == 0) {
+                exercise = exercise.copy(reps = 1)
+                binding.etReps.setText(exercise.reps.toString())
+            }
+            exercise = exercise.copy(duration = calculateDuration())
+            setDuration()
         }
     }
 
