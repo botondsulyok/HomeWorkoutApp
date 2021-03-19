@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<androidx.core.widget.NestedScrollView xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        app:layoutDescription="@xml/fragment_new_exercise_scene">
 
         <TextView
             android:id="@+id/tvGeneral"
@@ -73,10 +74,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:text="Duration"
             android:textAlignment="textStart"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ibDurationExpand"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnAttachVideo" />
 
@@ -261,7 +262,19 @@
             app:layout_constraintStart_toStartOf="@+id/npDurationSeconds"
             app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription" />
 
+        <ImageButton
+            android:id="@+id/ibDurationExpand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+            android:rotation="0"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDurationDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvDuration" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 
 </androidx.core.widget.NestedScrollView>
