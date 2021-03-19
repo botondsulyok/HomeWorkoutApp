@@ -8,11 +8,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 
 class PlansFragment : Fragment() {
 
     private lateinit var plansViewModel: PlansViewModel
+
+    private var mainActivity: MainActivity? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -28,4 +31,12 @@ class PlansFragment : Fragment() {
         })
         return root
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mainActivity = activity as? MainActivity
+        mainActivity?.supportActionBar?.show()
+        mainActivity?.binding?.navView?.visibility = View.VISIBLE
+    }
+
 }

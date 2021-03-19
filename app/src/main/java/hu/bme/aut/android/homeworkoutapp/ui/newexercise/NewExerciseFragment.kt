@@ -16,6 +16,7 @@ import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
 import com.bumptech.glide.Glide
+import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewExerciseBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
@@ -41,6 +42,8 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     private var _binding: FragmentNewExerciseBinding? = null
     private val binding get() = _binding!!
+
+    private var mainActivity: MainActivity? = null
 
     var exercise = UiNewExercise()
 
@@ -130,6 +133,13 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
             )
         )
         binding.autoCompleteTextViewExerciseCategories.setAdapter(adapter)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mainActivity = activity as? MainActivity
+        mainActivity?.supportActionBar?.show()
+        mainActivity?.binding?.navView?.visibility = View.GONE
     }
 
     override fun render(viewState: NewExerciseViewState) {

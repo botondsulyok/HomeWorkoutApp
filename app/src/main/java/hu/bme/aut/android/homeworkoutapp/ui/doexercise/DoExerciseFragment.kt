@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
+import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentDoExerciseBinding
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentExercisesBinding
 
@@ -15,6 +16,8 @@ class DoExerciseFragment : Fragment() {
     private val binding get() = _binding!!
 
     val args: DoExerciseFragmentArgs by navArgs()
+
+    private var mainActivity: MainActivity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +38,13 @@ class DoExerciseFragment : Fragment() {
 
 
 
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mainActivity = activity as? MainActivity
+        mainActivity?.supportActionBar?.hide()
+        mainActivity?.binding?.navView?.visibility = View.GONE
     }
 
 }
