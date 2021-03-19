@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentStartExerciseBinding
+import hu.bme.aut.android.homeworkoutapp.ui.doexercise.DoExerciseFragmentDirections
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExerciseListener
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
@@ -71,7 +73,8 @@ class StartExerciseBottomSheetDialogFragment
             if(binding.cbSave.isChecked) {
                 (arguments?.getSerializable(SAVE_ACTION_VALUE) as? ExerciseListener)?.action?.invoke(updatedExercise)
             }
-            // TODO start, move to a fragment
+            val action = DoExerciseFragmentDirections.actionGlobalDoExerciseFragment(updatedExercise)
+            findNavController().navigate(action)
             dismiss()
         }
 

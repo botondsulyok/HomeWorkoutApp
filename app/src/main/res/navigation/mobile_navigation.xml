@@ -72,4 +72,20 @@
         android:name="hu.bme.aut.android.homeworkoutapp.ui.newexercise.NewExerciseFragment"
         android:label="fragment_new_exercise"
         tools:layout="@layout/fragment_new_exercise" />
+    <fragment
+        android:id="@+id/doExerciseFragment"
+        android:name="hu.bme.aut.android.homeworkoutapp.ui.doexercise.DoExerciseFragment"
+        android:label="fragment_do_exercise"
+        tools:layout="@layout/fragment_do_exercise" >
+        <argument
+            android:name="exercise"
+            app:argType="hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_doExerciseFragment"
+        app:destination="@id/doExerciseFragment"
+        app:enterAnim="@anim/fragment_close_enter"
+        app:exitAnim="@anim/fragment_close_exit"
+        app:popEnterAnim="@anim/fragment_close_enter"
+        app:popExitAnim="@anim/fragment_close_exit" />
 </navigation>
