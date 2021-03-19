@@ -65,6 +65,8 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
             findNavController().navigate(action)
         }
 
+        viewModel.getExercises()
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -72,11 +74,6 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
         mainActivity = activity as? MainActivity
         mainActivity?.supportActionBar?.show()
         mainActivity?.binding?.navView?.visibility = View.VISIBLE
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.getExercises()
     }
 
     override fun render(viewState: ExercisesViewState) {
