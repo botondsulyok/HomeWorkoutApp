@@ -2,13 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".DoExerciseFragment">
+    android:layout_height="match_parent" >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/vvDoingExercise"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

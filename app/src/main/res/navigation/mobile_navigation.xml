@@ -74,15 +74,15 @@
         tools:layout="@layout/fragment_new_exercise" />
     <fragment
         android:id="@+id/doExerciseFragment"
-        android:name="hu.bme.aut.android.homeworkoutapp.ui.doexercise.DoExerciseFragment"
+        android:name="hu.bme.aut.android.homeworkoutapp.ui.doingexercise.DoingExerciseFragment"
         android:label="fragment_do_exercise"
-        tools:layout="@layout/fragment_do_exercise" >
+        tools:layout="@layout/fragment_doing_exercise" >
         <argument
             android:name="exercise"
             app:argType="hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise" />
     </fragment>
     <action
-        android:id="@+id/action_global_doExerciseFragment"
+        android:id="@+id/action_global_doingExerciseFragment"
         app:destination="@id/doExerciseFragment"
         app:enterAnim="@anim/fragment_close_enter"
         app:exitAnim="@anim/fragment_close_exit"
