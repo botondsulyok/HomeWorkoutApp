@@ -3,11 +3,61 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ConstraintSet android:id="@+id/start">
-        <Constraint android:id="@+id/tvGeneral" />
+
+
+
+
+
+        <Constraint
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnCreate"
+            app:layout_constraintEnd_toEndOf="@+id/btnCreate"
+            app:layout_constraintStart_toStartOf="@+id/btnCreate"
+            app:layout_constraintTop_toTopOf="@+id/btnCreate"
+            app:visibilityMode="ignore" />
+
+        <Constraint
+            android:id="@+id/btnCreate"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/btn_create"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clDurationDetails"
+            app:visibilityMode="ignore" />
+
+        <Constraint
+            android:id="@+id/rlExerciseVideo"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibilityMode="ignore" />
+
+        <Constraint
+            android:id="@+id/rlExerciseVideoThumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:visibilityMode="ignore" />
+
+        <Constraint
+            android:id="@+id/vvExerciseVideo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
-        <Constraint android:id="@id/tvGeneral" />
+
         <Constraint
             android:id="@+id/ibDurationExpand"
             app:layout_constraintEnd_toEndOf="parent"
@@ -17,6 +67,65 @@
             android:layout_marginEnd="12dp"
             android:rotation="180"
             app:layout_constraintTop_toTopOf="@+id/tvDuration" />
+        <Constraint
+            android:id="@+id/clDurationDetails"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tvDurationDescription"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:visibility="visible" />
+
+
+
+
+        <Constraint
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnCreate"
+            app:layout_constraintEnd_toEndOf="@+id/btnCreate"
+            app:layout_constraintStart_toStartOf="@+id/btnCreate"
+            app:layout_constraintTop_toTopOf="@+id/btnCreate"
+            app:visibilityMode="ignore" />
+
+        <Constraint
+            android:id="@+id/btnCreate"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/btn_create"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clDurationDetails"
+            app:visibilityMode="ignore" />
+
+        <Constraint
+            android:id="@+id/rlExerciseVideo"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibilityMode="ignore" />
+
+        <Constraint
+            android:id="@+id/rlExerciseVideoThumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:visibilityMode="ignore" />
+
+        <Constraint
+            android:id="@+id/vvExerciseVideo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
     </ConstraintSet>
 
     <Transition
