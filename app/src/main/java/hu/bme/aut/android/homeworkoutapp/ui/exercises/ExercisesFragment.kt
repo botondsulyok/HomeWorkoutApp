@@ -3,7 +3,6 @@ package hu.bme.aut.android.homeworkoutapp.ui.exercises
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,14 +13,10 @@ import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
-import hu.bme.aut.android.homeworkoutapp.databinding.ExercisesRowBinding
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentExercisesBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.StartExerciseBottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview.ExercisesRecyclerViewAdapter
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.RawValue
-import kotlinx.android.synthetic.main.exercises_row.*
 import java.io.Serializable
 
 

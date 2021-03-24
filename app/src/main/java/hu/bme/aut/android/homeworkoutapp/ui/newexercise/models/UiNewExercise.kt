@@ -3,8 +3,7 @@ package hu.bme.aut.android.homeworkoutapp.ui.newexercise.models
 import android.net.Uri
 import android.os.Parcelable
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
-import kotlinx.android.parcel.Parcelize
-import java.io.ByteArrayOutputStream
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class UiNewExercise(
