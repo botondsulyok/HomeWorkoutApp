@@ -26,4 +26,11 @@ data class Duration(
         return hours * 3600 + minutes * 60 + seconds
     }
 
+    override fun toString(): String {
+        fun formatNumber(number: Int): String {
+            return if(number < 10) "0$number" else number.toString()
+        }
+        return "${if(formatNumber(hours) != "00") "${formatNumber(hours)}:" else ""}${formatNumber(minutes)}:${formatNumber(seconds)}"
+    }
+
 }
