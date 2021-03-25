@@ -111,6 +111,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         binding.etReps.apply {
             addTextChangedListener {
                 if(updatedExercise.videoLength.getDurationInSeconds() !=  0 && hasFocus()) {
+                    // saveInstanceState miatt
                     exercise = updatedExercise.copy(duration = calculateDuration())
                     setDuration()
                 }
@@ -118,7 +119,6 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         }
 
         binding.npDurationHours.setOnValueChangedListener { picker, oldVal, newVal ->
-            // TODO legyen custom view
             if(updatedExercise.videoLength.getDurationInSeconds() !=  0) {
                 binding.etReps.clearFocus()
                 hideKeyboard()
@@ -178,6 +178,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     }
 
     private fun setDuration() {
+        // saveInstanceState miatt nem updatedExercise van
         binding.npDurationHours.value = exercise.duration.hours
         binding.npDurationMinutes.value = exercise.duration.minutes
         binding.npDurationSeconds.value = exercise.duration.seconds

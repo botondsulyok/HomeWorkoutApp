@@ -29,13 +29,10 @@ class StartExerciseBottomSheetDialogFragment
 
     private val updatedExercise: UiExercise
     get() {
+        val e = binding.exerciseDurationPicker.exercise
         return exercise.copy(
-            reps = binding.etReps.text.toInt(),
-            duration = Duration(
-                binding.npDurationHours.value,
-                binding.npDurationMinutes.value,
-                binding.npDurationSeconds.value
-            )
+            reps = e.reps,
+            duration = e.duration
         )
     }
 
@@ -57,17 +54,7 @@ class StartExerciseBottomSheetDialogFragment
             savedInstanceState.getParcelable(EXERCISE_VALUE) ?: UiExercise()
         }
 
-        binding.npDurationHours.minValue = 0
-        binding.npDurationHours.maxValue = 24
-        binding.npDurationMinutes.minValue = 0
-        binding.npDurationMinutes.maxValue = 59
-        binding.npDurationSeconds.minValue = 0
-        binding.npDurationSeconds.maxValue = 59
-
-        binding.npDurationHours.value = exercise.duration.hours
-        binding.npDurationMinutes.value = exercise.duration.minutes
-        binding.npDurationSeconds.value = exercise.duration.seconds
-        binding.etReps.setText(exercise.reps.toString())
+        binding.exerciseDurationPicker.exercise = exercise
 
         binding.btnStart.setOnClickListener {
             if(binding.cbSave.isChecked) {
