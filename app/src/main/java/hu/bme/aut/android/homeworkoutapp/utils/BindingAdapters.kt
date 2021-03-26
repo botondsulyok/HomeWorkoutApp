@@ -6,7 +6,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import hu.bme.aut.android.homeworkoutapp.R
 
-@BindingAdapter(value = ["setImageUrl"])
+@BindingAdapter("setImageUrl")
 fun bindImageUrl(imageView: ImageView, imageUrl: String?) {
     if(!imageUrl.isNullOrEmpty()) {
         Glide
@@ -20,4 +20,9 @@ fun bindImageUrl(imageView: ImageView, imageUrl: String?) {
     else {
         imageView.visibility = View.GONE
     }
+}
+
+@BindingAdapter("android:visibility")
+fun setVisibility(view: View, value: Boolean) {
+    view.visibility = if (value) View.VISIBLE else View.GONE
 }

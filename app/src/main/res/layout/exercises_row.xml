@@ -42,6 +42,7 @@
                 style="@style/TextAppearance.MaterialComponents.Body2"
                 android:textStyle="italic"
                 android:text="@{exercise.categoryEntry}"
+                android:visibility="@{!exercise.categoryEntry.empty}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvExerciseName"
                 tools:text="Category" />
@@ -50,7 +51,6 @@
                 android:id="@+id/clExpandableViews"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvExerciseCategory">
@@ -58,9 +58,9 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardViewVideoThumbnail"
                     android:layout_width="0dp"
-                    android:layout_height="150dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_height="wrap_content"
                     app:contentPadding="0dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -68,7 +68,7 @@
                     <ImageView
                         android:id="@+id/ivVideoThumbnail"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="150dp"
                         android:scaleType="centerCrop"
                         tools:srcCompat="@tools:sample/avatars" />
 
