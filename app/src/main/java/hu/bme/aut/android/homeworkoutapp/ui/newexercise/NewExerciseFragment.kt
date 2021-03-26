@@ -7,13 +7,10 @@ import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
@@ -22,12 +19,10 @@ import com.bumptech.glide.Glide
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewExerciseBinding
-import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
 import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
 import hu.bme.aut.android.homeworkoutapp.utils.setAllEnabled
-import hu.bme.aut.android.homeworkoutapp.utils.toInt
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 
@@ -169,10 +164,10 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             val mp: MediaPlayer = MediaPlayer.create(activity, data?.data)
-            val durationInSeconds = mp.duration / 1000
+            val durationInMilliseconds = mp.duration
             mp.release()
 
-            exercise = exercise.copy(videoUri = data?.data, videoLength = Duration.build(durationInSeconds))
+            exercise = exercise.copy(videoUri = data?.data, videoLengthInMilliseconds = durationInMilliseconds)
 
             setVideoPlayback()
 

@@ -5,11 +5,11 @@ import hu.bme.aut.android.homeworkoutapp.utils.Duration
 import java.io.ByteArrayOutputStream
 
 data class DomainNewExercise(
-    val name: String = "",
-    val reps: Int = 0,
-    val duration: Duration = Duration(),
-    val categoryValue: String = "",
-    val videoUri: Uri? = null,
-    val videoLength: Duration = Duration(),
-    val thumbnailInBytes: ByteArray? = null
+        val name: String = "",
+        val reps: Int = 0,
+        val duration: Duration = Duration(),
+        val categoryValue: String = "",
+        val videoUri: Uri? = null,
+        val videoLengthInMilliseconds: Int = 0,
+        val thumbnailInBytes: ByteArray? = null
 )

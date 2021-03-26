@@ -52,7 +52,7 @@ class ExercisesPresenter @Inject constructor(
                 duration = duration,
                 categoryValue = categoryValue,
                 videoUrl = videoUrl,
-                videoLength = videoLength,
+                videoLengthInMilliseconds = videoLengthInMilliseconds,
                 thumbnailUrl = thumbnailUrl
         )
     }
@@ -74,7 +74,7 @@ class ExercisesPresenter @Inject constructor(
                 duration = duration,
                 categoryEntry = categoryEntry,
                 videoUrl = videoUrl,
-                videoLength = videoLength,
+                videoLengthInMilliseconds = videoLengthInMilliseconds,
                 thumbnailUrl = thumbnailUrl
         )
     }

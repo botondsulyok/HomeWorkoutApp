@@ -34,7 +34,7 @@ class NewExercisePresenter @Inject constructor(
             reps = reps,
             categoryValue = categoryValue,
             videoUri = videoUri,
-            videoLength = videoLength
+            videoLengthInMilliseconds = videoLengthInMilliseconds
         )
     }
 

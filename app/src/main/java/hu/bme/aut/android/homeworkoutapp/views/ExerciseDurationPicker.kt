@@ -76,19 +76,19 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
         binding.npDurationSeconds.maxValue = 59
 
         binding.npDurationHours.setOnValueChangedListener { picker, oldVal, newVal ->
-            if(_exercise.videoLength.getDurationInSeconds() !=  0) {
+            if(_exercise.videoLengthInMilliseconds !=  0) {
                 binding.etReps.clearFocus()
                 binding.etReps.setText(calculateReps().toString())
             }
         }
         binding.npDurationMinutes.setOnValueChangedListener { picker, oldVal, newVal ->
-            if(_exercise.videoLength.getDurationInSeconds() !=  0) {
+            if(_exercise.videoLengthInMilliseconds !=  0) {
                 binding.etReps.clearFocus()
                 binding.etReps.setText(calculateReps().toString())
             }
         }
         binding.npDurationSeconds.setOnValueChangedListener { picker, oldVal, newVal ->
-            if(_exercise.videoLength.getDurationInSeconds() !=  0) {
+            if(_exercise.videoLengthInMilliseconds !=  0) {
                 binding.etReps.clearFocus()
                 binding.etReps.setText(calculateReps().toString())
             }
@@ -99,7 +99,7 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
     private fun initReps() {
         binding.etReps.apply {
             addTextChangedListener {
-                if(updatedExercise.videoLength.getDurationInSeconds() !=  0 && hasFocus()) {
+                if(updatedExercise.videoLengthInMilliseconds !=  0 && hasFocus()) {
                     _exercise = updatedExercise.copy(duration = calculateDuration())
                     setDuration()
                 }
@@ -108,10 +108,10 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
     }
 
     private fun calculateDuration() =
-            Duration.build(updatedExercise.reps * updatedExercise.videoLength.getDurationInSeconds())
+            Duration.buildFromMilliseconds(updatedExercise.reps * updatedExercise.videoLengthInMilliseconds)
 
     private fun calculateReps() =
-            updatedExercise.duration.getDurationInSeconds() / updatedExercise.videoLength.getDurationInSeconds()
+            updatedExercise.duration.getDurationInMilliseconds() / updatedExercise.videoLengthInMilliseconds
 
 
     private fun setDuration() {
@@ -126,7 +126,7 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
                 name = name,
                 reps = reps,
                 duration = duration,
-                videoLength = videoLength
+                videoLengthInMilliseconds = videoLengthInMilliseconds
         )
     }
 
@@ -135,7 +135,7 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
                 name = name,
                 reps = reps,
                 duration = duration,
-                videoLength = videoLength
+                videoLengthInMilliseconds = videoLengthInMilliseconds
         )
     }
 

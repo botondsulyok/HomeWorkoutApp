@@ -2,6 +2,7 @@ package hu.bme.aut.android.homeworkoutapp.utils
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlin.math.roundToInt
 
 @Parcelize
 data class Duration(
@@ -13,17 +14,24 @@ data class Duration(
     companion object {
         val ZERO = Duration(0, 0, 0)
 
-        fun build(durationInSeconds: Int): Duration {
+        fun buildFromMilliseconds(durationInMilliseconds: Int): Duration {
+            //val durationInSeconds = if(durationInMilliseconds / 1000 != 0) durationInMilliseconds / 1000 else 1
+            val durationInSeconds = (durationInMilliseconds / 1000.0).roundToInt()
             val hours: Int = durationInSeconds / 3600
             val secondsLeft: Int = durationInSeconds - hours * 3600
             val minutes: Int = secondsLeft / 60
             val seconds: Int = secondsLeft - minutes * 60
             return Duration(hours, minutes, seconds)
         }
+
     }
 
-    fun getDurationInSeconds(): Int {
+    private fun getDurationInSeconds(): Int {
         return hours * 3600 + minutes * 60 + seconds
+    }
+
+    fun getDurationInMilliseconds(): Int {
+        return getDurationInSeconds() * 1000
     }
 
     override fun toString(): String {

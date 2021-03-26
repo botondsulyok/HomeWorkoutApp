@@ -9,6 +9,6 @@ data class DomainExercise(
         val duration: Duration = Duration(),
         val categoryValue: String = "",
         val videoUrl: String = "",
-        val videoLength: Duration = Duration(),
+        val videoLengthInMilliseconds: Int = 0,
         val thumbnailUrl: String = ""
 )

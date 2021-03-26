@@ -12,5 +12,5 @@ data class UiNewExercise(
     val duration: Duration = Duration(),
     val categoryEntry: String = "",
     val videoUri: Uri? = null,
-    val videoLength: Duration = Duration()
+    val videoLengthInMilliseconds: Int = 0
 ) : Parcelable
