@@ -36,6 +36,15 @@ class StartExerciseBottomSheetDialogFragment
         )
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        exercise = if(savedInstanceState == null) {
+            arguments?.getParcelable(EXERCISE_VALUE) ?: UiExercise()
+        } else {
+            savedInstanceState.getParcelable(EXERCISE_VALUE) ?: UiExercise()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,12 +56,6 @@ class StartExerciseBottomSheetDialogFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        exercise = if(savedInstanceState == null) {
-            arguments?.getParcelable(EXERCISE_VALUE) ?: UiExercise()
-        } else {
-            savedInstanceState.getParcelable(EXERCISE_VALUE) ?: UiExercise()
-        }
 
         binding.exerciseDurationPicker.exercise = exercise
 

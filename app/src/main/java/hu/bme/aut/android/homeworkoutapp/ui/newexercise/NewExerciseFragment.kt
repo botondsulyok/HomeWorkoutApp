@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewExerciseBinding
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
 import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
@@ -51,14 +52,11 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     private val updatedExercise: UiNewExercise
         get() {
+            val e = binding.exerciseDurationPicker.newExercise
             return exercise.copy(
                 name = binding.etName.text.toString(),
-                reps = binding.etReps.text.toInt(),
-                duration = Duration(
-                    binding.npDurationHours.value,
-                    binding.npDurationMinutes.value,
-                    binding.npDurationSeconds.value
-                ),
+                reps = e.reps,
+                duration = e.duration,
                 categoryEntry = binding.autoCompleteTextViewExerciseCategories.text.toString()
             )
         }
@@ -80,9 +78,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initDuration()
-        setDuration()
-        binding.etReps.setText(exercise.reps.toString())
+        binding.exerciseDurationPicker.newExercise = exercise
 
         setVideoPlayback()
 
@@ -108,38 +104,6 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
             }
         }
 
-        binding.etReps.apply {
-            addTextChangedListener {
-                if(updatedExercise.videoLength.getDurationInSeconds() !=  0 && hasFocus()) {
-                    // saveInstanceState miatt
-                    exercise = updatedExercise.copy(duration = calculateDuration())
-                    setDuration()
-                }
-            }
-        }
-
-        binding.npDurationHours.setOnValueChangedListener { picker, oldVal, newVal ->
-            if(updatedExercise.videoLength.getDurationInSeconds() !=  0) {
-                binding.etReps.clearFocus()
-                hideKeyboard()
-                binding.etReps.setText(calculateReps().toString())
-            }
-        }
-        binding.npDurationMinutes.setOnValueChangedListener { picker, oldVal, newVal ->
-            if(updatedExercise.videoLength.getDurationInSeconds() !=  0) {
-                binding.etReps.clearFocus()
-                hideKeyboard()
-                binding.etReps.setText(calculateReps().toString())
-            }
-        }
-        binding.npDurationSeconds.setOnValueChangedListener { picker, oldVal, newVal ->
-            if(updatedExercise.videoLength.getDurationInSeconds() !=  0) {
-                binding.etReps.clearFocus()
-                hideKeyboard()
-                binding.etReps.setText(calculateReps().toString())
-            }
-        }
-
         binding.btnAttachVideo.setOnClickListener {
             if (requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
                 captureVideoWithPermissionCheck()
@@ -160,28 +124,6 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
             )
         )
         binding.autoCompleteTextViewExerciseCategories.setAdapter(adapter)
-    }
-
-    private fun calculateDuration() =
-        Duration.build(updatedExercise.reps * updatedExercise.videoLength.getDurationInSeconds())
-
-    private fun calculateReps() =
-        updatedExercise.duration.getDurationInSeconds() / updatedExercise.videoLength.getDurationInSeconds()
-
-    private fun initDuration() {
-        binding.npDurationHours.minValue = 0
-        binding.npDurationHours.maxValue = 24
-        binding.npDurationMinutes.minValue = 0
-        binding.npDurationMinutes.maxValue = 59
-        binding.npDurationSeconds.minValue = 0
-        binding.npDurationSeconds.maxValue = 59
-    }
-
-    private fun setDuration() {
-        // saveInstanceState miatt nem updatedExercise van
-        binding.npDurationHours.value = exercise.duration.hours
-        binding.npDurationMinutes.value = exercise.duration.minutes
-        binding.npDurationSeconds.value = exercise.duration.seconds
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -234,12 +176,14 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
             setVideoPlayback()
 
-            if(binding.etReps.text.toInt() == 0) {
-                exercise = exercise.copy(reps = 1)
-                binding.etReps.setText(exercise.reps.toString())
-            }
-            exercise = exercise.copy(duration = calculateDuration())
-            setDuration()
+            binding.exerciseDurationPicker.newExercise =
+                    if(binding.exerciseDurationPicker.exercise.reps == 0) {
+                        updatedExercise.copy(reps = 1)
+                    }
+                    else {
+                        updatedExercise
+                    }
+
         }
     }
 

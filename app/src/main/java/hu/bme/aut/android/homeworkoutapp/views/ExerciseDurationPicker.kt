@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import hu.bme.aut.android.homeworkoutapp.databinding.ExerciseDurationPickerViewBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
+import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
 import hu.bme.aut.android.homeworkoutapp.utils.toInt
 
@@ -24,6 +25,18 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
     get() {
         return updatedExercise
     }
+
+    var newExercise: UiNewExercise = UiNewExercise()
+        set(value) {
+            _exercise = value.toUiExercise()
+            binding.etReps.setText(_exercise.reps.toString())
+            _exercise = value.toUiExercise().copy(duration = calculateDuration())
+            setDuration()
+            field = value
+        }
+        get() {
+            return updatedExercise.toUiNewExercise()
+        }
 
     private var _exercise: UiExercise = UiExercise()
 
@@ -105,6 +118,25 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
         binding.npDurationHours.value = _exercise.duration.hours
         binding.npDurationMinutes.value = _exercise.duration.minutes
         binding.npDurationSeconds.value = _exercise.duration.seconds
+    }
+
+
+    private fun UiNewExercise.toUiExercise(): UiExercise {
+        return UiExercise(
+                name = name,
+                reps = reps,
+                duration = duration,
+                videoLength = videoLength
+        )
+    }
+
+    private fun UiExercise.toUiNewExercise(): UiNewExercise {
+        return UiNewExercise(
+                name = name,
+                reps = reps,
+                duration = duration,
+                videoLength = videoLength
+        )
     }
 
 }
