@@ -1,19 +1,18 @@
 package hu.bme.aut.android.homeworkoutapp.ui.doingexercise
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
 import com.gusakov.library.java.interfaces.OnCountdownCompleted
-import com.gusakov.library.start
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentDoingExerciseBinding
@@ -56,18 +55,37 @@ class DoingExerciseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvDoingExerciseHeader.text = getString(R.string.tv_duration_and_reps, args.exercise.duration.toString(), args.exercise.reps)
+        binding.tvDoingExerciseHeader.text = getString(
+            R.string.tv_duration_and_reps,
+            args.exercise.duration.toString(),
+            args.exercise.reps
+        )
 
         if(savedInstanceState == null) {
             binding.pulseCountDownDoingExercise.start(OnCountdownCompleted {
                 binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
-                binding.motionLayoutDoingExercise.addTransitionListener(object: MotionLayout.TransitionListener {
+                binding.motionLayoutDoingExercise.addTransitionListener(object :
+                    MotionLayout.TransitionListener {
                     override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {}
-                    override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) { }
+                    override fun onTransitionChange(
+                        p0: MotionLayout?,
+                        p1: Int,
+                        p2: Int,
+                        p3: Float
+                    ) {
+                    }
+
                     override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
                         player?.play()
                     }
-                    override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) { }
+
+                    override fun onTransitionTrigger(
+                        p0: MotionLayout?,
+                        p1: Int,
+                        p2: Boolean,
+                        p3: Float
+                    ) {
+                    }
                 })
             })
         }
@@ -89,10 +107,17 @@ class DoingExerciseFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        // TODO hideSystemUi()
+        hideSystemUi()
         if (Util.SDK_INT < 24 || player == null) {
             initializePlayer()
         }
+    }
+
+    private fun hideSystemUi() {
+        binding.vvDoingExercise.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
     }
 
     override fun onPause() {
