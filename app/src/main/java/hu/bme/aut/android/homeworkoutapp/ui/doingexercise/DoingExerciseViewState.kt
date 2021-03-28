@@ -6,6 +6,8 @@ sealed class DoingExerciseViewState(val exercise: UiExercise)
 
 class Initial(exercise: UiExercise): DoingExerciseViewState(exercise)
 
+class Ready(exercise: UiExercise): DoingExerciseViewState(exercise)
+
 class DoingExercise(exercise: UiExercise): DoingExerciseViewState(exercise)
 
 class Finished(exercise: UiExercise): DoingExerciseViewState(exercise)

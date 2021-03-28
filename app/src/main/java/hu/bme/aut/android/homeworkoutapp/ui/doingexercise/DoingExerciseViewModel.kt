@@ -14,7 +14,7 @@ class DoingExerciseViewModel @Inject constructor(
     var initialReps = 0
 
     fun addExercise(e: UiExercise) = execute {
-        viewState = Initial(e)
+        viewState = Ready(e)
         initialDurationInMilliseconds = viewState.exercise.duration.getDurationInMilliseconds()
         initialReps = viewState.exercise.reps
     }

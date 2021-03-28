@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -69,40 +70,7 @@ class DoingExerciseFragment :
             findNavController().popBackStack()
         }
 
-        if(savedInstanceState == null) {
-            viewModel.addExercise(args.exercise)
-
-            binding.pulseCountDownDoingExercise.start {
-                binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
-                binding.motionLayoutDoingExercise.addTransitionListener(object :
-                    MotionLayout.TransitionListener {
-                    override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {}
-                    override fun onTransitionChange(
-                        p0: MotionLayout?,
-                        p1: Int,
-                        p2: Int,
-                        p3: Float
-                    ) {
-                    }
-
-                    override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                        player?.play()
-                        viewModel.startExercise()
-                        p0?.removeTransitionListener(this)
-                    }
-
-                    override fun onTransitionTrigger(
-                        p0: MotionLayout?,
-                        p1: Int,
-                        p2: Boolean,
-                        p3: Float
-                    ) {
-                    }
-                })
-            }
-        }
-        else {
-            binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
+        if(savedInstanceState != null) {
             playWhenReady = true
             currentWindow = savedInstanceState.getInt(KEY_CURRENT_WINDOW)
             playbackPosition = savedInstanceState.getLong(KEY_PLAYBACK_POSITION)
@@ -118,13 +86,42 @@ class DoingExerciseFragment :
         )
         when(viewState) {
             is Initial -> {
-
+                viewModel.addExercise(args.exercise)
+            }
+            is Ready -> {
+                binding.pulseCountDownDoingExercise.start {
+                    binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
+                    binding.motionLayoutDoingExercise.addTransitionListener(object :
+                        MotionLayout.TransitionListener {
+                        override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {}
+                        override fun onTransitionChange(
+                            p0: MotionLayout?,
+                            p1: Int,
+                            p2: Int,
+                            p3: Float
+                        ) {
+                        }
+                        override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+                            player?.play()
+                            viewModel.startExercise()
+                            p0?.removeTransitionListener(this)
+                        }
+                        override fun onTransitionTrigger(
+                            p0: MotionLayout?,
+                            p1: Int,
+                            p2: Boolean,
+                            p3: Float
+                        ) {
+                        }
+                    })
+                }
             }
             is DoingExercise -> {
-
+                binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
             }
             is Finished -> {
-                // TODO set background (attr)
+                binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
+                Toast.makeText(requireContext(), "Finished", Toast.LENGTH_SHORT).show()
             }
         }.exhaustive
     }
