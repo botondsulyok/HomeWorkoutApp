@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayoutDoingExercise"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layoutDescription="@xml/fragment_doing_exercise_scene">
 
     <TextView
         android:id="@+id/tvDoingExerciseHeader"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
+        style="@style/TextAppearance.MaterialComponents.Headline4"
+        android:layout_marginBottom="48dp"
+        android:elevation="10dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/pulseCountDownDoingExercise"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="Header" />
 
     <com.gusakov.library.PulseCountDown
@@ -26,15 +31,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:pc_startValue="3" />
+        app:pc_startValue="3"
+        tools:text="3" />
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/vvDoingExercise"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDoingExerciseHeader" />
+        app:layout_constraintTop_toBottomOf="@+id/pulseCountDownDoingExercise" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

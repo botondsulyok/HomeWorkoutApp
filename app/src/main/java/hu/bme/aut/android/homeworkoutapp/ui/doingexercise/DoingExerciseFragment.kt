@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.exoplayer2.MediaItem
@@ -57,11 +59,19 @@ class DoingExerciseFragment : Fragment() {
 
         if(savedInstanceState == null) {
             binding.pulseCountDownDoingExercise.start(OnCountdownCompleted {
-                player?.play()
+                binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
+                binding.motionLayoutDoingExercise.addTransitionListener(object: MotionLayout.TransitionListener {
+                    override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {}
+                    override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) { }
+                    override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+                        player?.play()
+                    }
+                    override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) { }
+                })
             })
         }
         else {
-            binding.pulseCountDownDoingExercise.visibility = View.GONE
+            binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
             playWhenReady = true
             currentWindow = savedInstanceState.getInt(KEY_CURRENT_WINDOW)
             playbackPosition = savedInstanceState.getLong(KEY_PLAYBACK_POSITION)
