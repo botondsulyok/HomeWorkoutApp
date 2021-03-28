@@ -9,6 +9,8 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
+import com.gusakov.library.java.interfaces.OnCountdownCompleted
+import com.gusakov.library.start
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentDoingExerciseBinding
 
@@ -18,14 +20,20 @@ class DoingExerciseFragment : Fragment() {
     private var _binding: FragmentDoingExerciseBinding? = null
     private val binding get() = _binding!!
 
-    val args: DoingExerciseFragmentArgs by navArgs()
+    private val args: DoingExerciseFragmentArgs by navArgs()
 
     private var mainActivity: MainActivity? = null
 
+    companion object {
+        private const val KEY_CURRENT_WINDOW = "KEY_CURRENT_WINDOW"
+        private const val KEY_PLAYBACK_POSITION = "KEY_PLAYBACK_POSITION"
+    }
+
     private var player: SimpleExoPlayer? = null
-    private var playWhenReady: Boolean = true
+    private var playWhenReady: Boolean = false
     private var currentWindow = 0
     private var playbackPosition: Long = 0
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +52,17 @@ class DoingExerciseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        if(savedInstanceState == null) {
+            binding.pulseCountDownDoingExercise.start(OnCountdownCompleted {
+                player?.play()
+            })
+        }
+        else {
+            binding.pulseCountDownDoingExercise.visibility = View.GONE
+            playWhenReady = true
+            currentWindow = savedInstanceState.getInt(KEY_CURRENT_WINDOW)
+            playbackPosition = savedInstanceState.getLong(KEY_PLAYBACK_POSITION)
+        }
 
     }
 
@@ -94,7 +112,7 @@ class DoingExerciseFragment : Fragment() {
             playWhenReady = player!!.playWhenReady
             playbackPosition = player!!.currentPosition
             currentWindow = player!!.currentWindowIndex
-            player?.release()
+            player!!.release()
             player = null
         }
     }
@@ -104,6 +122,12 @@ class DoingExerciseFragment : Fragment() {
         mainActivity = activity as? MainActivity
         mainActivity?.supportActionBar?.hide()
         mainActivity?.binding?.navView?.visibility = View.GONE
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY_CURRENT_WINDOW, currentWindow)
+        outState.putLong(KEY_PLAYBACK_POSITION, playbackPosition)
     }
 
 }

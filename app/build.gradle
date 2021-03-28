@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "hu.bme.aut.android.homeworkoutapp"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -93,5 +93,8 @@ dependencies {
 
     //exoplayer
     implementation 'com.google.android.exoplayer:exoplayer:2.13.2'
+
+    //pulse countdownview
+    implementation 'com.gusakov:pulse-countdown:1.1.0-rc1'
 
 }
