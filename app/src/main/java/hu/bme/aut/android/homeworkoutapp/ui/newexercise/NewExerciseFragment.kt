@@ -35,7 +35,8 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     companion object {
         private const val RC_VIDEO_CAPTURE = 100
-        private const val KEY_NEW_EXERCISE = "101"
+        private const val KEY_NEW_EXERCISE = "KEY_NEW_EXERCISE"
+        private const val KEY_MOTION_LAYOUT = "KEY_MOTION_LAYOUT"
     }
 
     private var _binding: FragmentNewExerciseBinding? = null
@@ -58,7 +59,9 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        exercise = savedInstanceState?.getParcelable(KEY_NEW_EXERCISE) ?: UiNewExercise()
+        if(savedInstanceState != null) {
+            exercise = savedInstanceState.getParcelable(KEY_NEW_EXERCISE) ?: UiNewExercise()
+        }
     }
 
     override fun onCreateView(
@@ -72,6 +75,10 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if(savedInstanceState != null) {
+            binding.motionLayoutNewExercise.transitionToState(savedInstanceState.getInt(KEY_MOTION_LAYOUT))
+        }
 
         binding.exerciseDurationPicker.newExercise = exercise
 
@@ -197,6 +204,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(KEY_NEW_EXERCISE, updatedExercise)
+        outState.putInt(KEY_MOTION_LAYOUT, binding.motionLayoutNewExercise.currentState)
     }
 
 }

@@ -30,7 +30,9 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
         set(value) {
             _exercise = value.toUiExercise()
             binding.etReps.setText(_exercise.reps.toString())
-            _exercise = value.toUiExercise().copy(duration = calculateDuration())
+            if(updatedExercise.videoLengthInMilliseconds !=  0) {
+                _exercise = value.toUiExercise().copy(duration = calculateDuration())
+            }
             setDuration()
             field = value
         }

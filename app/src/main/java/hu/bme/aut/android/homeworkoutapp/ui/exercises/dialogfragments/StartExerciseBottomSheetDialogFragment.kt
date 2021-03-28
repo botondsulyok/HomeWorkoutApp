@@ -18,8 +18,8 @@ class StartExerciseBottomSheetDialogFragment
 
     companion object {
         const val START_EXERCISE = "START_EXERCISE"
-        const val EXERCISE_VALUE = "100"
-        const val SAVE_ACTION_VALUE = "101"
+        const val EXERCISE_VALUE = "EXERCISE_VALUE"
+        const val SAVE_ACTION_VALUE = "SAVE_ACTION_VALUE"
     }
 
     private var _binding: FragmentStartExerciseBinding? = null

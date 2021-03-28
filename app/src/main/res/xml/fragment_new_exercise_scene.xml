@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
-    <ConstraintSet android:id="@+id/newExercisesRowSceneStart">
+    <ConstraintSet android:id="@+id/newExerciseRowSceneStart">
 
         <Constraint
             android:id="@id/progressBar">
@@ -26,8 +26,8 @@
     </ConstraintSet>
 
     <ConstraintSet
-        android:id="@+id/newExercisesRowSceneEnd"
-        motion:deriveConstraintsFrom="@id/newExercisesRowSceneStart">
+        android:id="@+id/newExerciseRowSceneEnd"
+        motion:deriveConstraintsFrom="@id/newExerciseRowSceneStart">
 
         <Constraint
             android:id="@+id/ibDurationExpand"
@@ -52,8 +52,8 @@
     </ConstraintSet>
 
     <Transition
-        app:constraintSetEnd="@id/newExercisesRowSceneEnd"
-        app:constraintSetStart="@+id/newExercisesRowSceneStart" >
+        app:constraintSetEnd="@id/newExerciseRowSceneEnd"
+        app:constraintSetStart="@+id/newExerciseRowSceneStart" >
         <OnClick app:targetId="@+id/ibDurationExpand" />
     </Transition>
 </MotionScene>

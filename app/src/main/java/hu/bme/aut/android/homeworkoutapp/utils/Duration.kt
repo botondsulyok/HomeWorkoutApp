@@ -15,7 +15,6 @@ data class Duration(
         val ZERO = Duration(0, 0, 0)
 
         fun buildFromMilliseconds(durationInMilliseconds: Int): Duration {
-            //val durationInSeconds = if(durationInMilliseconds / 1000 != 0) durationInMilliseconds / 1000 else 1
             val durationInSeconds = (durationInMilliseconds / 1000.0).roundToInt()
             val hours: Int = durationInSeconds / 3600
             val secondsLeft: Int = durationInSeconds - hours * 3600
