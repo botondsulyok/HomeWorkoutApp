@@ -103,7 +103,7 @@
             android:layout_marginTop="2dp"
             android:text="Optional, you can add/change it later or specify for each workout."
             android:textAlignment="textStart"
-            android:textSize="10dp"
+            android:textSize="12sp"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="@+id/tvDuration"
             app:layout_constraintStart_toStartOf="@+id/tvDuration"

@@ -23,7 +23,7 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
         field = value
     }
     get() {
-        return updatedExercise
+        return updatedExercise.copy(duration = calculateDuration())
     }
 
     var newExercise: UiNewExercise = UiNewExercise()
@@ -37,7 +37,7 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
             field = value
         }
         get() {
-            return updatedExercise.toUiNewExercise()
+            return updatedExercise.copy(duration = calculateDuration()).toUiNewExercise()
         }
 
     private var _exercise: UiExercise = UiExercise()
@@ -56,7 +56,7 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
 
     val duration: Duration
         get() {
-            return updatedExercise.duration
+            return calculateDuration()
         }
 
     val reps: Int

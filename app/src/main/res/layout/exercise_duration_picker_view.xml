@@ -94,4 +94,16 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="If the duration and reps don't match with the length of the video then duration will be round down."
+        android:layout_margin="12dp"
+        android:textAlignment="textStart"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutReps" />
+
 </merge>
