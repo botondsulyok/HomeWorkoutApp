@@ -30,7 +30,7 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
         set(value) {
             _exercise = value.toUiExercise()
             binding.etReps.setText(_exercise.reps.toString())
-            if(updatedExercise.videoLengthInMilliseconds !=  0) {
+            if(_exercise.videoLengthInMilliseconds !=  0) {
                 _exercise = value.toUiExercise().copy(duration = calculateDuration())
             }
             setDuration()
@@ -101,7 +101,7 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
     private fun initReps() {
         binding.etReps.apply {
             addTextChangedListener {
-                if(updatedExercise.videoLengthInMilliseconds !=  0 && hasFocus()) {
+                if(_exercise.videoLengthInMilliseconds !=  0 && hasFocus()) {
                     _exercise = updatedExercise.copy(duration = calculateDuration())
                     setDuration()
                 }
@@ -109,11 +109,25 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
         }
     }
 
-    private fun calculateDuration() =
+    private fun calculateDuration(): Duration {
+        return if(_exercise.videoLengthInMilliseconds == 0) {
+            updatedExercise.duration
+        }
+        else {
             Duration.buildFromMilliseconds(updatedExercise.reps * updatedExercise.videoLengthInMilliseconds)
+        }
 
-    private fun calculateReps() =
+    }
+
+    private fun calculateReps(): Int {
+        return if(_exercise.videoLengthInMilliseconds == 0) {
+            updatedExercise.reps
+        }
+        else {
             updatedExercise.duration.getDurationInMilliseconds() / updatedExercise.videoLengthInMilliseconds
+        }
+
+    }
 
 
     private fun setDuration() {

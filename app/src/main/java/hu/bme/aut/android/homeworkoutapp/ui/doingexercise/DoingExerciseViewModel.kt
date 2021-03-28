@@ -31,6 +31,9 @@ class DoingExerciseViewModel @Inject constructor(
     }
 
     private fun calculateReps(): Int {
+        if(viewState.exercise.videoLengthInMilliseconds == 0) {
+            return viewState.exercise.reps
+        }
         val d = viewState.exercise.duration.getDurationInMilliseconds() / viewState.exercise.videoLengthInMilliseconds
         return if(d < initialReps) d+1 else d
     }
