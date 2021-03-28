@@ -60,10 +60,12 @@ class StartExerciseBottomSheetDialogFragment
         binding.exerciseDurationPicker.exercise = exercise
 
         binding.btnStart.setOnClickListener {
+            var e = updatedExercise
+            e = e.copy(duration = Duration.buildFromMilliseconds(e.reps * e.videoLengthInMilliseconds))
             if(binding.cbSave.isChecked) {
-                (arguments?.getSerializable(SAVE_ACTION_VALUE) as? ExerciseListener)?.action?.invoke(updatedExercise)
+                (arguments?.getSerializable(SAVE_ACTION_VALUE) as? ExerciseListener)?.action?.invoke(e)
             }
-            val action = DoingExerciseFragmentDirections.actionGlobalDoingExerciseFragment(updatedExercise)
+            val action = DoingExerciseFragmentDirections.actionGlobalDoingExerciseFragment(e)
             findNavController().navigate(action)
             dismiss()
         }

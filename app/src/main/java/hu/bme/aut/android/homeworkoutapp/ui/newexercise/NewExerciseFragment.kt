@@ -117,7 +117,8 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                 binding.etName.error = "Add a name!"
                 return@setOnClickListener
             }
-            viewModel.addExercise(updatedExercise)
+            val e = updatedExercise
+            viewModel.addExercise(e.copy(duration = Duration.buildFromMilliseconds(e.reps * e.videoLengthInMilliseconds)))
         }
 
         val adapter = ArrayAdapter(
