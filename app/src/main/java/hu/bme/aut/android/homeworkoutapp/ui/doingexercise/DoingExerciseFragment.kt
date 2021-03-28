@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.util.Util
 import com.gusakov.library.java.interfaces.OnCountdownCompleted
 import com.gusakov.library.start
 import hu.bme.aut.android.homeworkoutapp.MainActivity
+import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentDoingExerciseBinding
 
 
@@ -51,6 +52,8 @@ class DoingExerciseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.tvDoingExerciseHeader.text = getString(R.string.tv_duration_and_reps, args.exercise.duration.toString(), args.exercise.reps)
 
         if(savedInstanceState == null) {
             binding.pulseCountDownDoingExercise.start(OnCountdownCompleted {
