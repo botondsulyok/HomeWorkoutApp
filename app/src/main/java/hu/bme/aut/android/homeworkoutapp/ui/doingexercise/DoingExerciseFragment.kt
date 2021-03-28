@@ -9,16 +9,25 @@ import android.view.WindowManager
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import co.zsmb.rainbowcake.base.RainbowCakeFragment
+import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
+import co.zsmb.rainbowcake.extensions.exhaustive
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
+import com.google.android.exoplayer2.video.VideoListener
 import com.gusakov.library.java.interfaces.OnCountdownCompleted
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentDoingExerciseBinding
 
 
-class DoingExerciseFragment : Fragment() {
+class DoingExerciseFragment :
+    RainbowCakeFragment<DoingExerciseViewState, DoingExerciseViewModel>() {
+
+    override fun provideViewModel() = getViewModelFromFactory()
+    override fun getViewResource() = 0
 
     private var _binding: FragmentDoingExerciseBinding? = null
     private val binding get() = _binding!!
@@ -55,14 +64,10 @@ class DoingExerciseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvDoingExerciseHeader.text = getString(
-            R.string.tv_duration_and_reps,
-            args.exercise.duration.toString(),
-            args.exercise.reps
-        )
-
         if(savedInstanceState == null) {
-            binding.pulseCountDownDoingExercise.start(OnCountdownCompleted {
+            viewModel.addExercise(args.exercise)
+
+            binding.pulseCountDownDoingExercise.start {
                 binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
                 binding.motionLayoutDoingExercise.addTransitionListener(object :
                     MotionLayout.TransitionListener {
@@ -77,6 +82,8 @@ class DoingExerciseFragment : Fragment() {
 
                     override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
                         player?.play()
+                        viewModel.startExercise()
+                        p0?.removeTransitionListener(this)
                     }
 
                     override fun onTransitionTrigger(
@@ -87,7 +94,7 @@ class DoingExerciseFragment : Fragment() {
                     ) {
                     }
                 })
-            })
+            }
         }
         else {
             binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
@@ -96,6 +103,25 @@ class DoingExerciseFragment : Fragment() {
             playbackPosition = savedInstanceState.getLong(KEY_PLAYBACK_POSITION)
         }
 
+    }
+
+    override fun render(viewState: DoingExerciseViewState) {
+        binding.tvDoingExerciseHeader.text = getString(
+            R.string.tv_duration_and_reps,
+            viewState.exercise.duration.toString(),
+            viewState.exercise.reps
+        )
+        when(viewState) {
+            is Initial -> {
+
+            }
+            is DoingExercise -> {
+
+            }
+            is Finished -> {
+                // TODO set background (attr)
+            }
+        }.exhaustive
     }
 
     override fun onStart() {
@@ -144,6 +170,16 @@ class DoingExerciseFragment : Fragment() {
         player?.playWhenReady = playWhenReady
         player?.seekTo(currentWindow, playbackPosition)
         player?.prepare()
+
+        player?.addListener(object : Player.EventListener {
+            override fun onPlaybackStateChanged(state: Int) {
+                super.onPlaybackStateChanged(state)
+                if(state == Player.STATE_ENDED) {
+                    player?.seekTo(0)
+                    player?.play()
+                }
+            }
+        })
     }
 
     private fun releasePlayer() {
