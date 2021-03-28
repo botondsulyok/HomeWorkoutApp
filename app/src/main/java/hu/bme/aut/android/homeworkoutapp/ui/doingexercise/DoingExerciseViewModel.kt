@@ -10,10 +10,12 @@ import javax.inject.Inject
 class DoingExerciseViewModel @Inject constructor(
 ) : RainbowCakeViewModel<DoingExerciseViewState>(Initial(UiExercise())) {
 
+    var initialDurationInMilliseconds = 0
     var initialReps = 0
 
     fun addExercise(e: UiExercise) = execute {
         viewState = Initial(e)
+        initialDurationInMilliseconds = viewState.exercise.duration.getDurationInMilliseconds()
         initialReps = viewState.exercise.reps
     }
 
@@ -32,10 +34,10 @@ class DoingExerciseViewModel @Inject constructor(
 
     private fun calculateReps(): Int {
         if(viewState.exercise.videoLengthInMilliseconds == 0) {
-            return viewState.exercise.reps
+            return viewState.exercise.duration.getDurationInMilliseconds() / (initialDurationInMilliseconds / initialReps)
         }
-        val d = viewState.exercise.duration.getDurationInMilliseconds() / viewState.exercise.videoLengthInMilliseconds
-        return if(d < initialReps) d+1 else d
+        return viewState.exercise.duration.getDurationInMilliseconds() / viewState.exercise.videoLengthInMilliseconds
+        //return if(d < initialReps) d+1 else d
     }
 
 
