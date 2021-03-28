@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
-    <ConstraintSet android:id="@+id/DoingExerciseStart">
+    <ConstraintSet android:id="@+id/doingExerciseInitial">
 
         <Constraint
             android:id="@+id/tvDoingExerciseHeader"
@@ -24,8 +24,8 @@
 
     </ConstraintSet>
 
-    <ConstraintSet android:id="@+id/DoingExerciseEnd"
-        motion:deriveConstraintsFrom="@id/exercisesRowSceneStart">
+    <ConstraintSet android:id="@+id/doingExerciseStarted"
+        motion:deriveConstraintsFrom="@id/doingExerciseInitial">
 
     <Constraint
             android:layout_height="wrap_content"
@@ -55,6 +55,12 @@
             android:layout_width="wrap_content"
             android:visibility="gone"
             android:id="@+id/pulseCountDownDoingExercise" />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/doingExerciseFinished"
+        motion:deriveConstraintsFrom="@id/doingExerciseStarted">
+
         <Constraint
             android:id="@+id/btnDoingExerciseDone"
             android:elevation="10dp"
@@ -66,9 +72,28 @@
             app:layout_constraintTop_toTopOf="@+id/vvDoingExercise"
             android:layout_marginTop="4dp" />
 
+        <Constraint
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@android:color/white"
+            android:id="@+id/tvDoingExerciseHeader"
+            app:layout_constraintTop_toTopOf="parent">
+            <CustomAttribute
+                app:attributeName="background"
+                app:customColorDrawableValue="@android:color/holo_red_dark" />
+        </Constraint>
+
     </ConstraintSet>
 
     <Transition
-        app:constraintSetEnd="@id/DoingExerciseEnd"
-        app:constraintSetStart="@+id/DoingExerciseStart" />
+        app:constraintSetEnd="@id/doingExerciseStarted"
+        app:constraintSetStart="@+id/doingExerciseInitial" />
+
+    <Transition
+        app:constraintSetEnd="@id/doingExerciseFinished"
+        app:constraintSetStart="@+id/doingExerciseStarted"
+        app:duration="800" />
+
 </MotionScene>

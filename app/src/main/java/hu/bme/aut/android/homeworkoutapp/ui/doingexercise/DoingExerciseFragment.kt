@@ -1,14 +1,10 @@
 package hu.bme.aut.android.homeworkoutapp.ui.doingexercise
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.Toast
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
@@ -18,8 +14,6 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
-import com.google.android.exoplayer2.video.VideoListener
-import com.gusakov.library.java.interfaces.OnCountdownCompleted
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentDoingExerciseBinding
@@ -90,7 +84,7 @@ class DoingExerciseFragment :
             }
             is Ready -> {
                 binding.pulseCountDownDoingExercise.start {
-                    binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
+                    binding.motionLayoutDoingExercise.transitionToState(R.id.doingExerciseStarted)
                     binding.motionLayoutDoingExercise.addTransitionListener(object :
                         MotionLayout.TransitionListener {
                         override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {}
@@ -117,11 +111,10 @@ class DoingExerciseFragment :
                 }
             }
             is DoingExercise -> {
-                binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
+                binding.motionLayoutDoingExercise.transitionToState(R.id.doingExerciseStarted)
             }
             is Finished -> {
-                binding.motionLayoutDoingExercise.transitionToState(R.id.DoingExerciseEnd)
-                Toast.makeText(requireContext(), "Finished", Toast.LENGTH_SHORT).show()
+                binding.motionLayoutDoingExercise.transitionToState(R.id.doingExerciseFinished)
             }
         }.exhaustive
     }
