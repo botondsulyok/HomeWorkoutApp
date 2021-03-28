@@ -33,6 +33,7 @@ class DoingExerciseFragment :
     private var mainActivity: MainActivity? = null
 
     companion object {
+        private const val KEY_PLAY_WHEN_READY = "KEY_PLAY_WHEN_READY"
         private const val KEY_CURRENT_WINDOW = "KEY_CURRENT_WINDOW"
         private const val KEY_PLAYBACK_POSITION = "KEY_PLAYBACK_POSITION"
     }
@@ -65,7 +66,7 @@ class DoingExerciseFragment :
         }
 
         if(savedInstanceState != null) {
-            playWhenReady = true
+            playWhenReady = savedInstanceState.getBoolean(KEY_PLAY_WHEN_READY)
             currentWindow = savedInstanceState.getInt(KEY_CURRENT_WINDOW)
             playbackPosition = savedInstanceState.getLong(KEY_PLAYBACK_POSITION)
         }
@@ -96,7 +97,7 @@ class DoingExerciseFragment :
                         ) {
                         }
                         override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                            player?.play()
+                            player?.playWhenReady = true
                             viewModel.startExercise()
                             p0?.removeTransitionListener(this)
                         }
@@ -195,6 +196,7 @@ class DoingExerciseFragment :
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putBoolean(KEY_PLAY_WHEN_READY, playWhenReady)
         outState.putInt(KEY_CURRENT_WINDOW, currentWindow)
         outState.putLong(KEY_PLAYBACK_POSITION, playbackPosition)
     }
