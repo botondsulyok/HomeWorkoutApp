@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <ConstraintSet android:id="@+id/DoingExerciseStart">
 
+        <Constraint
+            android:id="@+id/tvDoingExerciseHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.MaterialComponents.Headline4"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="48dp"
+            android:elevation="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/pulseCountDownDoingExercise"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+            <CustomAttribute
+                app:attributeName="background"
+                app:customColorDrawableValue="@android:color/transparent" />
+        </Constraint>
+
     </ConstraintSet>
 
-    <ConstraintSet android:id="@+id/DoingExerciseEnd">
+    <ConstraintSet android:id="@+id/DoingExerciseEnd"
+        motion:deriveConstraintsFrom="@id/exercisesRowSceneStart">
 
-        <Constraint
+    <Constraint
             android:layout_height="wrap_content"
+            android:layout_width="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="0dp"
+            android:textColor="@android:color/white"
             android:id="@+id/tvDoingExerciseHeader"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="4dp" />
+            app:layout_constraintTop_toTopOf="parent">
+    </Constraint>
 
         <Constraint
             android:layout_height="0dp"
@@ -24,7 +44,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="0dp"
             android:id="@+id/vvDoingExercise"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/tvDoingExerciseHeader" />
+
 
         <Constraint
             android:layout_height="wrap_content"
@@ -34,6 +55,16 @@
             android:layout_width="wrap_content"
             android:visibility="gone"
             android:id="@+id/pulseCountDownDoingExercise" />
+        <Constraint
+            android:id="@+id/btnDoingExerciseDone"
+            android:elevation="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/vvDoingExercise"
+            android:layout_marginTop="4dp" />
 
     </ConstraintSet>
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
@@ -133,8 +134,7 @@ class DoingExerciseFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mainActivity = activity as? MainActivity
-        mainActivity?.supportActionBar?.hide()
-        mainActivity?.binding?.navView?.visibility = View.GONE
+        mainActivity?.setToolbarAndBottomNavigationViewVisible(false)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

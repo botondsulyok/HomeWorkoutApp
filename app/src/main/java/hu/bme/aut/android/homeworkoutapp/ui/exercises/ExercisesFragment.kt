@@ -67,8 +67,7 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mainActivity = activity as? MainActivity
-        mainActivity?.supportActionBar?.show()
-        mainActivity?.binding?.navView?.visibility = View.VISIBLE
+        mainActivity?.setToolbarAndBottomNavigationViewVisible(true)
     }
 
     override fun render(viewState: ExercisesViewState) {
