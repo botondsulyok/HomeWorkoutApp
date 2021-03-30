@@ -13,6 +13,7 @@ import hu.bme.aut.android.homeworkoutapp.data.Result
 import hu.bme.aut.android.homeworkoutapp.data.firebase.FirebaseDataSource
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainExercise
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewExercise
+import hu.bme.aut.android.homeworkoutapp.utils.ImageCompressor
 import java.io.ByteArrayOutputStream
 import java.io.FileDescriptor
 import javax.inject.Inject
@@ -22,7 +23,7 @@ import javax.inject.Singleton
 @Singleton
 class ExercisesInteractor @Inject constructor(
         private val firebaseDataSource: FirebaseDataSource,
-        private val context: Context
+        private val imageCompressor: ImageCompressor
 ) {
 
     suspend fun getExercises(): Result<List<DomainExercise>, Exception> {
@@ -31,10 +32,7 @@ class ExercisesInteractor @Inject constructor(
 
     suspend fun addExercise(exercise: DomainNewExercise): Result<Unit, Exception> {
         return if(exercise.videoUri != null) {
-            val bitmap = Glide.with(context).asBitmap().load(exercise.videoUri).submit().get()
-            val baos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos)
-            val imageInBytes = baos.toByteArray()
+            val imageInBytes = imageCompressor.compressImage(exercise.videoUri)
             firebaseDataSource.addExercise(exercise.copy(thumbnailInBytes = imageInBytes))
         } else {
             firebaseDataSource.addExercise(exercise)
@@ -47,5 +45,7 @@ class ExercisesInteractor @Inject constructor(
     suspend fun updateExercise(exercise: DomainExercise): Result<Unit, Exception> {
         return firebaseDataSource.updateExercise(exercise)
     }
+
+
 
 }
