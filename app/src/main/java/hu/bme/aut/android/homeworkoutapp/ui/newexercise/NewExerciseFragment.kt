@@ -80,10 +80,6 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
             binding.motionLayoutNewExercise.transitionToState(savedInstanceState.getInt(KEY_MOTION_LAYOUT))
         }
 
-        binding.exerciseDurationPicker.newExercise = exercise
-
-        setVideoPlayback()
-
         binding.ibExercisePlay.setOnClickListener {
             binding.rlExerciseVideoThumbnail.visibility = View.GONE
             binding.vvExerciseVideo.visibility = View.VISIBLE
@@ -126,6 +122,25 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
             )
         )
         binding.autoCompleteTextViewExerciseCategories.setAdapter(adapter)
+
+        if(exercise.videoUri != null) {
+            val mp: MediaPlayer = MediaPlayer.create(activity, exercise.videoUri)
+            val durationInMilliseconds = mp.duration
+            mp.release()
+
+            exercise = exercise.copy(videoLengthInMilliseconds = durationInMilliseconds)
+
+            setVideoPlayback()
+
+            binding.exerciseDurationPicker.newExercise =
+                if(binding.exerciseDurationPicker.exercise.reps == 0) {
+                    exercise.copy(reps = 1)
+                }
+                else {
+                    exercise
+                }
+        }
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -175,7 +190,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         findNavController().navigate(action)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             val mp: MediaPlayer = MediaPlayer.create(activity, data?.data)
@@ -195,7 +210,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                     }
 
         }
-    }
+    }*/
 
     private fun setVideoPlayback() {
         if(exercise.videoUri != null) {
@@ -211,8 +226,13 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(KEY_NEW_EXERCISE, updatedExercise)
-        outState.putInt(KEY_MOTION_LAYOUT, binding.motionLayoutNewExercise.currentState)
+        if(_binding != null) {
+            outState.putParcelable(KEY_NEW_EXERCISE, updatedExercise)
+            outState.putInt(KEY_MOTION_LAYOUT, binding.motionLayoutNewExercise.currentState)
+        }
+        else {
+            outState.putParcelable(KEY_NEW_EXERCISE, exercise)
+        }
     }
 
 }

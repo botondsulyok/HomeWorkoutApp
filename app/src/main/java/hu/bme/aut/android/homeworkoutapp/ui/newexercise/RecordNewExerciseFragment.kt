@@ -9,7 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.camera.core.*
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.Preview
+import androidx.camera.core.VideoCapture
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -21,8 +23,6 @@ import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
@@ -34,6 +34,7 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
     companion object {
         private const val TAG = "CameraXBasic"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        private const val KEY_LISTENER = "KEY_LISTENER"
     }
 
     private var videoCapture: VideoCapture? = null
@@ -73,6 +74,7 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
     }
 
+    @SuppressLint("RestrictedApi")
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
@@ -87,7 +89,9 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
                     it.setSurfaceProvider(binding.viewFinder.createSurfaceProvider())
                 }
 
-            videoCapture = VideoCapture.Builder()
+            videoCapture = VideoCapture
+                .Builder()
+                .setBitRate(2_800_000)
                 .build()
 
             // Select back camera as a default
@@ -144,6 +148,12 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
                     Log.e(TAG, "Video capture failed: $message", cause)
                 }
             })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // TODO
+        outState.putSerializable(KEY_LISTENER, )
     }
 
 }
