@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
 import hu.bme.aut.android.homeworkoutapp.utils.setAllEnabled
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
+import java.io.Serializable
 
 
 @RuntimePermissions
@@ -161,13 +161,18 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     @NeedsPermission(
         Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE)
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.RECORD_AUDIO)
     fun captureVideo() {
-        val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+        /*val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 30)
         if (takeVideoIntent.resolveActivity(requireContext().packageManager) != null) {
             startActivityForResult(takeVideoIntent, RC_VIDEO_CAPTURE)
-        }
+        }*/
+        val action = NewExerciseFragmentDirections.actionNewExerciseFragmentToRecordNewExerciseFragment(NewExerciseListener {
+            exercise = exercise.copy(videoUri = it.videoUri)
+        })
+        findNavController().navigate(action)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -211,3 +216,5 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     }
 
 }
+
+class NewExerciseListener(val action: (UiNewExercise) -> Unit) : Serializable
