@@ -7,10 +7,14 @@ import com.bumptech.glide.Glide
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
-class ImageCompressor @Inject constructor(val context: Context) {
+class MediaProcessor @Inject constructor(val context: Context) {
 
-    fun compressImage(videoUri: Uri): ByteArray {
+    fun createThumbnailFromVideo(videoUri: Uri): ByteArray {
         val bitmap = Glide.with(context).asBitmap().load(videoUri).submit().get()
+        return compressBitmap(bitmap)
+    }
+
+    fun compressBitmap(bitmap: Bitmap): ByteArray {
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos)
         val imageInBytes = baos.toByteArray()

@@ -1,21 +1,10 @@
 package hu.bme.aut.android.homeworkoutapp.domain.interactors
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.os.Build
-import android.os.ParcelFileDescriptor
-import android.provider.MediaStore
-import com.bumptech.glide.Glide
 import hu.bme.aut.android.homeworkoutapp.data.Result
 import hu.bme.aut.android.homeworkoutapp.data.firebase.FirebaseDataSource
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainExercise
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewExercise
-import hu.bme.aut.android.homeworkoutapp.utils.ImageCompressor
-import java.io.ByteArrayOutputStream
-import java.io.FileDescriptor
+import hu.bme.aut.android.homeworkoutapp.utils.MediaProcessor
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,7 +12,7 @@ import javax.inject.Singleton
 @Singleton
 class ExercisesInteractor @Inject constructor(
         private val firebaseDataSource: FirebaseDataSource,
-        private val imageCompressor: ImageCompressor
+        private val mediaProcessor: MediaProcessor
 ) {
 
     suspend fun getExercises(): Result<List<DomainExercise>, Exception> {
@@ -32,7 +21,7 @@ class ExercisesInteractor @Inject constructor(
 
     suspend fun addExercise(exercise: DomainNewExercise): Result<Unit, Exception> {
         return if(exercise.videoUri != null) {
-            val imageInBytes = imageCompressor.compressImage(exercise.videoUri)
+            val imageInBytes = mediaProcessor.createThumbnailFromVideo(exercise.videoUri)
             firebaseDataSource.addExercise(exercise.copy(thumbnailInBytes = imageInBytes))
         } else {
             firebaseDataSource.addExercise(exercise)
