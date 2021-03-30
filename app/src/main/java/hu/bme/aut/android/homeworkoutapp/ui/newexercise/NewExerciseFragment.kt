@@ -159,7 +159,9 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         }.exhaustive
     }
 
-    @NeedsPermission(Manifest.permission.CAMERA)
+    @NeedsPermission(
+        Manifest.permission.CAMERA,
+        Manifest.permission.READ_EXTERNAL_STORAGE)
     fun captureVideo() {
         val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 30)
