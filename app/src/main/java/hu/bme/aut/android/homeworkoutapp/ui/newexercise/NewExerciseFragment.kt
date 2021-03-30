@@ -162,6 +162,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     @NeedsPermission(Manifest.permission.CAMERA)
     fun captureVideo() {
         val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+        takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 30)
         if (takeVideoIntent.resolveActivity(requireContext().packageManager) != null) {
             startActivityForResult(takeVideoIntent, RC_VIDEO_CAPTURE)
         }
