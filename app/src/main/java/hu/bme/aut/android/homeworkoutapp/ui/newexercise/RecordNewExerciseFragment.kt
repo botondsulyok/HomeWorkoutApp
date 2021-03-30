@@ -2,9 +2,12 @@ package hu.bme.aut.android.homeworkoutapp.ui.newexercise
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.ActivityInfo
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,17 +32,21 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
     private var _binding: FragmentRecordNewExerciseBinding? = null
     private val binding get() = _binding!!
 
-    val args: RecordNewExerciseFragmentArgs by navArgs()
+    private val args: RecordNewExerciseFragmentArgs by navArgs()
 
     companion object {
         private const val TAG = "CameraXBasic"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-        private const val KEY_LISTENER = "KEY_LISTENER"
     }
 
     private var videoCapture: VideoCapture? = null
 
-    //private lateinit var cameraExecutor: ExecutorService
+    private var exercise = UiNewExercise()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        exercise = args.exercise
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,7 +67,13 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
         binding.btnCapture.setOnClickListener {
             if(binding.btnCapture.text == "Start Recording") {
+                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
                 startRecording()
+
+
+
+                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
                 binding.btnCapture.text = "Stop Recording"
             }
             else {
@@ -69,8 +82,6 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
             }
 
         }
-
-        //cameraExecutor = Executors.newSingleThreadExecutor()
 
     }
 
@@ -92,9 +103,10 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
             videoCapture = VideoCapture
                 .Builder()
                 .setBitRate(2_800_000)
+                .setMaxResolution(Size(2000, 2000))
                 .build()
 
-            // Select back camera as a default
+            // Select front camera as a default
             val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
             try {
@@ -113,24 +125,16 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
     }
 
 
-    /*override fun onDestroy() {
-        super.onDestroy()
-        cameraExecutor.shutdown()
-    }*/
-
     @SuppressLint("RestrictedApi")
     private fun startRecording() {
         // Get a stable reference of the modifiable image capture use case
         val videoCapture = videoCapture ?: return
 
-        // Create time-stamped output file to hold the image
         val videoFile = File(
             requireContext().getDir("Captured", Context.MODE_PRIVATE),
             SimpleDateFormat(FILENAME_FORMAT, Locale.US
             ).format(System.currentTimeMillis()) + ".mp4")
 
-        // Set up image capture listener, which is triggered after photo has
-        // been taken
         videoCapture.startRecording(
             videoFile,
             ContextCompat.getMainExecutor(requireContext()),
@@ -140,8 +144,13 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
                     val msg = "Video capture succeeded: $savedUri"
                     Toast.makeText(requireContext(), "Captured", Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
-                    args.listener.action(UiNewExercise(videoUri = savedUri))
-                    findNavController().popBackStack()
+
+                    val mp: MediaPlayer = MediaPlayer.create(activity, savedUri)
+                    val durationInMilliseconds = mp.duration
+                    mp.release()
+                    val action = RecordNewExerciseFragmentDirections.actionRecordNewExerciseFragmentToNewExerciseFragment(
+                        exercise.copy(videoUri = savedUri, videoLengthInMilliseconds = durationInMilliseconds))
+                    findNavController().navigate(action)
                 }
 
                 override fun onError(videoCaptureError: Int, message: String, cause: Throwable?) {
@@ -150,10 +159,9 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
             })
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        // TODO
-        outState.putSerializable(KEY_LISTENER, )
+    override fun onDestroyView() {
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
+        super.onDestroyView()
     }
 
 }

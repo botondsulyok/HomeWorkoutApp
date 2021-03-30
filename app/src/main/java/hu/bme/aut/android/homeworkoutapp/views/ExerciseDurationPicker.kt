@@ -10,6 +10,7 @@ import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
 import hu.bme.aut.android.homeworkoutapp.utils.toInt
+import kotlin.math.roundToInt
 
 class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
 
@@ -124,7 +125,7 @@ class ExerciseDurationPicker(context: Context, attrs: AttributeSet?) : Constrain
             updatedExercise.reps
         }
         else {
-            updatedExercise.duration.getDurationInMilliseconds() / updatedExercise.videoLengthInMilliseconds
+            (updatedExercise.duration.getDurationInMilliseconds() / updatedExercise.videoLengthInMilliseconds.toDouble()).roundToInt()
         }
 
     }

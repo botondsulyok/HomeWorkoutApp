@@ -76,6 +76,9 @@
             android:id="@+id/action_newExerciseFragment_to_recordNewExerciseFragment"
             app:destination="@id/recordNewExerciseFragment"
             app:popUpTo="@id/newExerciseFragment" />
+        <argument
+            android:name="exercise"
+            app:argType="hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise" />
     </fragment>
     <fragment
         android:id="@+id/doExerciseFragment"
@@ -99,7 +102,11 @@
         android:label="fragment_record_new_exercise"
         tools:layout="@layout/fragment_record_new_exercise" >
         <argument
-            android:name="listener"
-            app:argType="hu.bme.aut.android.homeworkoutapp.ui.newexercise.NewExerciseListener" />
+            android:name="exercise"
+            app:argType="hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise" />
+        <action
+            android:id="@+id/action_recordNewExerciseFragment_to_newExerciseFragment"
+            app:destination="@id/newExerciseFragment"
+            app:popUpTo="@id/navigation_exercises" />
     </fragment>
 </navigation>

@@ -17,6 +17,7 @@ import hu.bme.aut.android.homeworkoutapp.databinding.FragmentExercisesBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.StartExerciseBottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview.ExercisesRecyclerViewAdapter
+import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import java.io.Serializable
 
 
@@ -56,7 +57,9 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
         binding.exercisesRecyclerView.adapter = recyclerViewAdapter
 
         binding.fabCreateExercise.setOnClickListener {
-            val action = ExercisesFragmentDirections.actionNavigationExercisesToNewExerciseFragment()
+            val action = ExercisesFragmentDirections.actionNavigationExercisesToNewExerciseFragment(
+                UiNewExercise()
+            )
             findNavController().navigate(action)
         }
 

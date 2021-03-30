@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
@@ -34,13 +35,14 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
     override fun getViewResource() = 0
 
     companion object {
-        private const val RC_VIDEO_CAPTURE = 100
         private const val KEY_NEW_EXERCISE = "KEY_NEW_EXERCISE"
         private const val KEY_MOTION_LAYOUT = "KEY_MOTION_LAYOUT"
     }
 
     private var _binding: FragmentNewExerciseBinding? = null
     private val binding get() = _binding!!
+
+    private val args: NewExerciseFragmentArgs by navArgs()
 
     private var mainActivity: MainActivity? = null
 
@@ -59,8 +61,11 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(savedInstanceState != null) {
-            exercise = savedInstanceState.getParcelable(KEY_NEW_EXERCISE) ?: UiNewExercise()
+        exercise = if(savedInstanceState == null) {
+            args.exercise
+        }
+        else {
+            savedInstanceState.getParcelable(KEY_NEW_EXERCISE) ?: UiNewExercise()
         }
     }
 
@@ -124,22 +129,10 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         binding.autoCompleteTextViewExerciseCategories.setAdapter(adapter)
 
         if(exercise.videoUri != null) {
-            val mp: MediaPlayer = MediaPlayer.create(activity, exercise.videoUri)
-            val durationInMilliseconds = mp.duration
-            mp.release()
-
-            exercise = exercise.copy(videoLengthInMilliseconds = durationInMilliseconds)
-
             setVideoPlayback()
-
-            binding.exerciseDurationPicker.newExercise =
-                if(binding.exerciseDurationPicker.exercise.reps == 0) {
-                    exercise.copy(reps = 1)
-                }
-                else {
-                    exercise
-                }
         }
+
+        binding.exerciseDurationPicker.newExercise = exercise
 
     }
 
@@ -179,38 +172,9 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.RECORD_AUDIO)
     fun captureVideo() {
-        /*val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-        takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 30)
-        if (takeVideoIntent.resolveActivity(requireContext().packageManager) != null) {
-            startActivityForResult(takeVideoIntent, RC_VIDEO_CAPTURE)
-        }*/
-        val action = NewExerciseFragmentDirections.actionNewExerciseFragmentToRecordNewExerciseFragment(NewExerciseListener {
-            exercise = exercise.copy(videoUri = it.videoUri)
-        })
+        val action = NewExerciseFragmentDirections.actionNewExerciseFragmentToRecordNewExerciseFragment(updatedExercise)
         findNavController().navigate(action)
     }
-
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_VIDEO_CAPTURE && resultCode == RESULT_OK) {
-            val mp: MediaPlayer = MediaPlayer.create(activity, data?.data)
-            val durationInMilliseconds = mp.duration
-            mp.release()
-
-            exercise = exercise.copy(videoUri = data?.data, videoLengthInMilliseconds = durationInMilliseconds)
-
-            setVideoPlayback()
-
-            binding.exerciseDurationPicker.newExercise =
-                    if(binding.exerciseDurationPicker.exercise.reps == 0) {
-                        updatedExercise.copy(reps = 1)
-                    }
-                    else {
-                        updatedExercise
-                    }
-
-        }
-    }*/
 
     private fun setVideoPlayback() {
         if(exercise.videoUri != null) {
@@ -224,17 +188,22 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        if(_binding != null) {
+            exercise = updatedExercise
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putParcelable(KEY_NEW_EXERCISE, exercise)
         if(_binding != null) {
-            outState.putParcelable(KEY_NEW_EXERCISE, updatedExercise)
             outState.putInt(KEY_MOTION_LAYOUT, binding.motionLayoutNewExercise.currentState)
         }
         else {
-            outState.putParcelable(KEY_NEW_EXERCISE, exercise)
+            outState.putInt(KEY_MOTION_LAYOUT, R.id.newExerciseRowSceneEnd)
         }
     }
 
 }
-
-class NewExerciseListener(val action: (UiNewExercise) -> Unit) : Serializable
