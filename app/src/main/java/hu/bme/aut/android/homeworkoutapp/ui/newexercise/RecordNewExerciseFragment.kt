@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.gusakov.library.start
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentRecordNewExerciseBinding
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import java.io.File
@@ -40,6 +41,8 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
     }
 
     private var videoCapture: VideoCapture? = null
+
+    private var cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
     private var exercise = UiNewExercise()
 
@@ -68,13 +71,11 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
         binding.btnCapture.setOnClickListener {
             if(binding.btnCapture.text == "Start Recording") {
                 activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-                startRecording()
 
-
-
-                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-                binding.btnCapture.text = "Stop Recording"
+                binding.pulseCountDownRecordExercise.start {
+                    startRecording()
+                    binding.btnCapture.text = "Stop Recording"
+                }
             }
             else {
                 videoCapture?.stopRecording()
@@ -89,7 +90,7 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
-        cameraProviderFuture.addListener(Runnable {
+        cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
@@ -105,9 +106,6 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
                 .setBitRate(2_800_000)
                 .setMaxResolution(Size(2000, 2000))
                 .build()
-
-            // Select front camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
             try {
                 // Unbind use cases before rebinding
@@ -149,7 +147,7 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
                     val durationInMilliseconds = mp.duration
                     mp.release()
                     val action = RecordNewExerciseFragmentDirections.actionRecordNewExerciseFragmentToNewExerciseFragment(
-                        exercise.copy(videoUri = savedUri, videoLengthInMilliseconds = durationInMilliseconds))
+                        exercise.copy(videoUri = savedUri, videoLengthInMilliseconds = durationInMilliseconds, reps = 1))
                     findNavController().navigate(action)
                 }
 
