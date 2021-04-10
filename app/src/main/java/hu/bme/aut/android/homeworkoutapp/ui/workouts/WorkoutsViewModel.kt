@@ -7,12 +7,12 @@ import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import javax.inject.Inject
 
 class WorkoutsViewModel @Inject constructor(
-    private val workoutPresenter: WorkoutPresenter
+    private val workoutsPresenter: WorkoutsPresenter
 ) : RainbowCakeViewModel<WorkoutsViewState>(Loading) {
 
     fun getWorkouts() = execute {
         viewState = Loading
-        val result = workoutPresenter.getWorkouts()
+        val result = workoutsPresenter.getWorkouts()
         viewState = when(result) {
             is ResultSuccess -> {
                 Loaded(result.value)
@@ -25,7 +25,7 @@ class WorkoutsViewModel @Inject constructor(
 
     fun deleteWorkout(workout: UiWorkout) = execute {
         viewState = Loading
-        when(val result = workoutPresenter.deleteWorkout(workout)) {
+        when(val result = workoutsPresenter.deleteWorkout(workout)) {
             is ResultSuccess -> {
                 getWorkouts()
             }

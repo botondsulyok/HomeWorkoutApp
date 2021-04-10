@@ -85,6 +85,9 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
             binding.motionLayoutNewExercise.transitionToState(savedInstanceState.getInt(KEY_MOTION_LAYOUT))
         }
 
+        binding.etName.setText(exercise.name)
+        binding.autoCompleteTextViewExerciseCategories.setText(exercise.categoryEntry)
+
         binding.ibExercisePlay.setOnClickListener {
             binding.rlExerciseVideoThumbnail.visibility = View.GONE
             binding.vvExerciseVideo.visibility = View.VISIBLE
@@ -128,9 +131,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
         )
         binding.autoCompleteTextViewExerciseCategories.setAdapter(adapter)
 
-        if(exercise.videoUri != null) {
-            setVideoPlayback()
-        }
+        setVideoPlayback()
 
         binding.exerciseDurationPicker.newExercise = exercise
 

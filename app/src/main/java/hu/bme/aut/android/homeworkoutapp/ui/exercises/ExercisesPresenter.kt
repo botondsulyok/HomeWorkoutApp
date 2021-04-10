@@ -19,7 +19,7 @@ class ExercisesPresenter @Inject constructor(
     suspend fun getExercises(): Result<List<UiExercise>, Exception> = withIOContext {
         when(val result = exerciseInteractor.getExercises()) {
             is ResultSuccess -> {
-                ResultSuccess(value = result.value.map { it.toUiExercise() })
+                ResultSuccess(value = result.value.map { it.toUiExercise(context) })
             }
             is ResultFailure -> {
                 ResultFailure(reason = result.reason)
@@ -28,55 +28,57 @@ class ExercisesPresenter @Inject constructor(
     }
 
     suspend fun deleteExercise(exercise: UiExercise): Result<Unit, Exception> = withIOContext {
-        exerciseInteractor.deleteExercise(exercise.toDomainExercise())
+        exerciseInteractor.deleteExercise(exercise.toDomainExercise(context))
     }
 
     suspend fun updateExercise(exercise: UiExercise): Result<Unit, Exception> = withIOContext {
-        exerciseInteractor.updateExercise(exercise.toDomainExercise())
+        exerciseInteractor.updateExercise(exercise.toDomainExercise(context))
     }
 
-    private fun UiExercise.toDomainExercise(): DomainExercise {
-        val categoriesEntryList = context.resources.getStringArray(R.array.exercise_categories_entries)
-        val categoriesValuesList = context.resources.getStringArray(R.array.exercise_categories_values)
-        val categoryValue =
-                if(categoriesEntryList.contains(categoryEntry)) {
-                    categoriesValuesList[categoriesEntryList.indexOf(categoryEntry)]
-                }
-                else {
-                    ""
-                }
-        return DomainExercise(
-                id = id,
-                name = name,
-                reps = reps,
-                duration = duration,
-                categoryValue = categoryValue,
-                videoUrl = videoUrl,
-                videoLengthInMilliseconds = videoLengthInMilliseconds,
-                thumbnailUrl = thumbnailUrl
-        )
-    }
 
-    private fun DomainExercise.toUiExercise(): UiExercise {
-        val categoriesEntryList = context.resources.getStringArray(R.array.exercise_categories_entries)
-        val categoriesValuesList = context.resources.getStringArray(R.array.exercise_categories_values)
-        val categoryEntry =
-                if(categoriesValuesList.contains(categoryValue)) {
-                    categoriesEntryList[categoriesValuesList.indexOf(categoryValue)]
-                }
-                else {
-                    ""
-                }
-        return UiExercise(
-                id = id,
-                name = name,
-                reps = reps,
-                duration = duration,
-                categoryEntry = categoryEntry,
-                videoUrl = videoUrl,
-                videoLengthInMilliseconds = videoLengthInMilliseconds,
-                thumbnailUrl = thumbnailUrl
-        )
-    }
+}
+
+fun UiExercise.toDomainExercise(context: Context): DomainExercise {
+    val categoriesEntryList = context.resources.getStringArray(R.array.exercise_categories_entries)
+    val categoriesValuesList = context.resources.getStringArray(R.array.exercise_categories_values)
+    val categoryValue =
+        if(categoriesEntryList.contains(categoryEntry)) {
+            categoriesValuesList[categoriesEntryList.indexOf(categoryEntry)]
+        }
+        else {
+            ""
+        }
+    return DomainExercise(
+        id = id,
+        name = name,
+        reps = reps,
+        duration = duration,
+        categoryValue = categoryValue,
+        videoUrl = videoUrl,
+        videoLengthInMilliseconds = videoLengthInMilliseconds,
+        thumbnailUrl = thumbnailUrl
+    )
+}
+
+fun DomainExercise.toUiExercise(context: Context): UiExercise {
+    val categoriesEntryList = context.resources.getStringArray(R.array.exercise_categories_entries)
+    val categoriesValuesList = context.resources.getStringArray(R.array.exercise_categories_values)
+    val categoryEntry =
+        if(categoriesValuesList.contains(categoryValue)) {
+            categoriesEntryList[categoriesValuesList.indexOf(categoryValue)]
+        }
+        else {
+            ""
+        }
+    return UiExercise(
+        id = id,
+        name = name,
+        reps = reps,
+        duration = duration,
+        categoryEntry = categoryEntry,
+        videoUrl = videoUrl,
+        videoLengthInMilliseconds = videoLengthInMilliseconds,
+        thumbnailUrl = thumbnailUrl
+    )
 }
 

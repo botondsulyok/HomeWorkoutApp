@@ -10,6 +10,7 @@ import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.NewExerciseViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.newworkout.NewWorkoutViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.welcome.WelcomeViewModel
+import hu.bme.aut.android.homeworkoutapp.ui.workout.WorkoutViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.WorkoutsViewModel
 
 @Module
@@ -45,5 +46,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(DoingExerciseViewModel::class)
     abstract fun bindDoingExerciseViewModel(doingExerciseViewModel: DoingExerciseViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(WorkoutViewModel::class)
+    abstract fun bindWorkoutViewModel(workoutViewModel: WorkoutViewModel): ViewModel
 
 }

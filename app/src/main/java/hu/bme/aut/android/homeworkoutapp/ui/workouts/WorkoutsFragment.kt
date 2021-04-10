@@ -83,13 +83,19 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
 
     }
 
-    override fun onItemClick(workout: UiWorkout): Boolean {
-        // TODO
+    override fun onItemClick(workout: UiWorkout?): Boolean {
+        if(workout != null) {
+            val action = WorkoutsFragmentDirections.actionNavigationWorkoutsToWorkoutFragment(workout)
+            findNavController().navigate(action)
+        }
         return true
     }
 
-    override fun onItemLongClick(workout: UiWorkout): Boolean {
-        viewModel.deleteWorkout(workout)
+    override fun onItemLongClick(workout: UiWorkout?): Boolean {
+        // TODO
+        if(workout != null) {
+            viewModel.deleteWorkout(workout)
+        }
         return true
     }
 

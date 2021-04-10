@@ -9,7 +9,7 @@ import hu.bme.aut.android.homeworkoutapp.domain.models.DomainWorkout
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import javax.inject.Inject
 
-class WorkoutPresenter @Inject constructor(
+class WorkoutsPresenter @Inject constructor(
     private val workoutsInteractor: WorkoutsInteractor
 ) {
 

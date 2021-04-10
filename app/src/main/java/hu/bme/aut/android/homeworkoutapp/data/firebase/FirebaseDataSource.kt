@@ -15,6 +15,7 @@ import hu.bme.aut.android.homeworkoutapp.data.models.FirebaseExercise
 import hu.bme.aut.android.homeworkoutapp.data.models.FirebaseWorkout
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainExercise
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewExercise
+import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewWorkout
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainWorkout
 import kotlinx.coroutines.tasks.await
 import java.net.URLEncoder
@@ -73,7 +74,7 @@ class FirebaseDataSource @Inject constructor() {
 
     }
 
-    suspend fun addWorkout(workout: DomainWorkout): Result<Unit, Exception> {
+    suspend fun addWorkout(workout: DomainNewWorkout): Result<Unit, Exception> {
         val newWorkoutRef = db
             .collection("userdata")
             .document(userId)
@@ -106,6 +107,28 @@ class FirebaseDataSource @Inject constructor() {
         }
     }
 
+    suspend fun getWorkoutExercises(workoutId: String): Result<List<DomainExercise>, Exception> {
+        // TODO nem jó még
+        val exercisesRef = db
+            .collection("userdata")
+            .document(userId)
+            .collection("workouts")
+            .document(workoutId)
+            .collection("exercises")
+            .orderBy("creation", Query.Direction.DESCENDING)
+
+        return try {
+            val exercisesSnapshot = exercisesRef.get().await()
+            val workouts = exercisesSnapshot.documents.map {
+                it.toObject<FirebaseExercise>()?.toDomainExercise() ?: DomainExercise()
+            }
+            ResultSuccess(workouts)
+        } catch (e: Exception) {
+            ResultFailure(e)
+        }
+
+    }
+
     suspend fun getExercises(): Result<List<DomainExercise>, Exception> {
         val exercisesRef = db
                 .collection("userdata")
@@ -114,8 +137,8 @@ class FirebaseDataSource @Inject constructor() {
                 .orderBy("creation", Query.Direction.DESCENDING)
 
         return try {
-            val workoutsSnapshot = exercisesRef.get().await()
-            val workouts = workoutsSnapshot.documents.map {
+            val exercisesSnapshot = exercisesRef.get().await()
+            val workouts = exercisesSnapshot.documents.map {
                 it.toObject<FirebaseExercise>()?.toDomainExercise() ?: DomainExercise()
             }
             ResultSuccess(workouts)
@@ -201,10 +224,17 @@ class FirebaseDataSource @Inject constructor() {
 
 }
 
-private fun DomainWorkout.toFirebaseWorkout(id: String = this.id): FirebaseWorkout {
+private fun DomainWorkout.toFirebaseWorkout(): FirebaseWorkout {
     return FirebaseWorkout(
         id = id,
         name = name
+    )
+}
+
+private fun DomainNewWorkout.toFirebaseWorkout(id: String): FirebaseWorkout {
+    return FirebaseWorkout(
+            id = id,
+            name = name
     )
 }
 

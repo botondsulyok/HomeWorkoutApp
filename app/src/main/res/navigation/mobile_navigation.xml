@@ -17,6 +17,13 @@
             app:exitAnim="@anim/fragment_close_exit"
             app:popEnterAnim="@anim/fragment_close_enter"
             app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/action_navigation_workouts_to_workoutFragment"
+            app:destination="@id/workoutFragment"
+            app:enterAnim="@anim/fragment_close_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
     </fragment>
 
     <fragment
@@ -107,6 +114,16 @@
         <action
             android:id="@+id/action_recordNewExerciseFragment_to_newExerciseFragment"
             app:destination="@id/newExerciseFragment"
+            app:launchSingleTop="false"
             app:popUpTo="@id/navigation_exercises" />
+    </fragment>
+    <fragment
+        android:id="@+id/workoutFragment"
+        android:name="hu.bme.aut.android.homeworkoutapp.ui.workout.WorkoutFragment"
+        android:label="fragment_workout"
+        tools:layout="@layout/fragment_workout" >
+        <argument
+            android:name="workout"
+            app:argType="hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout" />
     </fragment>
 </navigation>
