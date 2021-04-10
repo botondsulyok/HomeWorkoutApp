@@ -60,6 +60,7 @@ class NewWorkoutFragment : RainbowCakeFragment<NewWorkoutViewState, NewWorkoutVi
                 binding.progressBar.visibility = View.GONE
                 binding.btnCreate.visibility = View.VISIBLE
                 Toast.makeText(activity, "Upload failed", Toast.LENGTH_LONG).show()
+                viewModel.toInitialState()
             }
             is UploadSuccess -> {
                 findNavController().popBackStack()

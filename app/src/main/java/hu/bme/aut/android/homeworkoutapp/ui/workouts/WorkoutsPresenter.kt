@@ -30,14 +30,14 @@ class WorkoutsPresenter @Inject constructor(
 
 }
 
-private fun UiWorkout.toDomainWorkout(): DomainWorkout {
+fun UiWorkout.toDomainWorkout(): DomainWorkout {
     return DomainWorkout(
         id = id,
         name = name
     )
 }
 
-private fun DomainWorkout.toUiWorkout(): UiWorkout {
+fun DomainWorkout.toUiWorkout(): UiWorkout {
     return UiWorkout(
         id = id,
         name = name

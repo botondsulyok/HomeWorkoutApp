@@ -24,7 +24,7 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModel>(
 
     private val args: WorkoutFragmentArgs by navArgs()
 
-    private lateinit var recyclerViewAdapter: WorkoutExercisesRecyclerViewAdapter
+    private val recyclerViewAdapter = WorkoutExercisesRecyclerViewAdapter()
 
     private var mainActivity: MainActivity? = null
 
@@ -47,7 +47,6 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModel>(
 
         binding.workout = args.workout
 
-        recyclerViewAdapter = WorkoutExercisesRecyclerViewAdapter(requireContext())
         recyclerViewAdapter.exerciseClickListener = this
         binding.workoutExercisesRecyclerView.adapter = recyclerViewAdapter
 

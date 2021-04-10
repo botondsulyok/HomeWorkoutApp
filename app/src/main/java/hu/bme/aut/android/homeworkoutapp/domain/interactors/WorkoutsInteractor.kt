@@ -29,4 +29,8 @@ class WorkoutsInteractor @Inject constructor(
         return firebaseDataSource.getWorkoutExercises(workoutId)
     }
 
+    suspend fun addExerciseToWorkout(exercise: DomainExercise, workoutId: String) :  Result<Unit, Exception> {
+        return firebaseDataSource.addExerciseToWorkout(exercise, workoutId)
+    }
+
 }

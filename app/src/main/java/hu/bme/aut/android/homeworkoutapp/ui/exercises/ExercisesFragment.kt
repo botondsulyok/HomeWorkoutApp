@@ -3,6 +3,7 @@ package hu.bme.aut.android.homeworkoutapp.ui.exercises
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -89,7 +90,6 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
                 Toast.makeText(activity, viewState.message, Toast.LENGTH_LONG).show()
             }
         }.exhaustive
-
     }
 
     override fun onItemLongClick(exerciseRowBinding: ExercisesRowBinding?): Boolean {
@@ -101,7 +101,8 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
                         icon = R.drawable.ic_baseline_add_24
                         callback = {
                             // TODO workouthoz rendelés, show picker
-                            
+                            val action = ExercisesFragmentDirections.actionNavigationExercisesToWorkoutPickerFragment(exerciseRowBinding.exercise)
+                            findNavController().navigate(action)
                         }
                     }
                 }

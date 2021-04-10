@@ -129,6 +129,26 @@ class FirebaseDataSource @Inject constructor() {
 
     }
 
+    suspend fun addExerciseToWorkout(exercise: DomainExercise, workoutId: String) :  Result<Unit, Exception> {
+        val newExerciseRef = db
+            .collection("userdata")
+            .document(userId)
+            .collection("workouts")
+            .document(workoutId)
+            .collection("exercises")
+            .document(exercise.id)
+
+        return try {
+            val newExercise = exercise.toFirebaseExercise()
+            newExerciseRef.set(newExercise).await()
+            ResultSuccess(Unit)
+        }
+        catch (e: Exception) {
+            ResultFailure(e)
+        }
+
+    }
+
     suspend fun getExercises(): Result<List<DomainExercise>, Exception> {
         val exercisesRef = db
                 .collection("userdata")

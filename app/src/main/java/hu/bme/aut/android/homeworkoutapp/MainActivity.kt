@@ -1,6 +1,7 @@
 package hu.bme.aut.android.homeworkoutapp
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         return when(item.itemId) {
             R.id.action_main_settings -> {
                 popupMenu {
+                    dropdownGravity = Gravity.END
                     section {
                         item {
                             labelRes = R.string.menu_sign_out

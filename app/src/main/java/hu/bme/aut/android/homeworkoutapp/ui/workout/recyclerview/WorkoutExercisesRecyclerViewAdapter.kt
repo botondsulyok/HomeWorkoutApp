@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import hu.bme.aut.android.homeworkoutapp.databinding.WorkoutExercisesRowBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 
-class WorkoutExercisesRecyclerViewAdapter(private val context: Context) :
+class WorkoutExercisesRecyclerViewAdapter() :
     ListAdapter<UiExercise, WorkoutExercisesRecyclerViewAdapter.ViewHolder>(ExercisesDiffCallback) {
 
     interface ExerciseItemClickListener {

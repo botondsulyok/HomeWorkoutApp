@@ -4,6 +4,8 @@ import android.content.Context
 import co.zsmb.rainbowcake.withIOContext
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.data.Result
+import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
+import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.domain.interactors.ExercisesInteractor
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewExercise
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
@@ -15,7 +17,14 @@ class NewExercisePresenter @Inject constructor(
 ) {
 
     suspend fun addExercise(exercise: UiNewExercise): Result<Unit, Exception> = withIOContext {
-        exercisesInteractor.addExercise(exercise.toDomainNewExercise())
+        when(val result = exercisesInteractor.addExercise(exercise.toDomainNewExercise())) {
+            is ResultSuccess -> {
+                ResultSuccess(Unit)
+            }
+            is ResultFailure -> {
+                ResultFailure(reason = result.reason)
+            }
+        }
     }
 
     private fun UiNewExercise.toDomainNewExercise(): DomainNewExercise {

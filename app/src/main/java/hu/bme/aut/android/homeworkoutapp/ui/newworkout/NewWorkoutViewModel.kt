@@ -23,4 +23,8 @@ class NewWorkoutViewModel @Inject constructor(
         }
     }
 
+    fun toInitialState() {
+        viewState = Initial
+    }
+
 }
