@@ -50,13 +50,8 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModel>(
         recyclerViewAdapter.exerciseClickListener = this
         binding.workoutExercisesRecyclerView.adapter = recyclerViewAdapter
 
-        // TODO
-        recyclerViewAdapter.submitList(listOf(
-            UiExercise(name = "exercise1"),
-            UiExercise(name = "exercise2")
-        ))
-
         viewModel.getWorkoutExercises(args.workout.id)
+
     }
 
     override fun render(viewState: WorkoutViewState) {
@@ -66,7 +61,7 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModel>(
             }
             is Loaded -> {
                 binding.progressBar.visibility = View.GONE
-                // TODO recyclerViewAdapter.submitList(viewState.exercisesList)
+                recyclerViewAdapter.submitList(viewState.exercisesList)
             }
             is Failed -> {
                 binding.progressBar.visibility = View.GONE
