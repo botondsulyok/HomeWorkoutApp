@@ -107,4 +107,7 @@ dependencies {
     // CameraX View class
     implementation "androidx.camera:camera-view:1.0.0-alpha14"
 
+    //popupmenu
+    implementation 'com.github.zawadz88.materialpopupmenu:material-popup-menu:4.1.0'
+
 }

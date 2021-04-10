@@ -51,10 +51,6 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModel>(
         recyclerViewAdapter.exerciseClickListener = this
         binding.workoutExercisesRecyclerView.adapter = recyclerViewAdapter
 
-        binding.fabAddExercise.setOnClickListener {
-            // TODO
-        }
-
         // TODO
         recyclerViewAdapter.submitList(listOf(
             UiExercise(name = "exercise1"),

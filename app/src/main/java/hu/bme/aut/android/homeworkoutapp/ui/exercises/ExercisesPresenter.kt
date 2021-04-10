@@ -7,12 +7,14 @@ import hu.bme.aut.android.homeworkoutapp.data.Result
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.domain.interactors.ExercisesInteractor
+import hu.bme.aut.android.homeworkoutapp.domain.interactors.WorkoutsInteractor
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainExercise
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import javax.inject.Inject
 
 class ExercisesPresenter @Inject constructor(
     private val exerciseInteractor: ExercisesInteractor,
+    private val workoutsInteractor: WorkoutsInteractor,
     private val context: Context
 ) {
 

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.github.zawadz88.materialpopupmenu.popupMenu
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -57,19 +58,37 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.action_main_settings -> {
+                popupMenu {
+                    section {
+                        item {
+                            labelRes = R.string.menu_sign_out
+                            icon = R.drawable.ic_baseline_exit_to_app_24
+                            callback = {
+                                // TODO sign out egy külön fragmenten belül majd, és ezt is kiszervezni a UserInteractorba
+                                // TODO vagy kellene egy külön viewmodel meg minden a mainactivity-nek
+                                FirebaseAuth.getInstance().signOut()
+                                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                    .requestIdToken(Credentials.serverClientId)
+                                    .requestEmail()
+                                    .build()
+                                val mGoogleSignInClient = GoogleSignIn.getClient(this@MainActivity, gso)
+                                mGoogleSignInClient?.signOut()
 
-                // TODO show a popup menu, or a dialog fragment
-                // TODO sign out egy külön fragmenten belül majd, és ezt is kiszervezni a UserInteractorba
-                FirebaseAuth.getInstance().signOut()
-                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(Credentials.serverClientId)
-                    .requestEmail()
-                    .build()
-                val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-                mGoogleSignInClient?.signOut()
-
-                val action = WelcomeFragmentDirections.actionGlobalNavigationWelcome()
-                findNavController(R.id.nav_host_fragment).navigate(action)
+                                val action = WelcomeFragmentDirections.actionGlobalNavigationWelcome()
+                                findNavController(R.id.nav_host_fragment).navigate(action)
+                            }
+                        }
+                        item {
+                            labelRes = R.string.menu_settings
+                            icon = R.drawable.ic_baseline_settings_24
+                            callback = {
+                                //TODO open settings fragment
+                            }
+                        }
+                    }
+                }.apply {
+                    show(this@MainActivity, binding.toolbar)
+                }
                 true
             }
             else -> {

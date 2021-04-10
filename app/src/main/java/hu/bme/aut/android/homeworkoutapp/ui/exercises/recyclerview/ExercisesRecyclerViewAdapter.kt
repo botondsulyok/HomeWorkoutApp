@@ -15,7 +15,7 @@ import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<UiExercise, ExercisesRecyclerViewAdapter.ViewHolder>(ExercisesDiffCallback) {
 
     interface ExerciseItemClickListener {
-        fun onItemLongClick(exercise: UiExercise?): Boolean
+        fun onItemLongClick(exerciseRowBinding: ExercisesRowBinding?): Boolean
         fun onDeleteClick(exercise: UiExercise?): Boolean
         fun onStartClick(exercise: UiExercise?): Boolean
     }
@@ -57,7 +57,7 @@ class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<U
             }
 
             itemView.setOnLongClickListener {
-                exerciseClickListener?.onItemLongClick(binding.exercise)
+                exerciseClickListener?.onItemLongClick(binding)
                 true
             }
 

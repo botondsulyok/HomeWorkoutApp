@@ -11,8 +11,10 @@ import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
+import com.github.zawadz88.materialpopupmenu.popupMenu
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
+import hu.bme.aut.android.homeworkoutapp.databinding.ExercisesRowBinding
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentExercisesBinding
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.StartExerciseBottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
@@ -90,8 +92,23 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
 
     }
 
-    override fun onItemLongClick(exercise: UiExercise?): Boolean {
-        // TODO elemek átrendezése
+    override fun onItemLongClick(exerciseRowBinding: ExercisesRowBinding?): Boolean {
+        if(exerciseRowBinding != null) {
+            popupMenu {
+                section {
+                    item {
+                        labelRes = R.string.menu_add_exercise_to_workout
+                        icon = R.drawable.ic_baseline_add_24
+                        callback = {
+                            // TODO workouthoz rendelés, show picker
+                            
+                        }
+                    }
+                }
+            }.apply {
+                show(requireContext(), exerciseRowBinding.root)
+            }
+        }
         return true
     }
 
