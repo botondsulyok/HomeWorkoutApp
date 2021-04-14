@@ -36,20 +36,8 @@ class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<U
         init {
 
             itemView.setOnClickListener {
-                val exercise = binding.exercise ?: UiExercise()
                 if(binding.motionLayoutExercisesRow.currentState == R.id.exercisesRowSceneStart) {
                     binding.motionLayoutExercisesRow.transitionToState(R.id.exercisesRowSceneEnd)
-                    if(exercise.thumbnailUrl.isEmpty()) {
-                        binding.cardViewVideoThumbnail.visibility = View.GONE
-                    }
-                    else {
-                        Glide.with(context)
-                                .load(exercise.thumbnailUrl)
-                                .dontAnimate()
-                                .dontTransform()
-                                .placeholder(R.drawable.ic_baseline_image_placeholder_24)
-                                .into(binding.ivVideoThumbnail)
-                    }
                 }
                 else {
                     binding.motionLayoutExercisesRow.transitionToState(R.id.exercisesRowSceneStart)
