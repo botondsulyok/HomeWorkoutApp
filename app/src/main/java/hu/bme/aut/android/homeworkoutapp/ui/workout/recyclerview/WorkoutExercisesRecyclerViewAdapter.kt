@@ -17,6 +17,7 @@ class WorkoutExercisesRecyclerViewAdapter() :
         fun onItemLongClick(exercise: UiExercise?): Boolean
         fun onDeleteClick(exercise: UiExercise?): Boolean
         fun onStartClick(exercise: UiExercise?): Boolean
+        fun onEditClick(exercise: UiExercise?): Boolean
     }
 
     var exerciseClickListener: ExerciseItemClickListener? = null
@@ -50,6 +51,10 @@ class WorkoutExercisesRecyclerViewAdapter() :
 
             binding.ibStart.setOnClickListener {
                 exerciseClickListener?.onStartClick(binding.exercise)
+            }
+
+            binding.ibEdit.setOnClickListener {
+                exerciseClickListener?.onEditClick(binding.exercise)
             }
 
         }
