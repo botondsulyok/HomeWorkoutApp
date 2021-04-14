@@ -17,6 +17,7 @@ import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.ExercisesRowBinding
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentExercisesBinding
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.EditExerciseBottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.StartExerciseBottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview.ExercisesRecyclerViewAdapter
@@ -37,6 +38,8 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
     private lateinit var recyclerViewAdapter: ExercisesRecyclerViewAdapter
 
     private var startExerciseBottomSheetDialogFragment = StartExerciseBottomSheetDialogFragment()
+
+    private var editExerciseBottomSheetDialogFragment = EditExerciseBottomSheetDialogFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -137,6 +140,21 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
                     args.putSerializable(StartExerciseBottomSheetDialogFragment.SAVE_ACTION_VALUE, ExerciseListener(this::updateExercise))
                     it.arguments = args
                 }.show(fragmentManager, StartExerciseBottomSheetDialogFragment.START_EXERCISE)
+            }
+        }
+        return true
+    }
+
+    override fun onEditClick(exercise: UiExercise?): Boolean {
+        if(exercise != null && !editExerciseBottomSheetDialogFragment.isAdded) {
+            activity?.supportFragmentManager?.let { fragmentManager ->
+                editExerciseBottomSheetDialogFragment = EditExerciseBottomSheetDialogFragment()
+                editExerciseBottomSheetDialogFragment.also {
+                    val args = Bundle()
+                    args.putParcelable(EditExerciseBottomSheetDialogFragment.EXERCISE_VALUE, exercise)
+                    args.putSerializable(EditExerciseBottomSheetDialogFragment.SAVE_ACTION_VALUE, ExerciseListener(this::updateExercise))
+                    it.arguments = args
+                }.show(fragmentManager, EditExerciseBottomSheetDialogFragment.EDIT_EXERCISE)
             }
         }
         return true

@@ -18,6 +18,7 @@ class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<U
         fun onItemLongClick(exerciseRowBinding: ExercisesRowBinding?): Boolean
         fun onDeleteClick(exercise: UiExercise?): Boolean
         fun onStartClick(exercise: UiExercise?): Boolean
+        fun onEditClick(exercise: UiExercise?): Boolean
     }
 
     var exerciseClickListener: ExerciseItemClickListener? = null
@@ -55,6 +56,10 @@ class ExercisesRecyclerViewAdapter(private val context: Context) : ListAdapter<U
 
             binding.ibStart.setOnClickListener {
                 exerciseClickListener?.onStartClick(binding.exercise)
+            }
+
+            binding.ibEdit.setOnClickListener {
+                exerciseClickListener?.onEditClick(binding.exercise)
             }
 
         }
