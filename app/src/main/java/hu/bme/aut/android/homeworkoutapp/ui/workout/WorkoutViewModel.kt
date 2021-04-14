@@ -3,13 +3,16 @@ package hu.bme.aut.android.homeworkoutapp.ui.workout
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import javax.inject.Inject
 
 class WorkoutViewModel @Inject constructor(
     private val workoutPresenter: WorkoutPresenter
 ) : RainbowCakeViewModel<WorkoutViewState>(Loading) {
 
-    fun getWorkoutExercises(workoutId: String) = execute {
+    var workoutId = ""
+
+    fun getWorkoutExercises() = execute {
         viewState = Loading
         val result = workoutPresenter.getWorkoutExercises(workoutId)
         viewState = when(result) {
@@ -18,6 +21,32 @@ class WorkoutViewModel @Inject constructor(
             }
             is ResultFailure -> {
                 Failed(result.reason.message.toString())
+            }
+        }
+    }
+
+    fun deleteWorkoutExercise(exercise: UiExercise) = execute {
+        viewState = Loading
+        when(val result = workoutPresenter.deleteWorkoutExercise(workoutId, exercise)) {
+            is ResultSuccess -> {
+                getWorkoutExercises()
+            }
+            is ResultFailure -> {
+                viewState =
+                    Failed(result.reason.message.toString())
+            }
+        }
+    }
+
+    fun updateWorkoutExercise(exercise: UiExercise) = execute {
+        viewState = Loading
+        when(val result = workoutPresenter.updateWorkoutExercise(workoutId, exercise)) {
+            is ResultSuccess -> {
+                getWorkoutExercises()
+            }
+            is ResultFailure -> {
+                viewState =
+                    Failed(result.reason.message.toString())
             }
         }
     }

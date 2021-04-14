@@ -241,6 +241,45 @@ class FirebaseDataSource @Inject constructor() {
         }
     }
 
+    suspend fun deleteWorkoutExercise(workoutId: String, exercise: DomainExercise): Result<Unit, Exception> {
+        val deleteExerciseRef = db
+            .collection("userdata")
+            .document(userId)
+            .collection("workouts")
+            .document(workoutId)
+            .collection("exercises")
+            .document(exercise.id)
+
+        return try {
+            deleteExerciseRef.delete().await()
+            ResultSuccess(Unit)
+        } catch (e: Exception) {
+            ResultFailure(e)
+        }
+    }
+
+    suspend fun updateWorkoutExercise(workoutId: String, exercise: DomainExercise): Result<Unit, Exception> {
+        val updateExerciseRef = db
+            .collection("userdata")
+            .document(userId)
+            .collection("workouts")
+            .document(workoutId)
+            .collection("exercises")
+            .document(exercise.id)
+
+        return try {
+            val oldExerciseSnapshot = updateExerciseRef.get().await()
+            val oldExercise = oldExerciseSnapshot.toObject<FirebaseExercise>()
+            if(oldExercise != null) {
+                val newExercise = exercise.toFirebaseExercise(oldExercise)
+                updateExerciseRef.set(newExercise).await()
+            }
+            ResultSuccess(Unit)
+        } catch (e: Exception) {
+            ResultFailure(e)
+        }
+    }
+
 
 }
 

@@ -33,4 +33,11 @@ class WorkoutsInteractor @Inject constructor(
         return firebaseDataSource.addExerciseToWorkout(exercise, workoutId)
     }
 
+    suspend fun deleteWorkoutExercise(workoutId: String, exercise: DomainExercise): Result<Unit, Exception> {
+        return firebaseDataSource.deleteWorkoutExercise(workoutId, exercise)
+    }
+    suspend fun updateWorkoutExercise(workoutId: String, exercise: DomainExercise): Result<Unit, Exception> {
+        return firebaseDataSource.updateWorkoutExercise(workoutId, exercise)
+    }
+
 }

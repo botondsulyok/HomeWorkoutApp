@@ -47,12 +47,4 @@ class ExercisesViewModel @Inject constructor(
         }
     }
 
-    fun getWorkoutsList() = execute {
-
-    }
-
-    fun addExerciseToWorkout() = execute {
-
-    }
-
 }

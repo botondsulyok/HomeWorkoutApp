@@ -8,6 +8,7 @@ import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.domain.interactors.WorkoutsInteractor
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainWorkout
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.toDomainExercise
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.toUiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import javax.inject.Inject
@@ -26,6 +27,14 @@ class WorkoutPresenter @Inject constructor(
                 ResultFailure(reason = result.reason)
             }
         }
+    }
+
+    suspend fun deleteWorkoutExercise(workoutId: String, exercise: UiExercise): Result<Unit, Exception> = withIOContext {
+        workoutsInteractor.deleteWorkoutExercise(workoutId, exercise.toDomainExercise(context))
+    }
+
+    suspend fun updateWorkoutExercise(workoutId: String, exercise: UiExercise): Result<Unit, Exception> = withIOContext {
+        workoutsInteractor.updateWorkoutExercise(workoutId, exercise.toDomainExercise(context))
     }
 
 }
