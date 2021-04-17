@@ -9,6 +9,19 @@
     app:layoutDescription="@xml/fragment_doing_exercise_scene">
 
     <TextView
+        android:id="@+id/tvDoingExerciseName"
+        style="@style/TextAppearance.MaterialComponents.Headline3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Name" />
+
+    <TextView
         android:id="@+id/tvDoingExerciseHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

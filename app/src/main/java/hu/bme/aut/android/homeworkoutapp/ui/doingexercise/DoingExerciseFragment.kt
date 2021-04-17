@@ -62,7 +62,7 @@ class DoingExerciseFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnDoingExerciseDone.setOnClickListener {
-            findNavController().popBackStack()
+            viewModel.nextExercise()
         }
 
         if(savedInstanceState != null) {
@@ -74,6 +74,7 @@ class DoingExerciseFragment :
     }
 
     override fun render(viewState: DoingExerciseViewState) {
+        // todo databinding
         binding.tvDoingExerciseHeader.text = getString(
             R.string.tv_duration_and_reps,
             viewState.exercise.duration.toString(),
@@ -81,9 +82,13 @@ class DoingExerciseFragment :
         )
         when(viewState) {
             is Initial -> {
-                viewModel.addExercise(args.exercise)
+                viewModel.addExercises(args.exercises.toList())
             }
             is Ready -> {
+                binding.tvDoingExerciseName.text = viewState.exercise.name
+                player?.playWhenReady = false
+                initializePlayer()
+                binding.motionLayoutDoingExercise.transitionToState(R.id.doingExerciseReady)
                 binding.pulseCountDownDoingExercise.start {
                     binding.motionLayoutDoingExercise.transitionToState(R.id.doingExerciseStarted)
                     binding.motionLayoutDoingExercise.addTransitionListener(object :
@@ -116,6 +121,10 @@ class DoingExerciseFragment :
             }
             is Finished -> {
                 binding.motionLayoutDoingExercise.transitionToState(R.id.doingExerciseFinished)
+            }
+            is Exit -> {
+                findNavController().popBackStack()
+                return
             }
         }.exhaustive
     }
@@ -157,25 +166,30 @@ class DoingExerciseFragment :
     }
 
     private fun initializePlayer() {
-        player = SimpleExoPlayer.Builder(requireContext()).build()
-        binding.vvDoingExercise.player = player
+        releasePlayer()
 
-        val mediaItem: MediaItem = MediaItem.fromUri(args.exercise.videoUrl)
-        player?.setMediaItem(mediaItem)
+        val currentState = viewModel.state.value
+        if(currentState != null) {
+            player = SimpleExoPlayer.Builder(requireContext()).build()
+            binding.vvDoingExercise.player = player
 
-        player?.playWhenReady = playWhenReady
-        player?.seekTo(currentWindow, playbackPosition)
-        player?.prepare()
+            val mediaItem: MediaItem = MediaItem.fromUri(currentState.exercise.videoUrl)
+            player?.setMediaItem(mediaItem)
 
-        player?.addListener(object : Player.EventListener {
-            override fun onPlaybackStateChanged(state: Int) {
-                super.onPlaybackStateChanged(state)
-                if(state == Player.STATE_ENDED) {
-                    player?.seekTo(0)
-                    player?.play()
+            player?.playWhenReady = playWhenReady
+            player?.seekTo(currentWindow, playbackPosition)
+            player?.prepare()
+
+            player?.addListener(object : Player.EventListener {
+                override fun onPlaybackStateChanged(state: Int) {
+                    super.onPlaybackStateChanged(state)
+                    if(state == Player.STATE_ENDED) {
+                        player?.seekTo(0)
+                        player?.play()
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 
     private fun releasePlayer() {

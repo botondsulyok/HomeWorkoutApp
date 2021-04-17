@@ -100,8 +100,8 @@
         android:label="fragment_do_exercise"
         tools:layout="@layout/fragment_doing_exercise" >
         <argument
-            android:name="exercise"
-            app:argType="hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise" />
+            android:name="exercises"
+            app:argType="hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise[]" />
     </fragment>
     <action
         android:id="@+id/action_global_doingExerciseFragment"

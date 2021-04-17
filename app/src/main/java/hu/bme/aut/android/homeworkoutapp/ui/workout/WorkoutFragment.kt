@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
@@ -14,6 +15,7 @@ import co.zsmb.rainbowcake.extensions.exhaustive
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentWorkoutBinding
+import hu.bme.aut.android.homeworkoutapp.ui.doingexercise.DoingExerciseFragmentDirections
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExerciseListener
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.EditExerciseBottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.StartExerciseBottomSheetDialogFragment
@@ -64,6 +66,14 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModel>(
 
         recyclerViewAdapter.exerciseClickListener = this
         binding.workoutExercisesRecyclerView.adapter = recyclerViewAdapter
+
+        binding.fabAddExercise.setOnClickListener {
+            val currentState = viewModel.state.value
+            if(currentState is Loaded) {
+                val action = DoingExerciseFragmentDirections.actionGlobalDoingExerciseFragment(currentState.exercisesList.toTypedArray())
+                findNavController().navigate(action)
+            }
+        }
 
         viewModel.getWorkoutExercises()
 

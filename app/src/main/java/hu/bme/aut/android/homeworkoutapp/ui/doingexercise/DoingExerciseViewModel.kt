@@ -10,11 +10,29 @@ import javax.inject.Inject
 class DoingExerciseViewModel @Inject constructor(
 ) : RainbowCakeViewModel<DoingExerciseViewState>(Initial(UiExercise())) {
 
+    var exercises = listOf<UiExercise>()
+    var currentExerciseNumber = 0
+
     var initialDurationInMilliseconds = 0
     var initialReps = 0
 
-    fun addExercise(e: UiExercise) = execute {
-        viewState = Ready(e)
+    fun addExercises(e: List<UiExercise>) = execute {
+        exercises = e
+        initExercise()
+    }
+
+    fun nextExercise() = execute {
+        if(currentExerciseNumber < exercises.size-1) {
+            currentExerciseNumber++
+            initExercise()
+        }
+        else {
+            viewState = Exit
+        }
+    }
+
+    private fun initExercise() {
+        viewState = Ready(exercises[currentExerciseNumber])
         initialDurationInMilliseconds = viewState.exercise.duration.getDurationInMilliseconds()
         initialReps = viewState.exercise.reps
     }

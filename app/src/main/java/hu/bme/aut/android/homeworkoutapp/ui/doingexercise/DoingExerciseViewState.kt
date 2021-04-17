@@ -12,3 +12,5 @@ class DoingExercise(exercise: UiExercise): DoingExerciseViewState(exercise)
 
 class Finished(exercise: UiExercise): DoingExerciseViewState(exercise)
 
+object Exit: DoingExerciseViewState(UiExercise())
+

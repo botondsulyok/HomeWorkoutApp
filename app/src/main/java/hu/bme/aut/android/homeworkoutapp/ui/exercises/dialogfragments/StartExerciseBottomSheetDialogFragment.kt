@@ -63,7 +63,7 @@ class StartExerciseBottomSheetDialogFragment
             if(binding.cbSave.isChecked) {
                 (arguments?.getSerializable(SAVE_ACTION_VALUE) as? ExerciseListener)?.action?.invoke(updatedExercise)
             }
-            val action = DoingExerciseFragmentDirections.actionGlobalDoingExerciseFragment(updatedExercise)
+            val action = DoingExerciseFragmentDirections.actionGlobalDoingExerciseFragment(arrayOf(updatedExercise))
             findNavController().navigate(action)
             dismiss()
         }

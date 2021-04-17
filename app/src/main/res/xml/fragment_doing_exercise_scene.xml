@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
-    <ConstraintSet android:id="@+id/doingExerciseInitial">
+    <ConstraintSet android:id="@+id/doingExerciseReady">
 
         <Constraint
             android:id="@+id/tvDoingExerciseHeader"
@@ -25,9 +25,13 @@
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/doingExerciseStarted"
-        motion:deriveConstraintsFrom="@id/doingExerciseInitial">
+        motion:deriveConstraintsFrom="@id/doingExerciseReady">
 
-    <Constraint
+        <Constraint
+            android:id="@+id/tvDoingExerciseName"
+            android:visibility="gone" />
+
+        <Constraint
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +39,7 @@
             android:textColor="@android:color/white"
             android:id="@+id/tvDoingExerciseHeader"
             app:layout_constraintTop_toTopOf="parent">
-    </Constraint>
+        </Constraint>
 
         <Constraint
             android:layout_height="0dp"
@@ -89,7 +93,7 @@
 
     <Transition
         app:constraintSetEnd="@id/doingExerciseStarted"
-        app:constraintSetStart="@+id/doingExerciseInitial" />
+        app:constraintSetStart="@+id/doingExerciseReady" />
 
     <Transition
         app:constraintSetEnd="@id/doingExerciseFinished"
