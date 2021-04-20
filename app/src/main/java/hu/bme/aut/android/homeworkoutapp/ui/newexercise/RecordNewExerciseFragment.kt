@@ -2,10 +2,15 @@ package hu.bme.aut.android.homeworkoutapp.ui.newexercise
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
@@ -35,6 +40,8 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
     private val args: RecordNewExerciseFragmentArgs by navArgs()
 
+    private var speechRecognizer: SpeechRecognizer? = null
+
     companion object {
         private const val TAG = "CameraXBasic"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
@@ -49,6 +56,11 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         exercise = args.exercise
+
+        if (SpeechRecognizer.isRecognitionAvailable(context)) {
+            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity)
+            speechRecognizer?.setRecognitionListener(ExerciseKeywordRecognitionListener())
+        }
     }
 
     override fun onCreateView(
@@ -60,7 +72,6 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
         return binding.root
     }
 
-    @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -71,19 +82,33 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
         binding.btnCapture.setOnClickListener {
             if(binding.btnCapture.text == "Start Recording") {
                 activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-
                 binding.pulseCountDownRecordExercise.start {
                     startRecording()
-                    binding.btnCapture.text = "Stop Recording"
+                    //todo error az lehet a gond, hogy közben fut a kamera, ami hangot is rögzít és egyszerre nem fér hozzá a kettő (camerax+speech recognition)
+                    startSpeechRecognizer()
                 }
             }
             else {
-                videoCapture?.stopRecording()
-                binding.btnCapture.text = "Start Recording"
+                stopRecording()
             }
-
         }
 
+    }
+
+    private fun startSpeechRecognizer() {
+        val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+            putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context?.packageName)
+            putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
+            putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS,true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
+            }
+        }
+        speechRecognizer?.startListening(recognizerIntent)
     }
 
     @SuppressLint("RestrictedApi")
@@ -155,11 +180,84 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
                     Log.e(TAG, "Video capture failed: $message", cause)
                 }
             })
+
+        binding.btnCapture.text = "Stop Recording"
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun stopRecording() {
+        videoCapture?.stopRecording()
+        binding.btnCapture.text = "Start Recording"
     }
 
     override fun onDestroyView() {
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        speechRecognizer?.stopListening()
+        speechRecognizer?.destroy()
+    }
+
+    inner class ExerciseKeywordRecognitionListener : RecognitionListener {
+
+        private val TAG = "TAG_SPEECH"
+
+        override fun onReadyForSpeech(params: Bundle?) {
+            Log.d(TAG, "onReadyForSpeech")
+        }
+
+        override fun onBeginningOfSpeech() {
+            Log.d(TAG, "onBeginningOfSpeech")
+        }
+
+        override fun onRmsChanged(rmsdB: Float) {
+            Log.d(TAG, "onRmsChanged")
+        }
+
+        override fun onBufferReceived(buffer: ByteArray?) {
+            Log.d(TAG, "onBufferReceived")
+        }
+
+        override fun onEndOfSpeech() {
+            Log.d(TAG, "onEndofSpeech")
+        }
+
+        override fun onError(error: Int) {
+            Log.d(TAG, "error $error")
+        }
+
+        override fun onResults(results: Bundle?) {
+            val data = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+            Log.d(TAG, "onResults")
+            if(data != null) {
+                for(d in data) {
+                    if(d.contains("stop", ignoreCase = true)) {
+                        stopRecording()
+                        return
+                    }
+                }
+                startSpeechRecognizer()
+
+                // todo
+                /*data.firstOrNull {
+                    it.contains("stop", ignoreCase = true)
+                }?.let {
+                    startSpeechRecognizer()
+                }*/
+            }
+        }
+
+        override fun onPartialResults(partialResults: Bundle?) {
+            Log.d(TAG, "onPartialResults")
+        }
+
+        override fun onEvent(eventType: Int, params: Bundle?) {
+            Log.d(TAG, "onEvent $eventType")
+        }
+
     }
 
 }

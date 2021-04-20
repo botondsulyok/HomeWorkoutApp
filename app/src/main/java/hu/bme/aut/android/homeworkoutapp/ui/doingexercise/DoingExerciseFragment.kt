@@ -1,10 +1,14 @@
 package hu.bme.aut.android.homeworkoutapp.ui.doingexercise
 
+import android.content.Intent
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
@@ -17,10 +21,11 @@ import com.google.android.exoplayer2.util.Util
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentDoingExerciseBinding
+import java.util.*
 
 
 class DoingExerciseFragment :
-    RainbowCakeFragment<DoingExerciseViewState, DoingExerciseViewModel>() {
+    RainbowCakeFragment<DoingExerciseViewState, DoingExerciseViewModel>(), TextToSpeech.OnInitListener {
 
     override fun provideViewModel() = getViewModelFromFactory()
     override fun getViewResource() = 0
@@ -43,6 +48,13 @@ class DoingExerciseFragment :
     private var currentWindow = 0
     private var playbackPosition: Long = 0
 
+    private var textToSpeech: TextToSpeech? = null
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        textToSpeech = TextToSpeech(requireContext(), this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,6 +68,8 @@ class DoingExerciseFragment :
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        textToSpeech?.stop()
+        textToSpeech?.shutdown()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,46 +97,35 @@ class DoingExerciseFragment :
         when(viewState) {
             is Initial -> {
                 viewModel.addExercises(args.exercises.toList())
+                return
             }
             is Ready -> {
+                textToSpeech?.speak("Get ready!", TextToSpeech.QUEUE_FLUSH, null, null)
                 binding.tvDoingExerciseName.text = viewState.exercise.name
                 player?.playWhenReady = false
                 initializePlayer()
                 binding.motionLayoutDoingExercise.transitionToState(R.id.doingExerciseReady)
+                // todo transitionlistener vagy valami, mert nem szép a visszaszámláló
                 binding.pulseCountDownDoingExercise.start {
-                    binding.motionLayoutDoingExercise.transitionToState(R.id.doingExerciseStarted)
-                    binding.motionLayoutDoingExercise.addTransitionListener(object :
-                        MotionLayout.TransitionListener {
-                        override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {}
-                        override fun onTransitionChange(
-                            p0: MotionLayout?,
-                            p1: Int,
-                            p2: Int,
-                            p3: Float
-                        ) {
-                        }
-                        override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+                    textToSpeech?.speak("Go!", TextToSpeech.QUEUE_FLUSH, null, null)
+                    binding.motionLayoutDoingExercise.apply {
+                        transitionToState(R.id.doingExerciseStarted)
+                        onTransitionCompleted{ motionLayout, i ->
                             player?.playWhenReady = true
                             viewModel.startExercise()
-                            p0?.removeTransitionListener(this)
                         }
-                        override fun onTransitionTrigger(
-                            p0: MotionLayout?,
-                            p1: Int,
-                            p2: Boolean,
-                            p3: Float
-                        ) {
-                        }
-                    })
+                    }
                 }
             }
             is DoingExercise -> {
                 binding.motionLayoutDoingExercise.transitionToState(R.id.doingExerciseStarted)
             }
             is Finished -> {
+                textToSpeech?.speak("Well done!", TextToSpeech.QUEUE_FLUSH, null, null)
                 binding.motionLayoutDoingExercise.transitionToState(R.id.doingExerciseFinished)
             }
             is Exit -> {
+                Toast.makeText(requireContext(), "Finished", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()
                 return
             }
@@ -215,4 +218,46 @@ class DoingExerciseFragment :
         outState.putLong(KEY_PLAYBACK_POSITION, playbackPosition)
     }
 
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            //val result = textToSpeech?.setLanguage(Locale.getDefault())
+            val result = textToSpeech?.setLanguage(Locale("en", "US"))
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                val installIntent = Intent()
+                installIntent.action = TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
+                startActivity(installIntent)
+            }
+        }
+        else {
+            val installIntent = Intent()
+            installIntent.action = TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
+            startActivity(installIntent)
+        }
+        if(viewModel.state.value is Ready) {
+            textToSpeech?.speak("Get ready!", TextToSpeech.QUEUE_FLUSH, null, null)
+        }
+    }
+
+}
+
+private fun MotionLayout.onTransitionCompleted(listener: (MotionLayout?, Int) -> Unit) {
+    this.addTransitionListener(object : MotionLayout.TransitionListener {
+        override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+
+        }
+
+        override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
+
+        }
+
+        override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+            listener(p0, p1)
+            p0?.removeTransitionListener(this)
+        }
+
+        override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+
+        }
+
+    })
 }

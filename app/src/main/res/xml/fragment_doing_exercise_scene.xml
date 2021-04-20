@@ -16,7 +16,8 @@
             android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/pulseCountDownDoingExercise"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDoingExerciseName">
             <CustomAttribute
                 app:attributeName="background"
                 app:customColorDrawableValue="@android:color/transparent" />
