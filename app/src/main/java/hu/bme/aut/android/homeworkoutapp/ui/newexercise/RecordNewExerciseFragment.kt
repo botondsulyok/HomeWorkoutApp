@@ -2,15 +2,11 @@ package hu.bme.aut.android.homeworkoutapp.ui.newexercise
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.speech.RecognitionListener
-import android.speech.RecognizerIntent
-import android.speech.SpeechRecognizer
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
@@ -22,16 +18,20 @@ import androidx.camera.core.Preview
 import androidx.camera.core.VideoCapture
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.gusakov.library.start
+import github.com.vikramezhil.dks.speech.Dks
+import github.com.vikramezhil.dks.speech.DksListener
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentRecordNewExerciseBinding
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
@@ -39,8 +39,6 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
     private val binding get() = _binding!!
 
     private val args: RecordNewExerciseFragmentArgs by navArgs()
-
-    private var speechRecognizer: SpeechRecognizer? = null
 
     companion object {
         private const val TAG = "CameraXBasic"
@@ -53,14 +51,11 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
     private var exercise = UiNewExercise()
 
+    private var dks: Dks? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         exercise = args.exercise
-
-        if (SpeechRecognizer.isRecognitionAvailable(context)) {
-            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity)
-            speechRecognizer?.setRecognitionListener(ExerciseKeywordRecognitionListener())
-        }
     }
 
     override fun onCreateView(
@@ -84,8 +79,6 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
                 activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
                 binding.pulseCountDownRecordExercise.start {
                     startRecording()
-                    //todo error az lehet a gond, hogy közben fut a kamera, ami hangot is rögzít és egyszerre nem fér hozzá a kettő (camerax+speech recognition)
-                    startSpeechRecognizer()
                 }
             }
             else {
@@ -95,20 +88,48 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
     }
 
-    private fun startSpeechRecognizer() {
-        val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-            putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-            )
-            putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context?.packageName)
-            putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
-            putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS,true)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        fun handleSpeechResult(result: String) {
+            if(result.contains("stop", ignoreCase = true)) {
+                stopRecording()
+            }
+            else if(result.contains("start", ignoreCase = true)) {
+                startRecording()
             }
         }
-        speechRecognizer?.startListening(recognizerIntent)
+        muteAudio(true, requireContext())
+        dks = Dks(requireActivity().application, parentFragmentManager, object : DksListener {
+            override fun onDksLiveSpeechResult(liveSpeechResult: String) {
+                handleSpeechResult(liveSpeechResult)
+                Log.d("DKS", "Speech result - $liveSpeechResult")
+            }
+
+            override fun onDksFinalSpeechResult(speechResult: String) {
+                handleSpeechResult(speechResult)
+                Log.d("DKS", "Final speech result - $speechResult")
+            }
+
+            override fun onDksLiveSpeechFrequency(frequency: Float) {
+                Log.d("DKS", "frequency - $frequency")
+            }
+
+            override fun onDksLanguagesAvailable(
+                defaultLanguage: String?,
+                supportedLanguages: ArrayList<String>?
+            ) {
+                if (supportedLanguages != null && supportedLanguages.contains("en-US")) {
+                    dks?.currentSpeechLanguage = "en-US"
+                }
+                Log.d("DKS", "defaultLanguage - $defaultLanguage")
+                Log.d("DKS", "supportedLanguages - $supportedLanguages")
+            }
+
+            override fun onDksSpeechError(errMsg: String) {
+                Log.d("DKS", "errMsg - $errMsg")
+            }
+        })
+        dks?.startSpeechRecognition()
     }
 
     @SuppressLint("RestrictedApi")
@@ -138,9 +159,10 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
                 // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, videoCapture)
+                    this, cameraSelector, preview, videoCapture
+                )
 
-            } catch(exc: Exception) {
+            } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
 
@@ -150,13 +172,19 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
     @SuppressLint("RestrictedApi")
     private fun startRecording() {
+        if(binding.btnCapture.text == "Stop Recording") {
+            return
+        }
+        binding.btnCapture.text = "Stop Recording"
         // Get a stable reference of the modifiable image capture use case
         val videoCapture = videoCapture ?: return
 
         val videoFile = File(
             requireContext().getDir("Captured", Context.MODE_PRIVATE),
-            SimpleDateFormat(FILENAME_FORMAT, Locale.US
-            ).format(System.currentTimeMillis()) + ".mp4")
+            SimpleDateFormat(
+                FILENAME_FORMAT, Locale.US
+            ).format(System.currentTimeMillis()) + ".mp4"
+        )
 
         videoCapture.startRecording(
             videoFile,
@@ -171,8 +199,14 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
                     val mp: MediaPlayer = MediaPlayer.create(activity, savedUri)
                     val durationInMilliseconds = mp.duration
                     mp.release()
-                    val action = RecordNewExerciseFragmentDirections.actionRecordNewExerciseFragmentToNewExerciseFragment(
-                        exercise.copy(videoUri = savedUri, videoLengthInMilliseconds = durationInMilliseconds, reps = 1))
+                    val action =
+                        RecordNewExerciseFragmentDirections.actionRecordNewExerciseFragmentToNewExerciseFragment(
+                            exercise.copy(
+                                videoUri = savedUri,
+                                videoLengthInMilliseconds = durationInMilliseconds,
+                                reps = 1
+                            )
+                        )
                     findNavController().navigate(action)
                 }
 
@@ -180,84 +214,32 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
                     Log.e(TAG, "Video capture failed: $message", cause)
                 }
             })
-
-        binding.btnCapture.text = "Stop Recording"
     }
 
     @SuppressLint("RestrictedApi")
     private fun stopRecording() {
-        videoCapture?.stopRecording()
+        if(binding.btnCapture.text == "Start Recording") {
+            return
+        }
         binding.btnCapture.text = "Start Recording"
+        videoCapture?.stopRecording()
     }
 
     override fun onDestroyView() {
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
+        muteAudio(false, requireContext())
         super.onDestroyView()
+    }
+
+    private fun muteAudio(shouldMute: Boolean, context: Context) {
+        val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val muteValue = if (shouldMute) AudioManager.ADJUST_MUTE else AudioManager.ADJUST_UNMUTE
+        audioManager.setStreamVolume(AudioManager.STREAM_RING, muteValue, 0)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        speechRecognizer?.stopListening()
-        speechRecognizer?.destroy()
-    }
-
-    inner class ExerciseKeywordRecognitionListener : RecognitionListener {
-
-        private val TAG = "TAG_SPEECH"
-
-        override fun onReadyForSpeech(params: Bundle?) {
-            Log.d(TAG, "onReadyForSpeech")
-        }
-
-        override fun onBeginningOfSpeech() {
-            Log.d(TAG, "onBeginningOfSpeech")
-        }
-
-        override fun onRmsChanged(rmsdB: Float) {
-            Log.d(TAG, "onRmsChanged")
-        }
-
-        override fun onBufferReceived(buffer: ByteArray?) {
-            Log.d(TAG, "onBufferReceived")
-        }
-
-        override fun onEndOfSpeech() {
-            Log.d(TAG, "onEndofSpeech")
-        }
-
-        override fun onError(error: Int) {
-            Log.d(TAG, "error $error")
-        }
-
-        override fun onResults(results: Bundle?) {
-            val data = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-            Log.d(TAG, "onResults")
-            if(data != null) {
-                for(d in data) {
-                    if(d.contains("stop", ignoreCase = true)) {
-                        stopRecording()
-                        return
-                    }
-                }
-                startSpeechRecognizer()
-
-                // todo
-                /*data.firstOrNull {
-                    it.contains("stop", ignoreCase = true)
-                }?.let {
-                    startSpeechRecognizer()
-                }*/
-            }
-        }
-
-        override fun onPartialResults(partialResults: Bundle?) {
-            Log.d(TAG, "onPartialResults")
-        }
-
-        override fun onEvent(eventType: Int, params: Bundle?) {
-            Log.d(TAG, "onEvent $eventType")
-        }
-
+        dks?.closeSpeechOperations()
     }
 
 }
