@@ -86,6 +86,16 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
             }
         }
 
+        binding.btnSwitchCamera.setOnClickListener {
+            cameraSelector = if(cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
+                CameraSelector.DEFAULT_BACK_CAMERA
+            }
+            else {
+                CameraSelector.DEFAULT_FRONT_CAMERA
+            }
+            startCamera()
+        }
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -134,6 +144,7 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
     @SuppressLint("RestrictedApi")
     private fun startCamera() {
+
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
@@ -175,6 +186,7 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
         if(binding.btnCapture.text == "Stop Recording") {
             return
         }
+        binding.btnSwitchCamera.visibility = View.GONE
         binding.btnCapture.text = "Stop Recording"
         // Get a stable reference of the modifiable image capture use case
         val videoCapture = videoCapture ?: return
@@ -223,6 +235,7 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
         }
         binding.btnCapture.text = "Start Recording"
         videoCapture?.stopRecording()
+        binding.btnSwitchCamera.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
