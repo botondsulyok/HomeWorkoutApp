@@ -13,7 +13,7 @@ class PlannedWorkoutRecyclerViewAdapter :
 
     interface PlannedWorkoutItemClickListener {
         fun onItemClick(workout: UiWorkout?): Boolean
-        fun onDeleteClick(workout: UiWorkout?): Boolean
+        fun onItemLongClick(workout: UiWorkout?): Boolean
     }
 
     var plannedWorkoutClickListener: PlannedWorkoutItemClickListener? = null
@@ -35,7 +35,7 @@ class PlannedWorkoutRecyclerViewAdapter :
                 plannedWorkoutClickListener?.onItemClick(binding.workout)
             }
             itemView.setOnLongClickListener {
-                plannedWorkoutClickListener?.onDeleteClick(binding.workout)
+                plannedWorkoutClickListener?.onItemLongClick(binding.workout)
                 true
             }
         }

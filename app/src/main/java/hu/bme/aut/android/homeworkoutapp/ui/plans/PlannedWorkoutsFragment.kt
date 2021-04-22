@@ -1,5 +1,7 @@
 package hu.bme.aut.android.homeworkoutapp.ui.plans
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.children
+import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
@@ -17,9 +20,14 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
+import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.*
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesFragmentDirections
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.UploadSuccess
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.Uploading
 import hu.bme.aut.android.homeworkoutapp.ui.plans.recyclerview.PlannedWorkoutRecyclerViewAdapter
+import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickerFragment
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import hu.bme.aut.android.homeworkoutapp.utils.daysOfWeekFromLocale
 import hu.bme.aut.android.homeworkoutapp.utils.setTextColorRes
@@ -38,6 +46,8 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
 
     private var _binding: FragmentPlansBinding? = null
     private val binding get() = _binding!!
+
+    private var mainActivity: MainActivity? = null
 
     private val today = LocalDate.now()
 
@@ -74,14 +84,35 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
                 binding.progressBar.visibility = View.GONE
                 Toast.makeText(activity, viewState.message, Toast.LENGTH_LONG).show()
             }
+            is PlannedWorkoutUploading -> {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+            is PlannedWorkoutUploadFailed -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(activity, viewState.message, Toast.LENGTH_LONG).show()
+            }
         }.exhaustive
 
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mainActivity = activity as? MainActivity
+        mainActivity?.setToolbarAndBottomNavigationViewVisible(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<UiWorkout>(
+            WorkoutPickerFragment.KEY_PICK_WORKOUT)?.observe(
+            requireActivity()) { result ->
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<UiWorkout>(WorkoutPickerFragment.KEY_PICK_WORKOUT)
+            viewModel.addPlannedWorkoutToDate(result)
+        }
+
         recyclerViewAdapter.plannedWorkoutClickListener = this
+        binding.plannedWorkoutsRecyclerView.adapter = recyclerViewAdapter
 
         val daysOfWeek = daysOfWeekFromLocale()
         val currentMonth = YearMonth.now()
@@ -90,14 +121,9 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
             scrollToMonth(currentMonth)
         }
 
-        if (savedInstanceState == null) {
-            binding.plansCalendar.post {
-                // Show today's events initially.
-                selectDate(today)
-            }
-        }
-        else {
-            viewModel.getPlannedWorkoutsFromDate()
+        binding.plansCalendar.post {
+            // Show today's events initially.
+            selectDate(viewModel.selectedDate)
         }
 
         class DayViewContainer(view: View) : ViewContainer(view) {
@@ -165,7 +191,7 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
 
             // Select the first day of the month when
             // we scroll to a new month.
-            selectDate(it.yearMonth.atDay(1))
+            // todo selectDate(it.yearMonth.atDay(1))
         }
 
         class MonthViewContainer(view: View) : ViewContainer(view) {
@@ -187,33 +213,38 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
         }
 
         binding.btnAddPlannedWorkout.setOnClickListener {
-            // todo navigate to workoutpickerfragment
+            val action = PlannedWorkoutsFragmentDirections.actionNavigationPlansToWorkoutPickerFragment()
+            findNavController().navigate(action)
         }
     }
 
     private fun selectDate(date: LocalDate) {
-        if (viewModel.selectedDate != date) {
-            val oldDate = viewModel.selectedDate
-            viewModel.selectedDate = date
-            oldDate.let { binding.plansCalendar.notifyDateChanged(it) }
-            binding.plansCalendar.notifyDateChanged(date)
-            updateAdapterForDate(date)
-        }
-    }
+        binding.plansCalendar.notifyDateChanged(viewModel.selectedDate)
+        viewModel.selectedDate = date
+        binding.plansCalendar.notifyDateChanged(viewModel.selectedDate)
 
-    private fun updateAdapterForDate(date: LocalDate) {
         viewModel.getPlannedWorkoutsFromDate()
-        binding.plansSelectedDateText.text = selectionFormatter.format(date)
+        binding.plansSelectedDateText.text = selectionFormatter.format(viewModel.selectedDate)
     }
 
     override fun onItemClick(workout: UiWorkout?): Boolean {
-        // todo navigate to workoutfragment
+        if(workout != null) {
+            val action = PlannedWorkoutsFragmentDirections.actionNavigationPlansToWorkoutFragment(workout)
+            findNavController().navigate(action)
+        }
         return true
     }
 
-    override fun onDeleteClick(workout: UiWorkout?): Boolean {
+    override fun onItemLongClick(workout: UiWorkout?): Boolean {
         if(workout != null) {
-            viewModel.deletePlannedWorkoutFromDate(workout)
+            AlertDialog.Builder(context)
+                .setTitle(getString(R.string.title_warning))
+                .setMessage(getString(R.string.txt_sure_to_delet))
+                .setPositiveButton(getString(R.string.btn_yes)) { dialogInterface: DialogInterface, i: Int ->
+                    viewModel.deletePlannedWorkoutFromDate(workout)
+                }
+                .setNegativeButton(getString(R.string.btn_no), null)
+                .show()
         }
         return true
     }

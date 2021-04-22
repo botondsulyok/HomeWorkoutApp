@@ -37,6 +37,19 @@ class ExercisesPresenter @Inject constructor(
         exerciseInteractor.updateExercise(exercise.toDomainExercise(context))
     }
 
+    suspend fun addExerciseToWorkout(
+        exercise: UiExercise,
+        workoutId: String
+    ): Result<Unit, Exception> = withIOContext {
+        when (val result = workoutsInteractor.addExerciseToWorkout(exercise.toDomainExercise(context), workoutId)) {
+            is ResultSuccess -> {
+                ResultSuccess(Unit)
+            }
+            is ResultFailure -> {
+                ResultFailure(reason = result.reason)
+            }
+        }
+    }
 
 }
 

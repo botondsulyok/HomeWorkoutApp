@@ -30,4 +30,4 @@ fun TextView.setTextColorRes(@ColorRes color: Int) = setTextColor(context.getCol
 
 val monthYearFormatter: DateTimeFormatter get() = DateTimeFormatter.ofPattern("MMM yyyy")
 
-val yearFormatter: DateTimeFormatter get() = DateTimeFormatter.ofPattern("d MMM yyyy")
+val dayMonthYearFormatter: DateTimeFormatter get() = DateTimeFormatter.ofPattern("d MMM yyyy")

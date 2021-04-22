@@ -11,9 +11,3 @@ data class Loaded(val workoutsList: List<UiWorkout> = listOf()) : WorkoutPickerV
 object Ready : WorkoutPickerViewState()
 
 data class Failed(val message: String) : WorkoutPickerViewState()
-
-object Uploading : WorkoutPickerViewState()
-
-data class UploadFailed(val message: String) : WorkoutPickerViewState()
-
-object UploadSuccess : WorkoutPickerViewState()

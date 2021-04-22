@@ -51,7 +51,22 @@
         android:id="@+id/navigation_plans"
         android:name="hu.bme.aut.android.homeworkoutapp.ui.plans.PlannedWorkoutsFragment"
         android:label="@string/title_plans"
-        tools:layout="@layout/fragment_plans" />
+        tools:layout="@layout/fragment_plans" >
+        <action
+            android:id="@+id/action_navigation_plans_to_workoutPickerFragment"
+            app:destination="@id/workoutPickerFragment"
+            app:enterAnim="@anim/fragment_close_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/action_navigation_plans_to_workoutFragment"
+            app:destination="@id/workoutFragment"
+            app:enterAnim="@anim/fragment_close_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_welcome"
         android:name="hu.bme.aut.android.homeworkoutapp.ui.welcome.WelcomeFragment"
@@ -137,10 +152,5 @@
         android:id="@+id/workoutPickerFragment"
         android:name="hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickerFragment"
         android:label="fragment_workout_picker"
-        tools:layout="@layout/fragment_workout_picker" >
-        <argument
-            android:name="exercise"
-            app:argType="hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise"
-            app:nullable="true" />
-    </fragment>
+        tools:layout="@layout/fragment_workout_picker" />
 </navigation>

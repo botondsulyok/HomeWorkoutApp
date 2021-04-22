@@ -1,5 +1,6 @@
 package hu.bme.aut.android.homeworkoutapp.ui.exercises
 
+import android.util.Log
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
@@ -9,6 +10,8 @@ import javax.inject.Inject
 class ExercisesViewModel @Inject constructor(
     private val exercisesPresenter: ExercisesPresenter
 ) : RainbowCakeViewModel<ExercisesViewState>(Loading) {
+
+    var selectedExercise = UiExercise()
 
     fun getExercises() = execute {
         viewState = Loading
@@ -43,6 +46,24 @@ class ExercisesViewModel @Inject constructor(
             }
             is ResultFailure -> {
                 viewState = Failed(result.reason.message.toString())
+            }
+        }
+    }
+
+    fun addExerciseToWorkout(
+        workoutId: String
+    ) = execute {
+
+        Log.i("asd", "asd")
+
+        viewState = Uploading
+        val result = exercisesPresenter.addExerciseToWorkout(selectedExercise, workoutId)
+        viewState = when(result) {
+            is ResultSuccess -> {
+                UploadSuccess
+            }
+            is ResultFailure -> {
+                Failed(result.reason.message.toString())
             }
         }
     }

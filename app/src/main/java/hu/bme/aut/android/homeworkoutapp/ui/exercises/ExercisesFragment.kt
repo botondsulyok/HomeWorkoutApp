@@ -3,6 +3,7 @@ package hu.bme.aut.android.homeworkoutapp.ui.exercises
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,8 @@ import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.StartExerc
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview.ExercisesRecyclerViewAdapter
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
+import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickerFragment
+import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import java.io.Serializable
 
 
@@ -58,6 +61,12 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<UiWorkout>(WorkoutPickerFragment.KEY_PICK_WORKOUT)?.observe(
+            viewLifecycleOwner) { result ->
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<UiWorkout>(WorkoutPickerFragment.KEY_PICK_WORKOUT)
+            viewModel.addExerciseToWorkout(result.id)
+        }
+
         recyclerViewAdapter = ExercisesRecyclerViewAdapter(requireContext())
         recyclerViewAdapter.exerciseClickListener = this
         binding.exercisesRecyclerView.adapter = recyclerViewAdapter
@@ -70,7 +79,6 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
         }
 
         viewModel.getExercises()
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -92,41 +100,52 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
                 binding.progressBar.visibility = View.GONE
                 Toast.makeText(activity, viewState.message, Toast.LENGTH_LONG).show()
             }
+            is Uploading -> {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+            is UploadSuccess -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(requireContext(), "Added", Toast.LENGTH_SHORT).show()
+            }
         }.exhaustive
     }
 
     override fun onItemLongClick(exerciseRowBinding: ExercisesRowBinding?): Boolean {
         if(exerciseRowBinding != null) {
-            popupMenu {
-                section {
-                    item {
-                        labelRes = R.string.menu_add_exercise_to_workout
-                        icon = R.drawable.ic_baseline_add_24
-                        callback = {
-                            // TODO workouthoz rendelés, show picker
-                            val action = ExercisesFragmentDirections.actionNavigationExercisesToWorkoutPickerFragment(exerciseRowBinding.exercise)
-                            findNavController().navigate(action)
+            val exercise = exerciseRowBinding.exercise
+            if(exercise != null) {
+                popupMenu {
+                    section {
+                        item {
+                            labelRes = R.string.menu_add_exercise_to_workout
+                            icon = R.drawable.ic_baseline_add_24
+                            callback = {
+                                viewModel.selectedExercise = exercise
+                                val action = ExercisesFragmentDirections.actionNavigationExercisesToWorkoutPickerFragment()
+                                findNavController().navigate(action)
+                            }
                         }
                     }
+                }.apply {
+                    show(requireContext(), exerciseRowBinding.root)
                 }
-            }.apply {
-                show(requireContext(), exerciseRowBinding.root)
             }
+
         }
         return true
     }
 
     override fun onDeleteClick(exercise: UiExercise?): Boolean {
-        AlertDialog.Builder(context)
-            .setTitle(getString(R.string.title_warning))
-            .setMessage(getString(R.string.txt_sure_to_delet))
-            .setPositiveButton(getString(R.string.btn_yes)) { dialogInterface: DialogInterface, i: Int ->
-                if (exercise != null) {
+        if (exercise != null) {
+            AlertDialog.Builder(context)
+                .setTitle(getString(R.string.title_warning))
+                .setMessage(getString(R.string.txt_sure_to_delet))
+                .setPositiveButton(getString(R.string.btn_yes)) { dialogInterface: DialogInterface, i: Int ->
                     viewModel.deleteExercise(exercise)
                 }
-            }
-            .setNegativeButton(getString(R.string.btn_no), null)
-            .show()
+                .setNegativeButton(getString(R.string.btn_no), null)
+                .show()
+        }
         return true
     }
 

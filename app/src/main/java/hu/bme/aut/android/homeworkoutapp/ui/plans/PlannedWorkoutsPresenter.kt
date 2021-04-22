@@ -30,4 +30,15 @@ class PlannedWorkoutsPresenter @Inject constructor(
         workoutsInteractor.deletePlannedWorkoutFromDate(selectedDate, workout.toDomainWorkout())
     }
 
+    suspend fun addPlannedWorkoutToDate(selectedDate: LocalDate, workout: UiWorkout): Result<Unit, Exception> = withIOContext {
+        when (val result = workoutsInteractor.addPlannedWorkoutToDate(selectedDate, workout.toDomainWorkout())) {
+            is ResultSuccess -> {
+                ResultSuccess(Unit)
+            }
+            is ResultFailure -> {
+                ResultFailure(reason = result.reason)
+            }
+        }
+    }
+
 }

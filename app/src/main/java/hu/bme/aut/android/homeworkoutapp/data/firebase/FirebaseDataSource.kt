@@ -1,5 +1,6 @@
 package hu.bme.aut.android.homeworkoutapp.data.firebase
 
+import android.util.Log
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -18,11 +19,10 @@ import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewExercise
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewWorkout
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainWorkout
 import hu.bme.aut.android.homeworkoutapp.utils.monthYearFormatter
-import hu.bme.aut.android.homeworkoutapp.utils.yearFormatter
+import hu.bme.aut.android.homeworkoutapp.utils.dayMonthYearFormatter
 import kotlinx.coroutines.tasks.await
 import java.net.URLEncoder
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -102,7 +102,7 @@ class FirebaseDataSource @Inject constructor() {
             .document(userId)
             .collection("plannedworkouts")
             .document(monthYearFormatter.format(selectedDate))
-            .collection(yearFormatter.format(selectedDate))
+            .collection(dayMonthYearFormatter.format(selectedDate))
             .document(workout.id)
 
         val newWorkout = workout.toFirebaseWorkout()
@@ -116,13 +116,13 @@ class FirebaseDataSource @Inject constructor() {
 
     }
 
-    suspend fun getWorkoutsFromDate(selectedDate: LocalDate): Result<List<DomainWorkout>, Exception> {
+    suspend fun getPlannedWorkoutsFromDate(selectedDate: LocalDate): Result<List<DomainWorkout>, Exception> {
         val workoutsRef = db
             .collection("userdata")
             .document(userId)
             .collection("plannedworkouts")
             .document(monthYearFormatter.format(selectedDate))
-            .collection(yearFormatter.format(selectedDate))
+            .collection(dayMonthYearFormatter.format(selectedDate))
             .orderBy("creation", Query.Direction.DESCENDING)
 
         return try {
@@ -143,7 +143,7 @@ class FirebaseDataSource @Inject constructor() {
             .document(userId)
             .collection("plannedworkouts")
             .document(monthYearFormatter.format(selectedDate))
-            .collection(yearFormatter.format(selectedDate))
+            .collection(dayMonthYearFormatter.format(selectedDate))
             .document(workout.id)
 
         return try {

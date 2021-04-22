@@ -9,6 +9,7 @@ import hu.bme.aut.android.homeworkoutapp.ui.doingexercise.DoingExerciseViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.NewExerciseViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.newworkout.NewWorkoutViewModel
+import hu.bme.aut.android.homeworkoutapp.ui.plans.PlannedWorkoutsViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.welcome.WelcomeViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.workout.WorkoutViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickerViewModel
@@ -57,5 +58,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(WorkoutPickerViewModel::class)
     abstract fun bindWorkoutPickerViewModel(workoutPickerViewModel: WorkoutPickerViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PlannedWorkoutsViewModel::class)
+    abstract fun bindPlannedWorkoutsViewModel(plannedWorkoutsViewModel: PlannedWorkoutsViewModel): ViewModel
 
 }

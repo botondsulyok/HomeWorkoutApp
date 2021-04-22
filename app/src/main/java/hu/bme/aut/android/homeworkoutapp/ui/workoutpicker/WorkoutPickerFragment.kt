@@ -1,6 +1,7 @@
 package hu.bme.aut.android.homeworkoutapp.ui.workoutpicker
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,9 +26,11 @@ class WorkoutPickerFragment : RainbowCakeFragment<WorkoutPickerViewState, Workou
 
     private var mainActivity: MainActivity? = null
 
-    val args: WorkoutPickerFragmentArgs by navArgs()
-
     private val recyclerViewAdapter = WorkoutPickerRecyclerViewAdapter()
+
+    companion object {
+        const val KEY_PICK_WORKOUT = "KEY_PICK_WORKOUT"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,19 +73,6 @@ class WorkoutPickerFragment : RainbowCakeFragment<WorkoutPickerViewState, Workou
                 binding.progressBar.visibility = View.GONE
                 Toast.makeText(activity, viewState.message, Toast.LENGTH_LONG).show()
             }
-            is Uploading -> {
-                binding.progressBar.visibility = View.VISIBLE
-            }
-            is UploadSuccess -> {
-                binding.progressBar.visibility = View.GONE
-                findNavController().popBackStack()
-                return
-            }
-            is UploadFailed -> {
-                binding.progressBar.visibility = View.GONE
-                Toast.makeText(activity, viewState.message, Toast.LENGTH_LONG).show()
-                viewModel.toReadyState()
-            }
         }.exhaustive
     }
 
@@ -93,9 +83,10 @@ class WorkoutPickerFragment : RainbowCakeFragment<WorkoutPickerViewState, Workou
     }
 
     override fun onItemClick(workout: UiWorkout?): Boolean {
-        val exercise = args.exercise
-        if(workout != null && exercise != null) {
-            viewModel.addExerciseToWorkout(exercise, workout.id)
+        if(workout != null) {
+            val navController = findNavController()
+            navController.previousBackStackEntry?.savedStateHandle?.set(KEY_PICK_WORKOUT, workout)
+            navController.popBackStack()
         }
         return true
     }
