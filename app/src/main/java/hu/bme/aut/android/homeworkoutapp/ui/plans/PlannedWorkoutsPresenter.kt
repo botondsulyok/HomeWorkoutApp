@@ -8,7 +8,9 @@ import hu.bme.aut.android.homeworkoutapp.domain.interactors.WorkoutsInteractor
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.toDomainWorkout
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.toUiWorkout
+import hu.bme.aut.android.homeworkoutapp.utils.toDate
 import java.time.LocalDate
+import java.util.*
 import javax.inject.Inject
 
 class PlannedWorkoutsPresenter @Inject constructor(
@@ -16,7 +18,7 @@ class PlannedWorkoutsPresenter @Inject constructor(
 ) {
 
     suspend fun getPlannedWorkoutsFromDate(selectedDate: LocalDate): Result<List<UiWorkout>, Exception> = withIOContext {
-        when(val result = workoutsInteractor.getPlannedWorkoutsFromDate(selectedDate)) {
+        when(val result = workoutsInteractor.getPlannedWorkoutsFromDate(selectedDate.toDate())) {
             is ResultSuccess -> {
                 ResultSuccess(value = result.value.map { it.toUiWorkout() })
             }
@@ -27,11 +29,11 @@ class PlannedWorkoutsPresenter @Inject constructor(
     }
 
     suspend fun deletePlannedWorkoutFromDate(selectedDate: LocalDate, workout: UiWorkout): Result<Unit, Exception> = withIOContext {
-        workoutsInteractor.deletePlannedWorkoutFromDate(selectedDate, workout.toDomainWorkout())
+        workoutsInteractor.deletePlannedWorkoutFromDate(selectedDate.toDate(), workout.toDomainWorkout())
     }
 
     suspend fun addPlannedWorkoutToDate(selectedDate: LocalDate, workout: UiWorkout): Result<Unit, Exception> = withIOContext {
-        when (val result = workoutsInteractor.addPlannedWorkoutToDate(selectedDate, workout.toDomainWorkout())) {
+        when (val result = workoutsInteractor.addPlannedWorkoutToDate(selectedDate.toDate(), workout.toDomainWorkout())) {
             is ResultSuccess -> {
                 ResultSuccess(Unit)
             }

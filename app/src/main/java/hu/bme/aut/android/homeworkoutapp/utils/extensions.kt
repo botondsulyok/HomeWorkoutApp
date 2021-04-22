@@ -9,6 +9,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
 
 fun Fragment.hideKeyboard() {
     view?.let { activity?.hideKeyboard(it) }
@@ -36,4 +40,21 @@ fun Editable?.toInt(): Int {
     } else {
         this.toString().toInt()
     }
+}
+
+
+fun LocalDate.toDate(): Date {
+    return Date.from(this.atStartOfDay(ZoneId.systemDefault()).toInstant())
+}
+
+fun Date.toDateStr(): String {
+    return SimpleDateFormat("dd MMM yyyy", Locale.US).format(this)
+}
+
+fun Date.toMonthStr(): String {
+    return SimpleDateFormat("MMM yyyy", Locale.US).format(this)
+}
+
+fun String.toDate(): Date {
+    return SimpleDateFormat("dd MMM yyyy", Locale.US).parse(this)
 }

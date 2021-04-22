@@ -16,7 +16,6 @@ class PlannedWorkoutsViewModel @Inject constructor(
     var selectedDate: LocalDate = LocalDate.now()
 
     fun getPlannedWorkoutsFromDate() = execute {
-
         viewState = PlannedWorkoutsLoading
         val result = plannedWorkoutsPresenter.getPlannedWorkoutsFromDate(selectedDate)
         viewState = when(result) {

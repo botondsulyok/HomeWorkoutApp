@@ -78,6 +78,8 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
                 binding.progressBar.visibility = View.VISIBLE
             }
             is PlannedWorkoutsLoaded -> {
+                binding.plansCalendar.notifyCalendarChanged()
+
                 binding.progressBar.visibility = View.GONE
                 recyclerViewAdapter.submitList(viewState.workoutsList)
             }
@@ -116,7 +118,6 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
         }
 
         binding.plansCalendar.post {
-            // Show today's events initially.
             selectDate(viewModel.selectedDate)
         }
 
@@ -182,10 +183,9 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
             } else {
                 titleFormatter.format(it.yearMonth)
             }
-
-            // Select the first day of the month when
-            // we scroll to a new month.
-            // todo selectDate(it.yearMonth.atDay(1))
+            //todo
+            //viewModel.getDatesWithWorkoutsForMonth(LocalDate.of(it.year, it.month, 1))
+            //selectDate(it.yearMonth.atDay(1))
         }
 
         class MonthViewContainer(view: View) : ViewContainer(view) {

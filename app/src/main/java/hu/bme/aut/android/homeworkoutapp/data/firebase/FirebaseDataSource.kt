@@ -9,8 +9,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.Result
+import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.data.models.FirebaseExercise
 import hu.bme.aut.android.homeworkoutapp.data.models.FirebaseWorkout
@@ -18,14 +18,16 @@ import hu.bme.aut.android.homeworkoutapp.domain.models.DomainExercise
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewExercise
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewWorkout
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainWorkout
-import hu.bme.aut.android.homeworkoutapp.utils.monthYearFormatter
-import hu.bme.aut.android.homeworkoutapp.utils.dayMonthYearFormatter
+import hu.bme.aut.android.homeworkoutapp.utils.toDate
+import hu.bme.aut.android.homeworkoutapp.utils.toDateStr
+import hu.bme.aut.android.homeworkoutapp.utils.toMonthStr
 import kotlinx.coroutines.tasks.await
 import java.net.URLEncoder
-import java.time.LocalDate
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+
 
 @Singleton
 class FirebaseDataSource @Inject constructor() {
@@ -96,13 +98,13 @@ class FirebaseDataSource @Inject constructor() {
 
     }
 
-    suspend fun addPlannedWorkoutToDate(selectedDate: LocalDate, workout: DomainWorkout): Result<Unit, Exception> {
+    suspend fun addPlannedWorkoutToDate(selectedDate: Date, workout: DomainWorkout): Result<Unit, Exception> {
         val newWorkoutRef = db
             .collection("userdata")
             .document(userId)
             .collection("plannedworkouts")
-            .document(monthYearFormatter.format(selectedDate))
-            .collection(dayMonthYearFormatter.format(selectedDate))
+            .document(selectedDate.toMonthStr())
+            .collection(selectedDate.toDateStr())
             .document(workout.id)
 
         val newWorkout = workout.toFirebaseWorkout()
@@ -116,13 +118,13 @@ class FirebaseDataSource @Inject constructor() {
 
     }
 
-    suspend fun getPlannedWorkoutsFromDate(selectedDate: LocalDate): Result<List<DomainWorkout>, Exception> {
+    suspend fun getPlannedWorkoutsFromDate(selectedDate: Date): Result<List<DomainWorkout>, Exception> {
         val workoutsRef = db
             .collection("userdata")
             .document(userId)
             .collection("plannedworkouts")
-            .document(monthYearFormatter.format(selectedDate))
-            .collection(dayMonthYearFormatter.format(selectedDate))
+            .document(selectedDate.toMonthStr())
+            .collection(selectedDate.toDateStr())
             .orderBy("creation", Query.Direction.DESCENDING)
 
         return try {
@@ -137,13 +139,13 @@ class FirebaseDataSource @Inject constructor() {
 
     }
 
-    suspend fun deletePlannedWorkoutFromDate(selectedDate: LocalDate, workout: DomainWorkout): Result<Unit, Exception> {
+    suspend fun deletePlannedWorkoutFromDate(selectedDate: Date, workout: DomainWorkout): Result<Unit, Exception> {
         val deleteWorkoutRef = db
             .collection("userdata")
             .document(userId)
             .collection("plannedworkouts")
-            .document(monthYearFormatter.format(selectedDate))
-            .collection(dayMonthYearFormatter.format(selectedDate))
+            .document(selectedDate.toMonthStr())
+            .collection(selectedDate.toDateStr())
             .document(workout.id)
 
         return try {
@@ -257,7 +259,12 @@ class FirebaseDataSource @Inject constructor() {
                 .collection("exercises")
                 .document()
 
-            val newExercise = exercise.toFirebaseExercise(newExerciseRef.id, videoPath, videoUrl, thumbnailUrl)
+            val newExercise = exercise.toFirebaseExercise(
+                newExerciseRef.id,
+                videoPath,
+                videoUrl,
+                thumbnailUrl
+            )
 
             newExerciseRef.set(newExercise).await()
             ResultSuccess(Unit)
@@ -342,7 +349,6 @@ class FirebaseDataSource @Inject constructor() {
         }
     }
 
-
 }
 
 private fun DomainWorkout.toFirebaseWorkout(): FirebaseWorkout {
@@ -354,8 +360,8 @@ private fun DomainWorkout.toFirebaseWorkout(): FirebaseWorkout {
 
 private fun DomainNewWorkout.toFirebaseWorkout(id: String): FirebaseWorkout {
     return FirebaseWorkout(
-            id = id,
-            name = name
+        id = id,
+        name = name
     )
 }
 
@@ -381,7 +387,12 @@ private fun DomainExercise.toFirebaseExercise(firebaseExercise: FirebaseExercise
     )
 }
 
-private fun DomainNewExercise.toFirebaseExercise(id: String, videoPath: String, videoUrl:String, thumbnailUrl: String): FirebaseExercise {
+private fun DomainNewExercise.toFirebaseExercise(
+    id: String,
+    videoPath: String,
+    videoUrl: String,
+    thumbnailUrl: String
+): FirebaseExercise {
     return FirebaseExercise(
         id = id,
         name = name,

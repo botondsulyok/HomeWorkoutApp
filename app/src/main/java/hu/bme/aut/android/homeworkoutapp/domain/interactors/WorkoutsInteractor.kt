@@ -1,12 +1,14 @@
 package hu.bme.aut.android.homeworkoutapp.domain.interactors
 
 import hu.bme.aut.android.homeworkoutapp.data.Result
+import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.firebase.FirebaseDataSource
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainExercise
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewWorkout
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainWorkout
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import java.time.LocalDate
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -43,15 +45,15 @@ class WorkoutsInteractor @Inject constructor(
         return firebaseDataSource.updateWorkoutExercise(workoutId, exercise)
     }
 
-    suspend fun getPlannedWorkoutsFromDate(selectedDate: LocalDate): Result<List<DomainWorkout>, Exception> {
+    suspend fun getPlannedWorkoutsFromDate(selectedDate: Date): Result<List<DomainWorkout>, Exception> {
         return firebaseDataSource.getPlannedWorkoutsFromDate(selectedDate)
     }
 
-    suspend fun deletePlannedWorkoutFromDate(selectedDate: LocalDate, workout: DomainWorkout): Result<Unit, Exception> {
+    suspend fun deletePlannedWorkoutFromDate(selectedDate: Date, workout: DomainWorkout): Result<Unit, Exception> {
         return firebaseDataSource.deletePlannedWorkoutFromDate(selectedDate, workout)
     }
 
-    suspend fun addPlannedWorkoutToDate(selectedDate: LocalDate, workout: DomainWorkout): Result<Unit, Exception> {
+    suspend fun addPlannedWorkoutToDate(selectedDate: Date, workout: DomainWorkout): Result<Unit, Exception> {
         return firebaseDataSource.addPlannedWorkoutToDate(selectedDate, workout)
     }
 
