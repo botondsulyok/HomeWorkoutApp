@@ -17,8 +17,12 @@ import hu.bme.aut.android.homeworkoutapp.domain.models.DomainExercise
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewExercise
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewWorkout
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainWorkout
+import hu.bme.aut.android.homeworkoutapp.utils.monthYearFormatter
+import hu.bme.aut.android.homeworkoutapp.utils.yearFormatter
 import kotlinx.coroutines.tasks.await
 import java.net.URLEncoder
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -90,6 +94,64 @@ class FirebaseDataSource @Inject constructor() {
             ResultFailure(e)
         }
 
+    }
+
+    suspend fun addPlannedWorkoutToDate(selectedDate: LocalDate, workout: DomainWorkout): Result<Unit, Exception> {
+        val newWorkoutRef = db
+            .collection("userdata")
+            .document(userId)
+            .collection("plannedworkouts")
+            .document(monthYearFormatter.format(selectedDate))
+            .collection(yearFormatter.format(selectedDate))
+            .document(workout.id)
+
+        val newWorkout = workout.toFirebaseWorkout()
+
+        return try {
+            newWorkoutRef.set(newWorkout).await()
+            ResultSuccess(Unit)
+        } catch (e: Exception) {
+            ResultFailure(e)
+        }
+
+    }
+
+    suspend fun getWorkoutsFromDate(selectedDate: LocalDate): Result<List<DomainWorkout>, Exception> {
+        val workoutsRef = db
+            .collection("userdata")
+            .document(userId)
+            .collection("plannedworkouts")
+            .document(monthYearFormatter.format(selectedDate))
+            .collection(yearFormatter.format(selectedDate))
+            .orderBy("creation", Query.Direction.DESCENDING)
+
+        return try {
+            val workoutsSnapshot = workoutsRef.get().await()
+            val workouts = workoutsSnapshot.documents.map {
+                it.toObject<FirebaseWorkout>()?.toDomainWorkout() ?: DomainWorkout()
+            }
+            ResultSuccess(workouts)
+        } catch (e: Exception) {
+            ResultFailure(e)
+        }
+
+    }
+
+    suspend fun deletePlannedWorkoutFromDate(selectedDate: LocalDate, workout: DomainWorkout): Result<Unit, Exception> {
+        val deleteWorkoutRef = db
+            .collection("userdata")
+            .document(userId)
+            .collection("plannedworkouts")
+            .document(monthYearFormatter.format(selectedDate))
+            .collection(yearFormatter.format(selectedDate))
+            .document(workout.id)
+
+        return try {
+            deleteWorkoutRef.delete().await()
+            ResultSuccess(Unit)
+        } catch (e: Exception) {
+            ResultFailure(e)
+        }
     }
 
     suspend fun deleteWorkout(workout: DomainWorkout): Result<Unit, Exception> {

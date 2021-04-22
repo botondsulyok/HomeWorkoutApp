@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import java.time.DayOfWeek
+import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 import java.util.*
 
@@ -25,3 +26,8 @@ fun daysOfWeekFromLocale(): Array<DayOfWeek> {
 fun Context.getColorCompat(@ColorRes color: Int) = ContextCompat.getColor(this, color)
 
 fun TextView.setTextColorRes(@ColorRes color: Int) = setTextColor(context.getColorCompat(color))
+
+
+val monthYearFormatter: DateTimeFormatter get() = DateTimeFormatter.ofPattern("MMM yyyy")
+
+val yearFormatter: DateTimeFormatter get() = DateTimeFormatter.ofPattern("d MMM yyyy")

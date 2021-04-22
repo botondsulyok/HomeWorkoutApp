@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
 import androidx.core.view.children
-import androidx.fragment.app.Fragment
+import co.zsmb.rainbowcake.base.RainbowCakeFragment
+import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
+import co.zsmb.rainbowcake.extensions.exhaustive
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
@@ -19,27 +19,33 @@ import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.*
+import hu.bme.aut.android.homeworkoutapp.ui.plans.recyclerview.PlannedWorkoutRecyclerViewAdapter
+import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import hu.bme.aut.android.homeworkoutapp.utils.daysOfWeekFromLocale
 import hu.bme.aut.android.homeworkoutapp.utils.setTextColorRes
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 
-class PlansFragment : Fragment() {
+class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, PlannedWorkoutsViewModel>(),
+    PlannedWorkoutRecyclerViewAdapter.PlannedWorkoutItemClickListener {
+
+    override fun provideViewModel() = getViewModelFromFactory()
+    override fun getViewResource() = 0
 
     val typedValue = TypedValue()
 
     private var _binding: FragmentPlansBinding? = null
     private val binding get() = _binding!!
 
-    private var selectedDate: LocalDate? = null
     private val today = LocalDate.now()
 
     private val titleSameYearFormatter = DateTimeFormatter.ofPattern("MMMM")
     private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyyy")
     private val selectionFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
+
+    private val recyclerViewAdapter = PlannedWorkoutRecyclerViewAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,15 +61,27 @@ class PlansFragment : Fragment() {
         _binding = null
     }
 
+    override fun render(viewState: PlannedWorkoutsViewState) {
+        when(viewState) {
+            is PlannedWorkoutsLoading -> {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+            is PlannedWorkoutsLoaded -> {
+                binding.progressBar.visibility = View.GONE
+                recyclerViewAdapter.submitList(viewState.workoutsList)
+            }
+            is PlannedWorkoutsFailed -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(activity, viewState.message, Toast.LENGTH_LONG).show()
+            }
+        }.exhaustive
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // todo
-        /*binding.eventsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            adapter = eventsAdapter
-            addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
-        }*/
+        recyclerViewAdapter.plannedWorkoutClickListener = this
 
         val daysOfWeek = daysOfWeekFromLocale()
         val currentMonth = YearMonth.now()
@@ -77,6 +95,9 @@ class PlansFragment : Fragment() {
                 // Show today's events initially.
                 selectDate(today)
             }
+        }
+        else {
+            viewModel.getPlannedWorkoutsFromDate()
         }
 
         class DayViewContainer(view: View) : ViewContainer(view) {
@@ -109,7 +130,7 @@ class PlansFragment : Fragment() {
                             textView.setBackgroundResource(R.drawable.plans_today_bg)
                             dotView.visibility = View.INVISIBLE
                         }
-                        selectedDate -> {
+                        viewModel.selectedDate -> {
                             requireContext().theme.resolveAttribute(R.attr.colorOnSecondary, typedValue, true)
                             textView.setTextColorRes(typedValue.resourceId)
                             textView.setBackgroundResource(R.drawable.plans_selected_bg)
@@ -119,8 +140,13 @@ class PlansFragment : Fragment() {
                             requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, typedValue, true)
                             textView.setTextColorRes(typedValue.resourceId)
                             textView.background = null
-                            // todo ez az egész a viewmodel state-je alapján az ott tárol listából szedje ki
-                            // dotView.isVisible = events[day.date].orEmpty().isNotEmpty()
+                            // todo ez az egész a viewmodel state-je alapján az ott tárolt listából szedje ki
+                            // todo valahogy lekérni a kollekció dátumait
+                            /*val currentState = viewModel.state.value
+                            if(currentState is PlannedWorkoutsLoaded) {
+
+                            }
+                            dotView.isVisible = events[day.date].orEmpty().isNotEmpty()*/
                         }
                     }
                 } else {
@@ -160,44 +186,36 @@ class PlansFragment : Fragment() {
             }
         }
 
-        binding.fabAddWorkoutToEvent.setOnClickListener {
-            Toast.makeText(requireContext(), "inputDialog.show()", Toast.LENGTH_SHORT).show()
+        binding.btnAddPlannedWorkout.setOnClickListener {
+            // todo navigate to workoutpickerfragment
         }
     }
 
     private fun selectDate(date: LocalDate) {
-        if (selectedDate != date) {
-            val oldDate = selectedDate
-            selectedDate = date
-            oldDate?.let { binding.plansCalendar.notifyDateChanged(it) }
+        if (viewModel.selectedDate != date) {
+            val oldDate = viewModel.selectedDate
+            viewModel.selectedDate = date
+            oldDate.let { binding.plansCalendar.notifyDateChanged(it) }
             binding.plansCalendar.notifyDateChanged(date)
-            // todo viewmodel call, viewmodel-ben eltárolni esetleg a kiválasztott napot, de ez nem biztos, hogy kell
             updateAdapterForDate(date)
         }
     }
 
-    /*private fun saveEvent(text: String) {
-        if (text.isBlank()) {
-            Toast.makeText(requireContext(), "R.string.example_3_empty_input_text", Toast.LENGTH_LONG).show()
-        } else {
-            selectedDate?.let {
-                events[it] = events[it].orEmpty().plus(Plans(UUID.randomUUID().toString(), text, it))
-                updateAdapterForDate(it)
-            }
-        }
+    private fun updateAdapterForDate(date: LocalDate) {
+        viewModel.getPlannedWorkoutsFromDate()
+        binding.plansSelectedDateText.text = selectionFormatter.format(date)
     }
 
-    private fun deleteEvent(event: Plans) {
-        val date = event.date
-        events[date] = events[date].orEmpty().minus(event)
-        updateAdapterForDate(date)
-    }*/
+    override fun onItemClick(workout: UiWorkout?): Boolean {
+        // todo navigate to workoutfragment
+        return true
+    }
 
-    private fun updateAdapterForDate(date: LocalDate) {
-
-        // todo viewmodel-től lekérni a workout-okat az új napra
-
-        binding.plansSelectedDateText.text = selectionFormatter.format(date)
+    override fun onDeleteClick(workout: UiWorkout?): Boolean {
+        if(workout != null) {
+            viewModel.deletePlannedWorkoutFromDate(workout)
+        }
+        return true
     }
 
 }

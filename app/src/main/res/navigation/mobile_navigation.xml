@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/navigation_plans"
-        android:name="hu.bme.aut.android.homeworkoutapp.ui.plans.PlansFragment"
+        android:name="hu.bme.aut.android.homeworkoutapp.ui.plans.PlannedWorkoutsFragment"
         android:label="@string/title_plans"
         tools:layout="@layout/fragment_plans" />
     <fragment
