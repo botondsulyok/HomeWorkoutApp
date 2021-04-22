@@ -152,5 +152,9 @@
         android:id="@+id/workoutPickerFragment"
         android:name="hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickerFragment"
         android:label="fragment_workout_picker"
-        tools:layout="@layout/fragment_workout_picker" />
+        tools:layout="@layout/fragment_workout_picker" >
+        <argument
+            android:name="selectedAction"
+            app:argType="hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickedListener" />
+    </fragment>
 </navigation>

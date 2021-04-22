@@ -27,6 +27,7 @@ import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesFragmentDirection
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.UploadSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.Uploading
 import hu.bme.aut.android.homeworkoutapp.ui.plans.recyclerview.PlannedWorkoutRecyclerViewAdapter
+import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickedListener
 import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickerFragment
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import hu.bme.aut.android.homeworkoutapp.utils.daysOfWeekFromLocale
@@ -103,13 +104,6 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<UiWorkout>(
-            WorkoutPickerFragment.KEY_PICK_WORKOUT)?.observe(
-            requireActivity()) { result ->
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<UiWorkout>(WorkoutPickerFragment.KEY_PICK_WORKOUT)
-            viewModel.addPlannedWorkoutToDate(result)
-        }
 
         recyclerViewAdapter.plannedWorkoutClickListener = this
         binding.plannedWorkoutsRecyclerView.adapter = recyclerViewAdapter
@@ -213,7 +207,11 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
         }
 
         binding.btnAddPlannedWorkout.setOnClickListener {
-            val action = PlannedWorkoutsFragmentDirections.actionNavigationPlansToWorkoutPickerFragment()
+            val action = PlannedWorkoutsFragmentDirections.actionNavigationPlansToWorkoutPickerFragment(
+                WorkoutPickedListener { workouts ->
+                    viewModel.addPlannedWorkoutToDate(workouts[0])
+                }
+            )
             findNavController().navigate(action)
         }
     }

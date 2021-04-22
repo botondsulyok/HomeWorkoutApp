@@ -23,6 +23,7 @@ import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.StartExerc
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview.ExercisesRecyclerViewAdapter
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
+import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickedListener
 import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickerFragment
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import java.io.Serializable
@@ -60,12 +61,6 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<UiWorkout>(WorkoutPickerFragment.KEY_PICK_WORKOUT)?.observe(
-            viewLifecycleOwner) { result ->
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<UiWorkout>(WorkoutPickerFragment.KEY_PICK_WORKOUT)
-            viewModel.addExerciseToWorkout(result.id)
-        }
 
         recyclerViewAdapter = ExercisesRecyclerViewAdapter(requireContext())
         recyclerViewAdapter.exerciseClickListener = this
@@ -120,8 +115,11 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
                             labelRes = R.string.menu_add_exercise_to_workout
                             icon = R.drawable.ic_baseline_add_24
                             callback = {
-                                viewModel.selectedExercise = exercise
-                                val action = ExercisesFragmentDirections.actionNavigationExercisesToWorkoutPickerFragment()
+                                val action = ExercisesFragmentDirections.actionNavigationExercisesToWorkoutPickerFragment(
+                                    WorkoutPickedListener { workouts ->
+                                        val ids = workouts.map { it.id }
+                                        viewModel.addExerciseToWorkout(exercise, ids[0])
+                                    })
                                 findNavController().navigate(action)
                             }
                         }

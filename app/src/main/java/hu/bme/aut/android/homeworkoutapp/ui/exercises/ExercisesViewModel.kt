@@ -11,8 +11,6 @@ class ExercisesViewModel @Inject constructor(
     private val exercisesPresenter: ExercisesPresenter
 ) : RainbowCakeViewModel<ExercisesViewState>(Loading) {
 
-    var selectedExercise = UiExercise()
-
     fun getExercises() = execute {
         viewState = Loading
         val result = exercisesPresenter.getExercises()
@@ -51,13 +49,14 @@ class ExercisesViewModel @Inject constructor(
     }
 
     fun addExerciseToWorkout(
+        exercise: UiExercise,
         workoutId: String
     ) = execute {
 
         Log.i("asd", "asd")
 
         viewState = Uploading
-        val result = exercisesPresenter.addExerciseToWorkout(selectedExercise, workoutId)
+        val result = exercisesPresenter.addExerciseToWorkout(exercise, workoutId)
         viewState = when(result) {
             is ResultSuccess -> {
                 UploadSuccess

@@ -13,8 +13,10 @@ import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentWorkoutPickerBinding
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.recyclerview.WorkoutPickerRecyclerViewAdapter
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
+import java.io.Serializable
 
 class WorkoutPickerFragment : RainbowCakeFragment<WorkoutPickerViewState, WorkoutPickerViewModel>(), WorkoutPickerRecyclerViewAdapter.WorkoutItemClickListener {
 
@@ -25,6 +27,8 @@ class WorkoutPickerFragment : RainbowCakeFragment<WorkoutPickerViewState, Workou
     private val binding get() = _binding!!
 
     private var mainActivity: MainActivity? = null
+
+    private val args: WorkoutPickerFragmentArgs by navArgs()
 
     private val recyclerViewAdapter = WorkoutPickerRecyclerViewAdapter()
 
@@ -84,9 +88,8 @@ class WorkoutPickerFragment : RainbowCakeFragment<WorkoutPickerViewState, Workou
 
     override fun onItemClick(workout: UiWorkout?): Boolean {
         if(workout != null) {
-            val navController = findNavController()
-            navController.previousBackStackEntry?.savedStateHandle?.set(KEY_PICK_WORKOUT, workout)
-            navController.popBackStack()
+            args.selectedAction.action(listOf(workout))
+            findNavController().popBackStack()
         }
         return true
     }
@@ -98,3 +101,5 @@ class WorkoutPickerFragment : RainbowCakeFragment<WorkoutPickerViewState, Workou
 
 
 }
+
+class WorkoutPickedListener(val action: (List<UiWorkout>) -> Unit) : Serializable
