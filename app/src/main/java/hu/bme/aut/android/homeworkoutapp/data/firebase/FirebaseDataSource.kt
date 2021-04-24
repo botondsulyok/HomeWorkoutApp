@@ -4,7 +4,9 @@ import android.util.Log
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -13,6 +15,7 @@ import hu.bme.aut.android.homeworkoutapp.data.Result
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.data.models.FirebaseExercise
+import hu.bme.aut.android.homeworkoutapp.data.models.FirebasePlannedWorkoutDay
 import hu.bme.aut.android.homeworkoutapp.data.models.FirebaseWorkout
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainExercise
 import hu.bme.aut.android.homeworkoutapp.domain.models.DomainNewExercise
@@ -21,9 +24,9 @@ import hu.bme.aut.android.homeworkoutapp.domain.models.DomainWorkout
 import hu.bme.aut.android.homeworkoutapp.utils.toDate
 import hu.bme.aut.android.homeworkoutapp.utils.toDateStr
 import hu.bme.aut.android.homeworkoutapp.utils.toMonthStr
+import hu.bme.aut.android.homeworkoutapp.utils.toYearStr
 import kotlinx.coroutines.tasks.await
 import java.net.URLEncoder
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -99,18 +102,18 @@ class FirebaseDataSource @Inject constructor() {
     }
 
     suspend fun addPlannedWorkoutToDate(selectedDate: Date, workout: DomainWorkout): Result<Unit, Exception> {
-        val newWorkoutRef = db
+        val dateRef = db
             .collection("userdata")
             .document(userId)
             .collection("plannedworkouts")
-            .document(selectedDate.toMonthStr())
-            .collection(selectedDate.toDateStr())
-            .document(workout.id)
+            .document(selectedDate.toYearStr())
+            .collection(selectedDate.toMonthStr())
+            .document(selectedDate.toDateStr())
 
         val newWorkout = workout.toFirebaseWorkout()
 
         return try {
-            newWorkoutRef.set(newWorkout).await()
+            dateRef.set(FirebasePlannedWorkoutDay(mapOf(newWorkout.id to newWorkout)), SetOptions.merge()).await()
             ResultSuccess(Unit)
         } catch (e: Exception) {
             ResultFailure(e)
@@ -119,19 +122,19 @@ class FirebaseDataSource @Inject constructor() {
     }
 
     suspend fun getPlannedWorkoutsFromDate(selectedDate: Date): Result<List<DomainWorkout>, Exception> {
-        val workoutsRef = db
+        val dateRef = db
             .collection("userdata")
             .document(userId)
             .collection("plannedworkouts")
-            .document(selectedDate.toMonthStr())
-            .collection(selectedDate.toDateStr())
-            .orderBy("creation", Query.Direction.DESCENDING)
+            .document(selectedDate.toYearStr())
+            .collection(selectedDate.toMonthStr())
+            .document(selectedDate.toDateStr())
 
         return try {
-            val workoutsSnapshot = workoutsRef.get().await()
-            val workouts = workoutsSnapshot.documents.map {
-                it.toObject<FirebaseWorkout>()?.toDomainWorkout() ?: DomainWorkout()
-            }
+            val dateSnapshot = dateRef.get().await()
+            val workouts = dateSnapshot.toObject<FirebasePlannedWorkoutDay>()?.workouts?.values
+                ?.sortedBy { it.creation }
+                ?.map { it.toDomainWorkout() } ?: listOf()
             ResultSuccess(workouts)
         } catch (e: Exception) {
             ResultFailure(e)
@@ -139,17 +142,41 @@ class FirebaseDataSource @Inject constructor() {
 
     }
 
-    suspend fun deletePlannedWorkoutFromDate(selectedDate: Date, workout: DomainWorkout): Result<Unit, Exception> {
-        val deleteWorkoutRef = db
+    suspend fun getPlannedDaysFromMonth(month: Date): Result<List<Date>, Exception> {
+        val dateRef = db
             .collection("userdata")
             .document(userId)
             .collection("plannedworkouts")
-            .document(selectedDate.toMonthStr())
-            .collection(selectedDate.toDateStr())
-            .document(workout.id)
+            .document(month.toYearStr())
+            .collection(month.toMonthStr())
 
         return try {
-            deleteWorkoutRef.delete().await()
+            val dateSnapshot = dateRef.get().await()
+            val dates = mutableListOf<Date>()
+            dateSnapshot.documents.forEach {
+                val firebasePlannedWorkoutDay = it.toObject<FirebasePlannedWorkoutDay>()
+                if(firebasePlannedWorkoutDay?.workouts?.isNotEmpty() == true) {
+                    dates.add(it.id.toDate())
+                }
+            }
+            ResultSuccess(dates)
+        } catch (e: Exception) {
+            ResultFailure(e)
+        }
+
+    }
+
+    suspend fun deletePlannedWorkoutFromDate(selectedDate: Date, workout: DomainWorkout): Result<Unit, Exception> {
+        val dateRef = db
+            .collection("userdata")
+            .document(userId)
+            .collection("plannedworkouts")
+            .document(selectedDate.toYearStr())
+            .collection(selectedDate.toMonthStr())
+            .document(selectedDate.toDateStr())
+
+        return try {
+            dateRef.update("workouts.${workout.id}", FieldValue.delete()).await()
             ResultSuccess(Unit)
         } catch (e: Exception) {
             ResultFailure(e)
@@ -172,7 +199,7 @@ class FirebaseDataSource @Inject constructor() {
     }
 
     suspend fun getWorkoutExercises(workoutId: String): Result<List<DomainExercise>, Exception> {
-        // TODO nem jó még
+        // TODO nem jó még, subcollection-ök törlése
         val exercisesRef = db
             .collection("userdata")
             .document(userId)

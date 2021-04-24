@@ -2,6 +2,8 @@ package hu.bme.aut.android.homeworkoutapp.ui.plans
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -10,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
@@ -23,15 +26,12 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.*
-import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesFragmentDirections
-import hu.bme.aut.android.homeworkoutapp.ui.exercises.UploadSuccess
-import hu.bme.aut.android.homeworkoutapp.ui.exercises.Uploading
 import hu.bme.aut.android.homeworkoutapp.ui.plans.recyclerview.PlannedWorkoutRecyclerViewAdapter
 import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickedListener
-import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickerFragment
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import hu.bme.aut.android.homeworkoutapp.utils.daysOfWeekFromLocale
 import hu.bme.aut.android.homeworkoutapp.utils.setTextColorRes
+import hu.bme.aut.android.homeworkoutapp.utils.toDate
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -78,8 +78,6 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
                 binding.progressBar.visibility = View.VISIBLE
             }
             is PlannedWorkoutsLoaded -> {
-                binding.plansCalendar.notifyCalendarChanged()
-
                 binding.progressBar.visibility = View.GONE
                 recyclerViewAdapter.submitList(viewState.workoutsList)
             }
@@ -117,9 +115,8 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
             scrollToMonth(currentMonth)
         }
 
-        binding.plansCalendar.post {
-            selectDate(viewModel.selectedDate)
-        }
+        selectDate(viewModel.selectedDate)
+
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
@@ -148,31 +145,29 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
                         today -> {
                             requireContext().theme.resolveAttribute(R.attr.colorOnSecondary, typedValue, true)
                             textView.setTextColorRes(typedValue.resourceId)
-                            textView.setBackgroundResource(R.drawable.plans_today_bg)
-                            dotView.visibility = View.INVISIBLE
+                            textView.setBackgroundResource(R.drawable.plans_today_unselected_bg)
                         }
                         viewModel.selectedDate -> {
                             requireContext().theme.resolveAttribute(R.attr.colorOnSecondary, typedValue, true)
                             textView.setTextColorRes(typedValue.resourceId)
                             textView.setBackgroundResource(R.drawable.plans_selected_bg)
-                            dotView.visibility = View.INVISIBLE
                         }
                         else -> {
                             requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, typedValue, true)
                             textView.setTextColorRes(typedValue.resourceId)
-                            textView.background = null
-                            // todo ez az egész a viewmodel state-je alapján az ott tárolt listából szedje ki
-                            // todo valahogy lekérni a kollekció dátumait
-                            /*val currentState = viewModel.state.value
-                            if(currentState is PlannedWorkoutsLoaded) {
-
-                            }
-                            dotView.isVisible = events[day.date].orEmpty().isNotEmpty()*/
+                            textView.background = ColorDrawable(Color.TRANSPARENT)
                         }
                     }
+                    dotView.isVisible = false
                 } else {
                     textView.visibility = View.INVISIBLE
                     dotView.visibility = View.INVISIBLE
+                }
+                viewModel.plannedWorkoutsFromMonthLiveData.observe(viewLifecycleOwner) { dates ->
+                    dotView.isVisible = dates.contains(day.date.toDate())
+                    if(day.date == today && day.date == viewModel.selectedDate) {
+                        textView.setBackgroundResource(R.drawable.plans_today_selected_bg)
+                    }
                 }
             }
         }
@@ -183,9 +178,7 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
             } else {
                 titleFormatter.format(it.yearMonth)
             }
-            //todo
-            //viewModel.getDatesWithWorkoutsForMonth(LocalDate.of(it.year, it.month, 1))
-            //selectDate(it.yearMonth.atDay(1))
+            viewModel.getPlannedDaysFromMonth(LocalDate.of(it.year, it.month, 1))
         }
 
         class MonthViewContainer(view: View) : ViewContainer(view) {

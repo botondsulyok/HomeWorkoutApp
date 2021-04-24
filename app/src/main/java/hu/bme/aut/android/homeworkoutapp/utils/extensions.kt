@@ -51,8 +51,12 @@ fun Date.toDateStr(): String {
     return SimpleDateFormat("dd MMM yyyy", Locale.US).format(this)
 }
 
+fun Date.toYearStr(): String {
+    return SimpleDateFormat("yyyy", Locale.US).format(this)
+}
+
 fun Date.toMonthStr(): String {
-    return SimpleDateFormat("MMM yyyy", Locale.US).format(this)
+    return SimpleDateFormat("MMM", Locale.US).format(this)
 }
 
 fun String.toDate(): Date {

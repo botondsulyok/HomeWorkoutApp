@@ -22,6 +22,6 @@
         android:layout_height="4.5dp"
         android:layout_marginBottom="10dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:background="@drawable/plans_today_bg" />
+        android:background="@drawable/plans_today_selected_bg" />
 </FrameLayout>
 

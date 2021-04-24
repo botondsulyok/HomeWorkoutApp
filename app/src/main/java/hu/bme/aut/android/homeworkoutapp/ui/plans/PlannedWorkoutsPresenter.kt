@@ -28,6 +28,17 @@ class PlannedWorkoutsPresenter @Inject constructor(
         }
     }
 
+    suspend fun getPlannedDaysFromMonth(month: LocalDate): Result<List<Date>, Exception> = withIOContext {
+        when(val result = workoutsInteractor.getPlannedDaysFromMonth(month.toDate())) {
+            is ResultSuccess -> {
+                ResultSuccess(result.value)
+            }
+            is ResultFailure -> {
+                ResultFailure(reason = result.reason)
+            }
+        }
+    }
+
     suspend fun deletePlannedWorkoutFromDate(selectedDate: LocalDate, workout: UiWorkout): Result<Unit, Exception> = withIOContext {
         workoutsInteractor.deletePlannedWorkoutFromDate(selectedDate.toDate(), workout.toDomainWorkout())
     }

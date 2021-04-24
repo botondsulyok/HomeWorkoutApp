@@ -49,6 +49,10 @@ class WorkoutsInteractor @Inject constructor(
         return firebaseDataSource.getPlannedWorkoutsFromDate(selectedDate)
     }
 
+    suspend fun getPlannedDaysFromMonth(month: Date): Result<List<Date>, Exception> {
+        return firebaseDataSource.getPlannedDaysFromMonth(month)
+    }
+
     suspend fun deletePlannedWorkoutFromDate(selectedDate: Date, workout: DomainWorkout): Result<Unit, Exception> {
         return firebaseDataSource.deletePlannedWorkoutFromDate(selectedDate, workout)
     }

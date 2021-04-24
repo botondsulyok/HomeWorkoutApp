@@ -1,12 +1,17 @@
 package hu.bme.aut.android.homeworkoutapp.ui.plans
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import hu.bme.aut.android.homeworkoutapp.utils.dayMonthYearFormatter
+import hu.bme.aut.android.homeworkoutapp.utils.toDate
+import hu.bme.aut.android.homeworkoutapp.utils.toMonthStr
 import java.time.LocalDate
+import java.util.*
 import javax.inject.Inject
 
 class PlannedWorkoutsViewModel @Inject constructor(
@@ -15,15 +20,31 @@ class PlannedWorkoutsViewModel @Inject constructor(
 
     var selectedDate: LocalDate = LocalDate.now()
 
+    val plannedWorkoutsFromMonthLiveData: MutableLiveData<List<Date>> by lazy {
+        MutableLiveData<List<Date>>()
+    }
+
     fun getPlannedWorkoutsFromDate() = execute {
         viewState = PlannedWorkoutsLoading
         val result = plannedWorkoutsPresenter.getPlannedWorkoutsFromDate(selectedDate)
         viewState = when(result) {
             is ResultSuccess -> {
+                getPlannedDaysFromMonth(selectedDate)
                 PlannedWorkoutsLoaded(result.value)
             }
             is ResultFailure -> {
                 PlannedWorkoutsFailed(result.reason.message.toString())
+            }
+        }
+    }
+
+    fun getPlannedDaysFromMonth(month: LocalDate) = execute {
+        when(val result = plannedWorkoutsPresenter.getPlannedDaysFromMonth(month)) {
+            is ResultSuccess -> {
+                plannedWorkoutsFromMonthLiveData.postValue(result.value)
+            }
+            is ResultFailure -> {
+                viewState = PlannedWorkoutsFailed(result.reason.message.toString())
             }
         }
     }
