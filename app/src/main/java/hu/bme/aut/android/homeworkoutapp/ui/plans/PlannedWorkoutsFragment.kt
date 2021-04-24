@@ -143,7 +143,7 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
                     textView.visibility = View.VISIBLE
                     when (day.date) {
                         today -> {
-                            requireContext().theme.resolveAttribute(R.attr.colorOnSecondary, typedValue, true)
+                            requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, typedValue, true)
                             textView.setTextColorRes(typedValue.resourceId)
                             textView.setBackgroundResource(R.drawable.plans_today_unselected_bg)
                         }
@@ -158,6 +158,11 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
                             textView.background = ColorDrawable(Color.TRANSPARENT)
                         }
                     }
+                    if(day.date == today && day.date == viewModel.selectedDate) {
+                        requireContext().theme.resolveAttribute(R.attr.colorOnSecondary, typedValue, true)
+                        textView.setTextColorRes(typedValue.resourceId)
+                        textView.setBackgroundResource(R.drawable.plans_today_selected_bg)
+                    }
                     dotView.isVisible = false
                 } else {
                     textView.visibility = View.INVISIBLE
@@ -165,9 +170,6 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
                 }
                 viewModel.plannedWorkoutsFromMonthLiveData.observe(viewLifecycleOwner) { dates ->
                     dotView.isVisible = dates.contains(day.date.toDate())
-                    if(day.date == today && day.date == viewModel.selectedDate) {
-                        textView.setBackgroundResource(R.drawable.plans_today_selected_bg)
-                    }
                 }
             }
         }
