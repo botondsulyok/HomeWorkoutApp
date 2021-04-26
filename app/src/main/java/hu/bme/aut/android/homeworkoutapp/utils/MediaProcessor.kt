@@ -4,9 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import com.bumptech.glide.Glide
-import com.iceteck.silicompressorr.SiliCompressor
 import java.io.ByteArrayOutputStream
-import java.io.File
 import javax.inject.Inject
 
 class MediaProcessor @Inject constructor(val context: Context) {

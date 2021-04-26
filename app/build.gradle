@@ -48,59 +48,95 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
+
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    //rainbowcake
+    def nav_version = "2.3.5"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    // Tests
+    testImplementation 'junit:junit:4.13.2'
+    // Core library
+    androidTestImplementation 'androidx.test:core-ktx:1.3.0'
+
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+
+    // Assertions
+    androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.2'
+    androidTestImplementation 'androidx.test.ext:truth:1.3.0'
+    androidTestImplementation 'com.google.truth:truth:1.1.2'
+    testImplementation 'com.google.truth.extensions:truth-java8-extension:1.0.1'
+
+    // Espresso dependencies
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.3.0'
+    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.3.0'
+
+    // The following Espresso dependency can be either "implementation"
+    // or "androidTestImplementation", depending on whether you want the
+    // dependency to appear on your APK's compile classpath or the test APK
+    // classpath.
+    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.3.0'
+
+    // Mockito framework
+    testImplementation 'org.mockito:mockito-core:3.9.0'
+    androidTestImplementation 'org.mockito:mockito-android:3.9.0'
+
+    // Fragment test
+    debugImplementation 'androidx.fragment:fragment-testing:1.3.3'
+
+    // Navigation testing
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+
+
+    // RainbowCake
     implementation "co.zsmb:rainbow-cake-core:1.3.0"
     implementation "co.zsmb:rainbow-cake-dagger:1.3.0"
 
-    //dagger
+    // Dagger
     implementation 'com.google.dagger:dagger:2.32'
     kapt 'com.google.dagger:dagger-compiler:2.32'
 
-    //firebase
+    // Firebase
     implementation platform('com.google.firebase:firebase-bom:26.5.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
 
-    //google auth
+    // Google Auth
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
-    //kotlin
+    // Kotlin
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.1"
 
-    //permission dispatcher
+    // Permission Dispatcher
     def permissions_dispatcher_version = "4.8.0"
     implementation "com.github.permissions-dispatcher:permissionsdispatcher:${permissions_dispatcher_version}"
     kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:${permissions_dispatcher_version}"
 
-    //glide
+    // Glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'
 
-    //exoplayer
-    implementation 'com.google.android.exoplayer:exoplayer:2.13.2'
+    // Exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.13.3'
 
-    //pulse countdownview
+    // Pulse CountdownView
     implementation 'com.gusakov:pulse-countdown:1.1.0-rc1'
 
-    //video compressor
-    implementation 'com.iceteck.silicompressorr:silicompressor:2.2.4'
-    implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
-
-    //camerax
+    // Camerax
     def camerax_version = "1.0.0-beta07"
     // CameraX core library using camera2 implementation
     implementation "androidx.camera:camera-camera2:$camerax_version"
@@ -109,15 +145,14 @@ dependencies {
     // CameraX View class
     implementation "androidx.camera:camera-view:1.0.0-alpha14"
 
-    //popupmenu
+    // Popupmenu
     implementation 'com.github.zawadz88.materialpopupmenu:material-popup-menu:4.1.0'
 
-
-    //calendar view
+    // Calendar view
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation 'com.github.kizitonwose:CalendarView:1.0.3'
 
-    //speech recognizer
+    // Speech recognizer
     implementation 'com.github.vikramezhil:DroidSpeech2.0:v1.2'
 
 
