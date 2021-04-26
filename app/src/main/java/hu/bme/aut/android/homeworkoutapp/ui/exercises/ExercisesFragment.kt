@@ -3,8 +3,6 @@ package hu.bme.aut.android.homeworkoutapp.ui.exercises
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,8 +22,6 @@ import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.recyclerview.ExercisesRecyclerViewAdapter
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickedListener
-import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickerFragment
-import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import java.io.Serializable
 
 
@@ -137,7 +133,7 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
         if (exercise != null) {
             AlertDialog.Builder(context)
                 .setTitle(getString(R.string.title_warning))
-                .setMessage(getString(R.string.txt_sure_to_delet))
+                .setMessage(getString(R.string.txt_sure_to_delete))
                 .setPositiveButton(getString(R.string.btn_yes)) { dialogInterface: DialogInterface, i: Int ->
                     viewModel.deleteExercise(exercise)
                 }

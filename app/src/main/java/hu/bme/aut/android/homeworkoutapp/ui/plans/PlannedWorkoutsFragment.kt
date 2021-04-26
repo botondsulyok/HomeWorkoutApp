@@ -232,7 +232,7 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
         if(workout != null) {
             AlertDialog.Builder(context)
                 .setTitle(getString(R.string.title_warning))
-                .setMessage(getString(R.string.txt_sure_to_delet))
+                .setMessage(getString(R.string.txt_sure_to_delete))
                 .setPositiveButton(getString(R.string.btn_yes)) { dialogInterface: DialogInterface, i: Int ->
                     viewModel.deletePlannedWorkoutFromDate(workout)
                 }

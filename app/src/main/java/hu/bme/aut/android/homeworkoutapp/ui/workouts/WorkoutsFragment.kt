@@ -1,16 +1,18 @@
 package hu.bme.aut.android.homeworkoutapp.ui.workouts
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
 import hu.bme.aut.android.homeworkoutapp.MainActivity
+import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentWorkoutsBinding
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.recyclerview.WorkoutsRecyclerViewAdapter
@@ -50,7 +52,7 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
 
         binding.btnCreateWorkout.setOnClickListener {
             val action = WorkoutsFragmentDirections.actionNavigationWorkoutsToNewWorkoutFragment()
-            Navigation.findNavController(view).navigate(action)
+            findNavController().navigate(action)
         }
 
     }
@@ -93,9 +95,15 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
     }
 
     override fun onItemLongClick(workout: UiWorkout?): Boolean {
-        // TODO
         if(workout != null) {
-            viewModel.deleteWorkout(workout)
+            AlertDialog.Builder(context)
+                .setTitle(getString(R.string.title_warning))
+                .setMessage(getString(R.string.txt_sure_to_delete))
+                .setPositiveButton(getString(R.string.btn_yes)) { dialogInterface: DialogInterface, i: Int ->
+                    viewModel.deleteWorkout(workout)
+                }
+                .setNegativeButton(getString(R.string.btn_no), null)
+                .show()
         }
         return true
     }

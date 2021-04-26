@@ -99,6 +99,7 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModel>(
         super.onActivityCreated(savedInstanceState)
         mainActivity = activity as? MainActivity
         mainActivity?.setToolbarAndBottomNavigationViewVisible(true)
+        mainActivity?.binding?.toolbar?.title = args.workout.name
     }
 
     override fun onItemClick(exercise: UiExercise?): Boolean {
@@ -113,7 +114,7 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModel>(
     override fun onDeleteClick(exercise: UiExercise?): Boolean {
         AlertDialog.Builder(context)
             .setTitle(getString(R.string.title_warning))
-            .setMessage(getString(R.string.txt_sure_to_delet))
+            .setMessage(getString(R.string.txt_sure_to_delete))
             .setPositiveButton(getString(R.string.btn_yes)) { dialogInterface: DialogInterface, i: Int ->
                 if (exercise != null) {
                     viewModel.deleteWorkoutExercise(exercise)
