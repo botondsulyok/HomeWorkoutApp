@@ -24,19 +24,14 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class WorkoutsFragmentTest {
 
+    companion object {
+        val listItemNumberInTest = 2
+        val workoutInTest = UiWorkout("2", "Workout2")
+    }
+
     private lateinit var navController: TestNavHostController
 
     private lateinit var scenario: FragmentScenario<WorkoutsFragment>
-
-    private val listItemNumberInTest = 2
-
-    private val workoutInTest = UiWorkout("2", "Workout2")
-
-    private val workoutsList = MutableList(listItemNumberInTest + 2) {
-        UiWorkout(it.toString(), "Workout${it}")
-    }.apply {
-        this[listItemNumberInTest] = workoutInTest
-    }
 
     @Before
     fun initFragment() {
@@ -55,7 +50,6 @@ class WorkoutsFragmentTest {
             navController.setCurrentDestination(R.id.navigation_workouts)
         }
     }
-
 
     @Test
     fun whenCreateWorkoutButtonClicked_thenNewWorkoutFragmentVisible() {
@@ -82,7 +76,6 @@ class WorkoutsFragmentTest {
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.workoutFragment)
     }
 
-    // Todo nem működik
     @Test
     fun whenWorkoutLongClicked_thenAlertDialogVisible() {
         // When

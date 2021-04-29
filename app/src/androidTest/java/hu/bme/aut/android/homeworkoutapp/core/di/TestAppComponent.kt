@@ -11,7 +11,8 @@ import javax.inject.Singleton
     modules = [
         RainbowCakeModule::class,
         TestViewModelModule::class,
-        ApplicationModule::class
+        ApplicationModule::class,
+        TestDataModule::class
     ]
 )
 interface TestAppComponent : RainbowCakeComponent
