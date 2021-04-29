@@ -18,7 +18,8 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'hu.bme.aut.android.homeworkoutapp.CustomTestRunner'
     }
 
     buildTypes {
@@ -41,6 +42,7 @@ android {
         viewBinding true
         dataBinding true
     }
+
 }
 
 dependencies {
@@ -108,6 +110,10 @@ dependencies {
     // Dagger
     implementation 'com.google.dagger:dagger:2.32'
     kapt 'com.google.dagger:dagger-compiler:2.32'
+
+    // Dagger Test
+    kaptAndroidTest 'com.google.dagger:dagger-compiler:2.32'
+    kaptTest 'com.google.dagger:dagger-compiler:2.32'
 
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:26.5.0')
