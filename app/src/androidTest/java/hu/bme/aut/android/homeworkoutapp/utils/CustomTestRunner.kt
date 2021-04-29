@@ -1,8 +1,9 @@
-package hu.bme.aut.android.homeworkoutapp
+package hu.bme.aut.android.homeworkoutapp.utils
 
 import android.app.Application
 import android.content.Context
 import androidx.test.runner.AndroidJUnitRunner
+import hu.bme.aut.android.homeworkoutapp.core.WorkoutTestApplication
 
 
 class CustomTestRunner : AndroidJUnitRunner() {

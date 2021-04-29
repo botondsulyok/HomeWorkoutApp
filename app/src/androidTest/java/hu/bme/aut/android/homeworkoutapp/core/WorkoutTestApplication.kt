@@ -1,9 +1,9 @@
-package hu.bme.aut.android.homeworkoutapp
+package hu.bme.aut.android.homeworkoutapp.core
 
 import co.zsmb.rainbowcake.dagger.RainbowCakeApplication
 import co.zsmb.rainbowcake.dagger.RainbowCakeComponent
+import hu.bme.aut.android.homeworkoutapp.core.di.DaggerTestAppComponent
 import hu.bme.aut.android.homeworkoutapp.di.ApplicationModule
-import hu.bme.aut.android.homeworkoutapp.di.DaggerTestAppComponent
 
 class WorkoutTestApplication : RainbowCakeApplication() {
 

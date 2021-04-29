@@ -1,4 +1,4 @@
-package hu.bme.aut.android.homeworkoutapp.di
+package hu.bme.aut.android.homeworkoutapp.core.di
 
 import androidx.lifecycle.ViewModel
 import co.zsmb.rainbowcake.dagger.ViewModelKey
