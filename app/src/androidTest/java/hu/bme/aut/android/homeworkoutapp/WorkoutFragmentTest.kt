@@ -17,6 +17,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import hu.bme.aut.android.homeworkoutapp.core.di.TestDataModule
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.workout.WorkoutFragment
 import hu.bme.aut.android.homeworkoutapp.ui.workout.recyclerview.WorkoutExercisesRecyclerViewAdapter
@@ -34,7 +35,6 @@ class WorkoutFragmentTest {
     companion object {
         private val listItemNumberInTest = 2
         private val exerciseInTest = UiExercise("2", "Exercise2")
-        var exercisesList: List<UiExercise> = listOf()
     }
 
     private lateinit var navController: TestNavHostController
@@ -66,7 +66,7 @@ class WorkoutFragmentTest {
     @Test
     fun whenStartWorkoutButtonClicked_thenDoingExerciseFragmentVisible() {
         // Given
-        exercisesList = MutableList(listItemNumberInTest + 4) {
+        TestDataModule.exercisesList = MutableList(listItemNumberInTest + 4) {
             UiExercise(it.toString(), "Exercise${it}")
         }.apply {
             this[listItemNumberInTest] = exerciseInTest
@@ -85,7 +85,7 @@ class WorkoutFragmentTest {
     @Test
     fun whenStartWorkoutButtonClickedAndThereAreNoExercises_thenAlertTextShowsUp() {
         // Given
-        exercisesList = listOf()
+        TestDataModule.exercisesList = listOf()
         initFragment()
 
         // When

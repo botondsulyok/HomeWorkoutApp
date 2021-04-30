@@ -13,6 +13,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import hu.bme.aut.android.homeworkoutapp.core.di.TestDataModule
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.WorkoutsFragment
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.recyclerview.WorkoutsRecyclerViewAdapter
@@ -27,7 +28,6 @@ class WorkoutsFragmentTest {
     companion object {
         private val listItemNumberInTest = 2
         private val workoutInTest = UiWorkout("2", "Workout2")
-        var workoutsList: List<UiWorkout> = listOf()
     }
 
     private lateinit var navController: TestNavHostController
@@ -36,7 +36,7 @@ class WorkoutsFragmentTest {
 
     @Before
     fun initFragment() {
-        workoutsList = MutableList(WorkoutsFragmentTest.listItemNumberInTest + 4) {
+        TestDataModule.workoutsList = MutableList(WorkoutsFragmentTest.listItemNumberInTest + 4) {
             UiWorkout(it.toString(), "Workout${it}")
         }.apply {
             this[WorkoutsFragmentTest.listItemNumberInTest] = WorkoutsFragmentTest.workoutInTest
