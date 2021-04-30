@@ -25,7 +25,7 @@ import java.util.*
 
 
 class DoingExerciseFragment :
-    RainbowCakeFragment<DoingExerciseViewState, DoingExerciseViewModel>(), TextToSpeech.OnInitListener {
+    RainbowCakeFragment<DoingExerciseViewState, DoingExerciseViewModelBase>(), TextToSpeech.OnInitListener {
 
     override fun provideViewModel() = getViewModelFromFactory()
     override fun getViewResource() = 0

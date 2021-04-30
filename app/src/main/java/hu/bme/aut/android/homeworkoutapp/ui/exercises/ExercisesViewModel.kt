@@ -9,9 +9,9 @@ import javax.inject.Inject
 
 class ExercisesViewModel @Inject constructor(
     private val exercisesPresenter: ExercisesPresenter
-) : RainbowCakeViewModel<ExercisesViewState>(Loading) {
+) : ExercisesViewModelBase() {
 
-    fun getExercises() = execute {
+    override fun getExercises() = execute {
         viewState = Loading
         val result = exercisesPresenter.getExercises()
         viewState = when(result) {
@@ -24,7 +24,7 @@ class ExercisesViewModel @Inject constructor(
         }
     }
 
-    fun deleteExercise(exercise: UiExercise) = execute {
+    override fun deleteExercise(exercise: UiExercise) = execute {
         viewState = Loading
         when(val result = exercisesPresenter.deleteExercise(exercise)) {
             is ResultSuccess -> {
@@ -36,7 +36,7 @@ class ExercisesViewModel @Inject constructor(
         }
     }
 
-    fun updateExercise(exercise: UiExercise) = execute {
+    override fun updateExercise(exercise: UiExercise) = execute {
         viewState = Loading
         when(val result = exercisesPresenter.updateExercise(exercise)) {
             is ResultSuccess -> {
@@ -48,7 +48,7 @@ class ExercisesViewModel @Inject constructor(
         }
     }
 
-    fun addExerciseToWorkout(
+    override fun addExerciseToWorkout(
         exercise: UiExercise,
         workoutId: String
     ) = execute {

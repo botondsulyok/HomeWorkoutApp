@@ -23,7 +23,7 @@ import hu.bme.aut.android.homeworkoutapp.databinding.FragmentWelcomeBinding
 import hu.bme.aut.android.homeworkoutapp.utils.Credentials
 
 
-class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModel>() {
+class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModelBase>() {
 
     override fun provideViewModel() = getViewModelFromFactory()
     override fun getViewResource() = 0

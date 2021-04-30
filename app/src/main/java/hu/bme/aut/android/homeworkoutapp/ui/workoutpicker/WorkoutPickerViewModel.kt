@@ -11,9 +11,9 @@ import javax.inject.Inject
 
 class WorkoutPickerViewModel @Inject constructor(
     private val workoutPickerPresenter: WorkoutPickerPresenter
-) : RainbowCakeViewModel<WorkoutPickerViewState>(Loading) {
+) : WorkoutPickerViewModelBase() {
 
-    fun getWorkouts() = execute {
+    override fun getWorkouts() = execute {
         viewState = Loading
         val result = workoutPickerPresenter.getWorkouts()
         viewState = when (result) {
@@ -26,7 +26,7 @@ class WorkoutPickerViewModel @Inject constructor(
         }
     }
 
-    fun toReadyState() {
+    override fun toReadyState() {
         viewState = Ready
     }
 

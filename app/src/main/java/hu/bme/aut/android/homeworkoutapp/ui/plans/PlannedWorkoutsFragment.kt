@@ -37,7 +37,7 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 
-class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, PlannedWorkoutsViewModel>(),
+class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, PlannedWorkoutsViewModelBase>(),
     PlannedWorkoutRecyclerViewAdapter.PlannedWorkoutItemClickListener {
 
     override fun provideViewModel() = getViewModelFromFactory()

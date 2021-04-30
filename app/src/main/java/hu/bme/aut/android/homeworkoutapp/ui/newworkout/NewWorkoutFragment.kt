@@ -13,7 +13,7 @@ import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewWorkoutBinding
 import hu.bme.aut.android.homeworkoutapp.ui.newworkout.models.UiNewWorkout
 import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
 
-class NewWorkoutFragment : RainbowCakeFragment<NewWorkoutViewState, NewWorkoutViewModel>() {
+class NewWorkoutFragment : RainbowCakeFragment<NewWorkoutViewState, NewWorkoutViewModelBase>() {
 
     override fun provideViewModel() = getViewModelFromFactory()
     override fun getViewResource() = 0

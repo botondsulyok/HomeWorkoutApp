@@ -22,7 +22,7 @@ import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.StartExerc
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.workout.recyclerview.WorkoutExercisesRecyclerViewAdapter
 
-class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModel>(), WorkoutExercisesRecyclerViewAdapter.ExerciseItemClickListener {
+class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModelBase>(), WorkoutExercisesRecyclerViewAdapter.ExerciseItemClickListener {
 
     override fun provideViewModel() = getViewModelFromFactory()
     override fun getViewResource() = 0

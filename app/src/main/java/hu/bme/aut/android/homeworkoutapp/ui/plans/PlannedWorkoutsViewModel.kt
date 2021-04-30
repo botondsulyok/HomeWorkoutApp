@@ -16,15 +16,15 @@ import javax.inject.Inject
 
 class PlannedWorkoutsViewModel @Inject constructor(
     private val plannedWorkoutsPresenter: PlannedWorkoutsPresenter
-) : RainbowCakeViewModel<PlannedWorkoutsViewState>(PlannedWorkoutsLoading) {
+) : PlannedWorkoutsViewModelBase() {
 
-    var selectedDate: LocalDate = LocalDate.now()
+    override var selectedDate: LocalDate = LocalDate.now()
 
-    val plannedWorkoutsFromMonthLiveData: MutableLiveData<List<Date>> by lazy {
+    override val plannedWorkoutsFromMonthLiveData: MutableLiveData<List<Date>> by lazy {
         MutableLiveData<List<Date>>()
     }
 
-    fun getPlannedWorkoutsFromDate() = execute {
+    override fun getPlannedWorkoutsFromDate() = execute {
         viewState = PlannedWorkoutsLoading
         val result = plannedWorkoutsPresenter.getPlannedWorkoutsFromDate(selectedDate)
         viewState = when(result) {
@@ -38,7 +38,7 @@ class PlannedWorkoutsViewModel @Inject constructor(
         }
     }
 
-    fun getPlannedDaysFromMonth(month: LocalDate) = execute {
+    override fun getPlannedDaysFromMonth(month: LocalDate) = execute {
         when(val result = plannedWorkoutsPresenter.getPlannedDaysFromMonth(month)) {
             is ResultSuccess -> {
                 plannedWorkoutsFromMonthLiveData.postValue(result.value)
@@ -49,7 +49,7 @@ class PlannedWorkoutsViewModel @Inject constructor(
         }
     }
 
-    fun addPlannedWorkoutToDate(
+    override fun addPlannedWorkoutToDate(
         workout: UiWorkout
     ) = execute {
         viewState = PlannedWorkoutUploading
@@ -63,7 +63,7 @@ class PlannedWorkoutsViewModel @Inject constructor(
         }
     }
 
-    fun deletePlannedWorkoutFromDate(workout: UiWorkout) = execute {
+    override fun deletePlannedWorkoutFromDate(workout: UiWorkout) = execute {
         viewState = PlannedWorkoutsLoading
         when(val result = plannedWorkoutsPresenter.deletePlannedWorkoutFromDate(selectedDate, workout)) {
             is ResultSuccess -> {

@@ -1,5 +1,7 @@
-package hu.bme.aut.android.homeworkoutapp.ui.workouts
+package hu.bme.aut.android.homeworkoutapp.core.testviewmodels
 
+import hu.bme.aut.android.homeworkoutapp.ui.workouts.Loaded
+import hu.bme.aut.android.homeworkoutapp.ui.workouts.WorkoutsViewModelBase
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import javax.inject.Inject
 

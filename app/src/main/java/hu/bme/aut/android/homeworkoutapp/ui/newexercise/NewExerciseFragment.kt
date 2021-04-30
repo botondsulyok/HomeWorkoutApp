@@ -29,7 +29,7 @@ import java.io.Serializable
 
 
 @RuntimePermissions
-class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExerciseViewModel>() {
+class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExerciseViewModelBase>() {
 
     override fun provideViewModel() = getViewModelFromFactory()
     override fun getViewResource() = 0

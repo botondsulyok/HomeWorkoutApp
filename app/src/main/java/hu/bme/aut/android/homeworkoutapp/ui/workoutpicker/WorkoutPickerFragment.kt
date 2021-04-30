@@ -18,7 +18,7 @@ import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.recyclerview.WorkoutPi
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import java.io.Serializable
 
-class WorkoutPickerFragment : RainbowCakeFragment<WorkoutPickerViewState, WorkoutPickerViewModel>(), WorkoutPickerRecyclerViewAdapter.WorkoutItemClickListener {
+class WorkoutPickerFragment : RainbowCakeFragment<WorkoutPickerViewState, WorkoutPickerViewModelBase>(), WorkoutPickerRecyclerViewAdapter.WorkoutItemClickListener {
 
     override fun provideViewModel() = getViewModelFromFactory()
     override fun getViewResource() = 0

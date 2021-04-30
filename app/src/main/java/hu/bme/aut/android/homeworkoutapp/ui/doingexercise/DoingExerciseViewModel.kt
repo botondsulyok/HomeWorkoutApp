@@ -8,20 +8,20 @@ import javax.inject.Inject
 
 
 class DoingExerciseViewModel @Inject constructor(
-) : RainbowCakeViewModel<DoingExerciseViewState>(Initial(UiExercise())) {
+) : DoingExerciseViewModelBase() {
 
-    var exercises = listOf<UiExercise>()
-    var currentExerciseNumber = 0
+    override var exercises = listOf<UiExercise>()
+    override var currentExerciseNumber = 0
 
-    var initialDurationInMilliseconds = 0
-    var initialReps = 0
+    override var initialDurationInMilliseconds = 0
+    override var initialReps = 0
 
-    fun addExercises(e: List<UiExercise>) = execute {
+    override fun addExercises(e: List<UiExercise>) = execute {
         exercises = e
         initExercise()
     }
 
-    fun nextExercise() = execute {
+    override fun nextExercise() = execute {
         if(currentExerciseNumber < exercises.size-1) {
             currentExerciseNumber++
             initExercise()
@@ -31,13 +31,13 @@ class DoingExerciseViewModel @Inject constructor(
         }
     }
 
-    private fun initExercise() {
+    override fun initExercise() {
         viewState = Ready(exercises[currentExerciseNumber])
         initialDurationInMilliseconds = viewState.exercise.duration.getDurationInMilliseconds()
         initialReps = viewState.exercise.reps
     }
 
-    fun startExercise() = execute {
+    override fun startExercise() = execute {
         viewState = DoingExercise(viewState.exercise)
         object : CountDownTimer(viewState.exercise.duration.getDurationInMilliseconds().toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -50,7 +50,7 @@ class DoingExerciseViewModel @Inject constructor(
         }.start()
     }
 
-    private fun calculateReps(): Int {
+    override fun calculateReps(): Int {
         if(viewState.exercise.videoLengthInMilliseconds == 0) {
             return viewState.exercise.duration.getDurationInMilliseconds() / (initialDurationInMilliseconds / initialReps)
         }

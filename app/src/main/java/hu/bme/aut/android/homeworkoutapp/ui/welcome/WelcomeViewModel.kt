@@ -8,9 +8,9 @@ import javax.inject.Inject
 
 class WelcomeViewModel @Inject constructor(
     private val welcomePresenter: WelcomePresenter
-) : RainbowCakeViewModel<WelcomeViewState>(Loading) {
+) : WelcomeViewModelBase() {
 
-    fun checkUserSignedIn() = execute {
+    override fun checkUserSignedIn() = execute {
         viewState = if(welcomePresenter.getCurrentUser() != null) {
             SignedIn
         } else {
@@ -18,7 +18,7 @@ class WelcomeViewModel @Inject constructor(
         }
     }
 
-    fun signInWithGoogle(credential: AuthCredential) = execute {
+    override fun signInWithGoogle(credential: AuthCredential) = execute {
         viewState = SigningIn
         val result = welcomePresenter.signInWithGoogle(credential)
         viewState = when(result) {

@@ -9,9 +9,9 @@ import javax.inject.Inject
 
 class NewExerciseViewModel @Inject constructor(
     private val newExercisePresenter: NewExercisePresenter
-) : RainbowCakeViewModel<NewExerciseViewState>(Initial) {
+) : NewExerciseViewModelBase() {
 
-    fun addExercise(exercise: UiNewExercise) = execute {
+    override fun addExercise(exercise: UiNewExercise) = execute {
         viewState = Uploading
         val result = newExercisePresenter.addExercise(exercise)
         viewState = when(result) {
@@ -24,7 +24,7 @@ class NewExerciseViewModel @Inject constructor(
         }
     }
 
-    fun toInitialState() {
+    override fun toInitialState() {
         viewState = Initial
     }
 
