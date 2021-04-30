@@ -67,11 +67,24 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModelBa
         recyclerViewAdapter.exerciseClickListener = this
         binding.workoutExercisesRecyclerView.adapter = recyclerViewAdapter
 
-        binding.fabAddExercise.setOnClickListener {
+        binding.fabStartWorkout.setOnClickListener {
             val currentState = viewModel.state.value
             if(currentState is Loaded) {
-                val action = DoingExerciseFragmentDirections.actionGlobalDoingExerciseFragment(currentState.exercisesList.toTypedArray())
-                findNavController().navigate(action)
+                if(currentState.exercisesList.isEmpty()) {
+                    AlertDialog.Builder(context)
+                        .setTitle(getString(R.string.title_warning))
+                        .setMessage(getString(R.string.txt_first_add_exercises))
+                        .setPositiveButton(getString(R.string.btn_yes)) { dialogInterface: DialogInterface, i: Int ->
+                            val action = DoingExerciseFragmentDirections.actionGlobalNavigationExercises()
+                            findNavController().navigate(action)
+                        }
+                        .setNegativeButton(getString(R.string.btn_no), null)
+                        .show()
+                }
+                else {
+                    val action = DoingExerciseFragmentDirections.actionGlobalDoingExerciseFragment(currentState.exercisesList.toTypedArray())
+                    findNavController().navigate(action)
+                }
             }
         }
 
@@ -103,12 +116,13 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModelBa
     }
 
     override fun onItemClick(exercise: UiExercise?): Boolean {
-        // TODO edit feature
-        TODO("Not yet implemented")
+        // todo
+        return true
     }
 
     override fun onItemLongClick(exercise: UiExercise?): Boolean {
-        TODO("Not yet implemented")
+        // todo
+        return true
     }
 
     override fun onDeleteClick(exercise: UiExercise?): Boolean {

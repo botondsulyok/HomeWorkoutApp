@@ -2,8 +2,9 @@ package hu.bme.aut.android.homeworkoutapp.core.testviewmodels
 
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesViewModelBase
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
+import javax.inject.Inject
 
-class TestExercisesViewModel : ExercisesViewModelBase() {
+class TestExercisesViewModel @Inject constructor() : ExercisesViewModelBase() {
 
     override fun getExercises() {
 

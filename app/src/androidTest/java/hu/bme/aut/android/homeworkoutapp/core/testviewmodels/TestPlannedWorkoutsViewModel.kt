@@ -5,8 +5,9 @@ import hu.bme.aut.android.homeworkoutapp.ui.plans.PlannedWorkoutsViewModelBase
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import java.time.LocalDate
 import java.util.*
+import javax.inject.Inject
 
-class TestPlannedWorkoutsViewModel : PlannedWorkoutsViewModelBase() {
+class TestPlannedWorkoutsViewModel @Inject constructor() : PlannedWorkoutsViewModelBase() {
 
     override var selectedDate: LocalDate = LocalDate.now()
 

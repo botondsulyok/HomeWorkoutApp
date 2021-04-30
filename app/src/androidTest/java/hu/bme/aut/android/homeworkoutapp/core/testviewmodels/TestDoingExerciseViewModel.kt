@@ -2,8 +2,9 @@ package hu.bme.aut.android.homeworkoutapp.core.testviewmodels
 
 import hu.bme.aut.android.homeworkoutapp.ui.doingexercise.DoingExerciseViewModelBase
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
+import javax.inject.Inject
 
-class TestDoingExerciseViewModel : DoingExerciseViewModelBase() {
+class TestDoingExerciseViewModel @Inject constructor() : DoingExerciseViewModelBase() {
 
     override var exercises: List<UiExercise> = listOf()
 

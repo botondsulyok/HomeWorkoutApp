@@ -25,8 +25,9 @@ import org.junit.runner.RunWith
 class WorkoutsFragmentTest {
 
     companion object {
-        val listItemNumberInTest = 2
-        val workoutInTest = UiWorkout("2", "Workout2")
+        private val listItemNumberInTest = 2
+        private val workoutInTest = UiWorkout("2", "Workout2")
+        var workoutsList: List<UiWorkout> = listOf()
     }
 
     private lateinit var navController: TestNavHostController
@@ -35,6 +36,12 @@ class WorkoutsFragmentTest {
 
     @Before
     fun initFragment() {
+        workoutsList = MutableList(WorkoutsFragmentTest.listItemNumberInTest + 4) {
+            UiWorkout(it.toString(), "Workout${it}")
+        }.apply {
+            this[WorkoutsFragmentTest.listItemNumberInTest] = WorkoutsFragmentTest.workoutInTest
+        }
+
         navController = TestNavHostController(
             ApplicationProvider.getApplicationContext()
         )
