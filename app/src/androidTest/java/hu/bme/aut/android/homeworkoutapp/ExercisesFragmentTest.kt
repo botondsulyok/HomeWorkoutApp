@@ -16,12 +16,12 @@ import hu.bme.aut.android.homeworkoutapp.core.di.TestDataModule
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.recyclerview.WorkoutsRecyclerViewAdapter
-import hu.bme.aut.android.homeworkoutapp.utils.RecyclerViewMatcher
+import hu.bme.aut.android.homeworkoutapp.utils.withViewAtPosition
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.not
 
 
 @RunWith(AndroidJUnit4::class)
@@ -85,8 +85,10 @@ class ExercisesFragmentTest {
             )
 
         // Then
-        onView(withRecyclerView(R.id.exercisesRecyclerView).atPosition(listItemNumberInTest))
-            .check(matches(hasDescendant(allOf(withId(R.id.ibStart), not(isDisplayed())))))
+        onView(withId(R.id.exercisesRecyclerView))
+            .check(matches(withViewAtPosition(
+                listItemNumberInTest,
+                hasDescendant(allOf(withId(R.id.ibStart), not(isDisplayed()))))))
     }
 
     @Test
@@ -106,17 +108,14 @@ class ExercisesFragmentTest {
             )
 
         // Then
-        onView(withRecyclerView(R.id.exercisesRecyclerView).atPosition(listItemNumberInTest))
-            .check(matches(hasDescendant(allOf(withId(R.id.ibStart), isDisplayed()))))
+        onView(withId(R.id.exercisesRecyclerView))
+            .check(matches(withViewAtPosition(
+                listItemNumberInTest,
+                hasDescendant(allOf(withId(R.id.ibStart), isDisplayed())))))
     }
 
-    @Test
-    fun whenExerciseClicked_thenButtonsVisible() {
-    }
 
-    private fun withRecyclerView(recyclerViewId: Int): RecyclerViewMatcher {
-        return RecyclerViewMatcher(recyclerViewId)
-    }
+
 
 
 

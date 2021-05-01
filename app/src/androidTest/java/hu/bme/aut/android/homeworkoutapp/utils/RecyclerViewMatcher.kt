@@ -1,57 +1,20 @@
 package hu.bme.aut.android.homeworkoutapp.utils
 
-import android.content.res.Resources
-import android.content.res.Resources.NotFoundException
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.matcher.BoundedMatcher
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.TypeSafeMatcher
 
+fun withViewAtPosition(position: Int, itemMatcher: Matcher<View?>): Matcher<View?> {
+    return object : BoundedMatcher<View?, RecyclerView>(RecyclerView::class.java) {
+        override fun describeTo(description: Description) {
+            itemMatcher.describeTo(description)
+        }
 
-class RecyclerViewMatcher(private val recyclerViewId: Int) {
-    fun atPosition(position: Int): Matcher<View> {
-        return atPositionOnView(position, -1)
-    }
-
-    private fun atPositionOnView(position: Int, targetViewId: Int): Matcher<View> {
-        return object : TypeSafeMatcher<View>() {
-            var resources: Resources? = null
-            var childView: View? = null
-            override fun describeTo(description: Description) {
-                var idDescription = recyclerViewId.toString()
-                if (resources != null) {
-                    idDescription = try {
-                        resources!!.getResourceName(recyclerViewId)
-                    } catch (var4: NotFoundException) {
-                        String.format(
-                            "%s (resource name not found)",
-                            Integer.valueOf(recyclerViewId)
-                        )
-                    }
-                }
-                description.appendText("with id: $idDescription")
-            }
-
-            public override fun matchesSafely(view: View): Boolean {
-                resources = view.resources
-                if (childView == null) {
-                    val recyclerView = view.rootView.findViewById<View>(
-                        recyclerViewId
-                    ) as RecyclerView
-                    childView = if (recyclerView.id == recyclerViewId) {
-                        recyclerView.findViewHolderForAdapterPosition(position)!!.itemView
-                    } else {
-                        return false
-                    }
-                }
-                return if (targetViewId == -1) {
-                    view === childView
-                } else {
-                    val targetView = childView!!.findViewById<View>(targetViewId)
-                    view === targetView
-                }
-            }
+        override fun matchesSafely(recyclerView: RecyclerView): Boolean {
+            val viewHolder = recyclerView.findViewHolderForAdapterPosition(position)
+            return viewHolder != null && itemMatcher.matches(viewHolder.itemView)
         }
     }
 }
