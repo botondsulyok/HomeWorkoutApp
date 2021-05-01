@@ -26,4 +26,6 @@
     <string name="menu_add_exercise_to_workout">Add this exercise to a workout</string>
     <string name="menu_sign_out">Sign out</string>
     <string name="txt_first_add_exercises">First add some exercises. Would you like to do it now?</string>
+    <string name="error_add_a_name">Add a name!</string>
+    <string name="desc_create_a_new_workout">Create a new workout</string>
 </resources>

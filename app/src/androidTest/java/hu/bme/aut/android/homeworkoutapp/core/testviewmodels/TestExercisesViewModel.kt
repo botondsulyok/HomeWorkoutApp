@@ -1,13 +1,16 @@
 package hu.bme.aut.android.homeworkoutapp.core.testviewmodels
 
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesViewModelBase
+import hu.bme.aut.android.homeworkoutapp.ui.exercises.Loaded
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import javax.inject.Inject
 
-class TestExercisesViewModel @Inject constructor() : ExercisesViewModelBase() {
+class TestExercisesViewModel @Inject constructor(
+    val exercisesList: List<UiExercise>
+) : ExercisesViewModelBase() {
 
     override fun getExercises() {
-
+        viewState = Loaded(exercisesList)
     }
 
     override fun deleteExercise(exercise: UiExercise) {
