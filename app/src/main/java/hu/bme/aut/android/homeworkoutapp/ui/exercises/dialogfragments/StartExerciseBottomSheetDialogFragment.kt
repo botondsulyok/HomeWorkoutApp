@@ -16,6 +16,9 @@ import hu.bme.aut.android.homeworkoutapp.utils.toInt
 class StartExerciseBottomSheetDialogFragment
     : BottomSheetDialogFragment() {
 
+    // todo lehetne ez is egy navigation
+    // todo használhatna az előző fragmenttel shared viewmodelt (de ugye több helyen ishasználva van ez a dialogfragment)
+
     companion object {
         const val START_EXERCISE = "START_EXERCISE"
         const val EXERCISE_VALUE = "EXERCISE_VALUE"

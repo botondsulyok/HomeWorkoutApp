@@ -7,15 +7,21 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
 import hu.bme.aut.android.homeworkoutapp.core.di.TestDataModule
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
+import hu.bme.aut.android.homeworkoutapp.ui.workouts.recyclerview.WorkoutsRecyclerViewAdapter
+import hu.bme.aut.android.homeworkoutapp.utils.RecyclerViewMatcher
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.not
 
 
 @RunWith(AndroidJUnit4::class)
@@ -68,10 +74,23 @@ class ExercisesFragmentTest {
     }
 
 
-    // todo
-    /*
     @Test
-    fun whenExerciseClicked_thenImageVisible() {
+    fun whenExerciseNotClicked_thenStartButtonNotVisible() {
+        // When
+        onView(withId(R.id.exercisesRecyclerView))
+            .perform(
+                RecyclerViewActions.actionOnItemAtPosition<WorkoutsRecyclerViewAdapter.ViewHolder>(
+                    listItemNumberInTest, ViewActions.scrollTo()
+                )
+            )
+
+        // Then
+        onView(withRecyclerView(R.id.exercisesRecyclerView).atPosition(listItemNumberInTest))
+            .check(matches(hasDescendant(allOf(withId(R.id.ibStart), not(isDisplayed())))))
+    }
+
+    @Test
+    fun whenExerciseClicked_thenStartButtonVisible() {
         // When
         onView(withId(R.id.exercisesRecyclerView))
             .perform(
@@ -87,26 +106,18 @@ class ExercisesFragmentTest {
             )
 
         // Then
-        onView(withId(R.id.exercisesRecyclerView))
-            .check(matches(withViewAtPosition(listItemNumberInTest, allOf(withId(R.id.ivVideoThumbnail), isDisplayed()))))
+        onView(withRecyclerView(R.id.exercisesRecyclerView).atPosition(listItemNumberInTest))
+            .check(matches(hasDescendant(allOf(withId(R.id.ibStart), isDisplayed()))))
     }
 
     @Test
     fun whenExerciseClicked_thenButtonsVisible() {
     }
 
-    private fun withViewAtPosition(position: Int, itemMatcher: Matcher<View?>): Matcher<View?> {
-        return object : BoundedMatcher<View?, RecyclerView>(RecyclerView::class.java) {
-            override fun describeTo(description: Description?) {
-                itemMatcher.describeTo(description)
-            }
-
-            override fun matchesSafely(recyclerView: RecyclerView): Boolean {
-                val viewHolder = recyclerView.findViewHolderForAdapterPosition(position)
-                return viewHolder != null && itemMatcher.matches(viewHolder.itemView)
-            }
-        }
+    private fun withRecyclerView(recyclerViewId: Int): RecyclerViewMatcher {
+        return RecyclerViewMatcher(recyclerViewId)
     }
-    */
+
+
 
 }

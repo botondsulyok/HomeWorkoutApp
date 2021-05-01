@@ -42,7 +42,7 @@ class NewWorkoutFragmentTest {
         }
 
         scenario.onFragment { fragment ->
-            // init graph and set destination to WorkoutsFragment
+            // init graph and set destination to NewWorkoutFragment
             navController.setGraph(R.navigation.mobile_navigation)
             Navigation.setViewNavController(fragment.requireView(), navController)
             navController.setCurrentDestination(R.id.newWorkoutFragment)
