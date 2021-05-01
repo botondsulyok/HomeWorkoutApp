@@ -28,4 +28,5 @@
     <string name="txt_first_add_exercises">First add some exercises. Would you like to do it now?</string>
     <string name="error_add_a_name">Add a name!</string>
     <string name="desc_create_a_new_workout">Create a new workout</string>
+    <string name="desc_create_a_new_exercise">Create a new exercise</string>
 </resources>

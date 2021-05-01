@@ -7,6 +7,8 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
@@ -48,7 +50,7 @@ class NewWorkoutFragmentTest {
     }
 
     @Test
-    fun whenCreateButtonClickedWithEmptyNameEditText_thenEditTextHasErrorText() {
+    fun whenCreateButtonClickedWithEmptyTitleEditText_thenEditTextHasErrorText() {
         // Given
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -62,7 +64,7 @@ class NewWorkoutFragmentTest {
     }
 
     @Test
-    fun whenCreateButtonClickedWithEmptyNameEditText_thenPopBackStackDoesNotHappen() {
+    fun whenCreateButtonClickedWithEmptyTitleEditText_thenPopBackStackDoesNotHappen() {
         // When
         onView(Matchers.allOf(withId(R.id.btnCreate), withContentDescription(R.string.desc_create_a_new_workout)))
             .perform(ViewActions.click())
@@ -72,10 +74,10 @@ class NewWorkoutFragmentTest {
     }
 
     @Test
-    fun whenCreateButtonClickedWithNotEmptyNameEditText_thenPopBackStack() {
+    fun whenCreateButtonClickedWithNotEmptyTitleEditText_thenPopBackStack() {
         // When
-        onView(withId(R.id.etTitle)).perform(ViewActions.typeText("Workout title"))
-        onView(ViewMatchers.isRoot()).perform(ViewActions.closeSoftKeyboard())
+        onView(withId(R.id.etTitle)).perform(typeText("Workout title"))
+        onView(ViewMatchers.isRoot()).perform(closeSoftKeyboard())
         onView(Matchers.allOf(withId(R.id.btnCreate), withContentDescription(R.string.desc_create_a_new_workout)))
             .perform(ViewActions.click())
 
