@@ -92,6 +92,11 @@ dependencies {
     // classpath.
     androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.3.0'
 
+    //Barista
+    androidTestImplementation('com.schibsted.spain:barista:3.9.0') {
+        exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
+    }
+
     // Mockito framework
     testImplementation 'org.mockito:mockito-core:3.9.0'
     androidTestImplementation 'org.mockito:mockito-android:3.9.0'

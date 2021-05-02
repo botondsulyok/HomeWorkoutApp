@@ -16,6 +16,7 @@ import hu.bme.aut.android.homeworkoutapp.core.di.TestDataModule
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExercisesFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.recyclerview.WorkoutsRecyclerViewAdapter
+import hu.bme.aut.android.homeworkoutapp.utils.clickOnViewChild
 import hu.bme.aut.android.homeworkoutapp.utils.withViewAtPosition
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
@@ -27,10 +28,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ExercisesFragmentTest {
 
-    companion object {
-        private val listItemNumberInTest = 2
-        private val exerciseInTest = UiExercise("2", "Exercise2")
-    }
+    private val listItemNumberInTest = 2
+    private val exerciseInTest = UiExercise("2", "Exercise2")
 
     private lateinit var navController: TestNavHostController
 
@@ -112,6 +111,42 @@ class ExercisesFragmentTest {
             .check(matches(withViewAtPosition(
                 listItemNumberInTest,
                 hasDescendant(allOf(withId(R.id.ibStart), isDisplayed())))))
+    }
+
+    @Test
+    fun whenExerciseStartButtonClicked_thenStartExerciseBottomSheetDialogFragmentVisible() {
+        // When
+        onView(withId(R.id.exercisesRecyclerView))
+            .perform(
+                RecyclerViewActions.actionOnItemAtPosition<WorkoutsRecyclerViewAdapter.ViewHolder>(
+                    listItemNumberInTest, ViewActions.click()
+                )
+            )
+        onView(withId(R.id.exercisesRecyclerView)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<WorkoutsRecyclerViewAdapter.ViewHolder>(
+                listItemNumberInTest,
+                clickOnViewChild(R.id.ibStart)))
+
+        // Then
+        onView(withChild(withId(R.id.btnStart))).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun whenExerciseEditButtonClicked_thenEditExerciseBottomSheetDialogFragmentVisible() {
+        // When
+        onView(withId(R.id.exercisesRecyclerView))
+            .perform(
+                RecyclerViewActions.actionOnItemAtPosition<WorkoutsRecyclerViewAdapter.ViewHolder>(
+                    listItemNumberInTest, ViewActions.click()
+                )
+            )
+        onView(withId(R.id.exercisesRecyclerView)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<WorkoutsRecyclerViewAdapter.ViewHolder>(
+                listItemNumberInTest,
+                clickOnViewChild(R.id.ibEdit)))
+
+        // Then
+        onView(withChild(withId(R.id.btnSaveEdits))).check(matches(isDisplayed()))
     }
 
 
