@@ -121,7 +121,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
 
         binding.btnCreate.setOnClickListener {
             if(binding.etName.text?.isEmpty() == true) {
-                binding.etName.error = "Add a name!"
+                binding.etName.error = getString(R.string.error_add_a_name)
                 return@setOnClickListener
             }
             viewModel.addExercise(updatedExercise)
@@ -193,7 +193,7 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                 .into(binding.ivExerciseThumbnail)
             binding.rlExerciseVideo.visibility = View.VISIBLE
             binding.rlExerciseVideoThumbnail.visibility = View.VISIBLE
-            binding.btnAttachVideo.text = "Change Video"
+            binding.btnAttachVideo.text = getString(R.string.btn_change_video)
         }
     }
 

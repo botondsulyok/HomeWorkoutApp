@@ -19,6 +19,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import hu.bme.aut.android.homeworkoutapp.MainActivity
+import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentWelcomeBinding
 import hu.bme.aut.android.homeworkoutapp.utils.Credentials
 
@@ -126,9 +127,9 @@ class WelcomeFragment : RainbowCakeFragment<WelcomeViewState, WelcomeViewModelBa
             }
             is SignInFailed -> {
                 AlertDialog.Builder(context)
-                    .setTitle("Error")
+                    .setTitle(getString(R.string.title_error))
                     .setMessage(viewState.message)
-                    .setNeutralButton("OK", null)
+                    .setNeutralButton(getString(R.string.btn_ok), null)
                     .show()
                 binding.ivLoading.visibility = View.GONE
             }

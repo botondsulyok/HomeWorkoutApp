@@ -70,7 +70,7 @@
     <fragment
         android:id="@+id/navigation_welcome"
         android:name="hu.bme.aut.android.homeworkoutapp.ui.welcome.WelcomeFragment"
-        android:label="fragment_welcome"
+        android:label="@string/title_welcome"
         tools:layout="@layout/fragment_welcome" >
         <action
             android:id="@+id/action_login"
@@ -94,12 +94,12 @@
     <fragment
         android:id="@+id/newWorkoutFragment"
         android:name="hu.bme.aut.android.homeworkoutapp.ui.newworkout.NewWorkoutFragment"
-        android:label="fragment_new_workout"
+        android:label="@string/title_new_workout"
         tools:layout="@layout/fragment_new_workout" />
     <fragment
         android:id="@+id/newExerciseFragment"
         android:name="hu.bme.aut.android.homeworkoutapp.ui.newexercise.NewExerciseFragment"
-        android:label="fragment_new_exercise"
+        android:label="@string/title_new_exercise"
         tools:layout="@layout/fragment_new_exercise" >
         <action
             android:id="@+id/action_newExerciseFragment_to_recordNewExerciseFragment"
@@ -112,7 +112,7 @@
     <fragment
         android:id="@+id/doExerciseFragment"
         android:name="hu.bme.aut.android.homeworkoutapp.ui.doingexercise.DoingExerciseFragment"
-        android:label="fragment_do_exercise"
+        android:label="@string/title_doing_exercise"
         tools:layout="@layout/fragment_doing_exercise" >
         <argument
             android:name="exercises"
@@ -128,7 +128,7 @@
     <fragment
         android:id="@+id/recordNewExerciseFragment"
         android:name="hu.bme.aut.android.homeworkoutapp.ui.newexercise.RecordNewExerciseFragment"
-        android:label="fragment_record_new_exercise"
+        android:label="@string/title_record_exercise"
         tools:layout="@layout/fragment_record_new_exercise" >
         <argument
             android:name="exercise"
@@ -142,7 +142,7 @@
     <fragment
         android:id="@+id/workoutFragment"
         android:name="hu.bme.aut.android.homeworkoutapp.ui.workout.WorkoutFragment"
-        android:label="fragment_workout"
+        android:label="@string/title_workout"
         tools:layout="@layout/fragment_workout" >
         <argument
             android:name="workout"
@@ -151,7 +151,7 @@
     <fragment
         android:id="@+id/workoutPickerFragment"
         android:name="hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickerFragment"
-        android:label="fragment_workout_picker"
+        android:label="@string/title_workout_picker"
         tools:layout="@layout/fragment_workout_picker" >
         <argument
             android:name="selectedAction"
