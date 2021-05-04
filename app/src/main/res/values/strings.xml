@@ -27,4 +27,6 @@
     <string name="error_add_a_name">Add a name!</string>
     <string name="desc_create_a_new_workout">Create a new workout</string>
     <string name="desc_create_a_new_exercise">Create a new exercise</string>
+    <string name="btn_stop_recording">Stop Recording</string>
+    <string name="btn_start_recording">Start Recording</string>
 </resources>

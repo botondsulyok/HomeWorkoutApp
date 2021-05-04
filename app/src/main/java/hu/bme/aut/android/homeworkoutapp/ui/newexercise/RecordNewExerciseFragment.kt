@@ -26,6 +26,7 @@ import androidx.navigation.fragment.navArgs
 import com.gusakov.library.start
 import github.com.vikramezhil.dks.speech.Dks
 import github.com.vikramezhil.dks.speech.DksListener
+import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentRecordNewExerciseBinding
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import java.io.File
@@ -75,7 +76,7 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
         }
 
         binding.btnCapture.setOnClickListener {
-            if(binding.btnCapture.text == "Start Recording") {
+            if(binding.btnCapture.text == getString(R.string.btn_start_recording)) {
                 activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
                 binding.pulseCountDownRecordExercise.start {
                     startRecording()
@@ -97,8 +98,6 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
         }
 
     }
-
-    // todo laggol a videó
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -162,7 +161,7 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
             videoCapture = VideoCapture
                 .Builder()
-                .setBitRate(2_800_000)
+                .setBitRate(4_800_000)
                 .setMaxResolution(Size(2000, 2000))
                 .build()
 
@@ -185,11 +184,16 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
     @SuppressLint("RestrictedApi")
     private fun startRecording() {
-        if(binding.btnCapture.text == "Stop Recording") {
+        if(binding.btnCapture.text == getString(R.string.btn_stop_recording)) {
             return
         }
+
+        // egyelőre laggol a videó, ha közben fut a hangfelismerés, ezért le kell állítani
+        dks?.continuousSpeechRecognition = false
+        dks?.closeSpeechOperations()
+
         binding.btnSwitchCamera.visibility = View.GONE
-        binding.btnCapture.text = "Stop Recording"
+        binding.btnCapture.text = getString(R.string.btn_stop_recording)
         // Get a stable reference of the modifiable image capture use case
         val videoCapture = videoCapture ?: return
 
@@ -232,10 +236,10 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
     @SuppressLint("RestrictedApi")
     private fun stopRecording() {
-        if(binding.btnCapture.text == "Start Recording") {
+        if(binding.btnCapture.text == getString(R.string.btn_start_recording)) {
             return
         }
-        binding.btnCapture.text = "Start Recording"
+        binding.btnCapture.text = getString(R.string.btn_start_recording)
         videoCapture?.stopRecording()
         binding.btnSwitchCamera.visibility = View.VISIBLE
     }
