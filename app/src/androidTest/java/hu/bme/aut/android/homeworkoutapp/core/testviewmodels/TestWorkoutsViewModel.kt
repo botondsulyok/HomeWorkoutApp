@@ -10,7 +10,7 @@ class TestWorkoutsViewModel @Inject constructor(
 )
     : WorkoutsViewModelBase() {
 
-    override fun getWorkouts() = execute {
+    override fun loadWorkouts() = execute {
         viewState = Loaded(workoutsList)
     }
 

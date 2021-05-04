@@ -66,7 +66,7 @@ class WorkoutsFragment : RainbowCakeFragment<WorkoutsViewState, WorkoutsViewMode
 
     override fun onStart() {
         super.onStart()
-        viewModel.getWorkouts()
+        viewModel.loadWorkouts()
     }
 
     override fun render(viewState: WorkoutsViewState) {

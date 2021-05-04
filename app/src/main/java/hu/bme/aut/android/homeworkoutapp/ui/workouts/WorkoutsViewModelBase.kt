@@ -6,7 +6,7 @@ import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 abstract class WorkoutsViewModelBase
     : RainbowCakeViewModel<WorkoutsViewState>(Loading) {
 
-    abstract fun getWorkouts()
+    abstract fun loadWorkouts()
 
     abstract fun deleteWorkout(workout: UiWorkout)
 

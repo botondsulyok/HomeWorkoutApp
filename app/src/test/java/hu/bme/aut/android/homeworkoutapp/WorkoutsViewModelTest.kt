@@ -29,7 +29,7 @@ class WorkoutsViewModelTest : ViewModelTest() {
     private lateinit var viewModel: WorkoutsViewModel
 
     @Test
-    fun testGetWorkoutsResultSuccess() = runBlockingTest {
+    fun testLoadWorkoutsResultSuccess() = runBlockingTest {
         // Given
         val mockWorkoutPresenter = mock<WorkoutsPresenter>()
         whenever(mockWorkoutPresenter.getWorkouts()) doReturn ResultSuccess(value = WORKOUTS)
@@ -38,14 +38,14 @@ class WorkoutsViewModelTest : ViewModelTest() {
 
         //When, Then
         viewModel.observeStateAndEvents { stateObserver, eventsObserver ->
-            viewModel.getWorkouts()
+            viewModel.loadWorkouts()
             stateObserver.assertObserved(Loading, Loaded(WORKOUTS))
         }
         verify(mockWorkoutPresenter).getWorkouts()
     }
 
     @Test
-    fun testGetWorkoutsResultFailed() = runBlockingTest {
+    fun testLoadWorkoutsResultFailed() = runBlockingTest {
         // Given
         val mockWorkoutPresenter = mock<WorkoutsPresenter>()
         whenever(mockWorkoutPresenter.getWorkouts()) doReturn ResultFailure(FAILURE_REASON)
@@ -54,7 +54,7 @@ class WorkoutsViewModelTest : ViewModelTest() {
 
         //When, Then
         viewModel.observeStateAndEvents { stateObserver, eventsObserver ->
-            viewModel.getWorkouts()
+            viewModel.loadWorkouts()
             stateObserver.assertObserved(Loading, Failed(FAILURE_REASON.message.toString()))
         }
         verify(mockWorkoutPresenter).getWorkouts()
