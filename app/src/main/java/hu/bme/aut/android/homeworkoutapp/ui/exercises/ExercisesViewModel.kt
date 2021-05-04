@@ -1,15 +1,18 @@
 package hu.bme.aut.android.homeworkoutapp.ui.exercises
 
 import android.util.Log
+import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.ActionFailed
 import hu.bme.aut.android.homeworkoutapp.ui.ActionSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
+import hu.bme.aut.android.homeworkoutapp.utils.ResourcesHelper
 import javax.inject.Inject
 
 class ExercisesViewModel @Inject constructor(
-    private val exercisesPresenter: ExercisesPresenter
+    private val exercisesPresenter: ExercisesPresenter,
+    private val resourcesHelper: ResourcesHelper
 ) : ExercisesViewModelBase() {
 
     override fun loadExercises() = execute {
@@ -20,8 +23,7 @@ class ExercisesViewModel @Inject constructor(
         viewState = Loading
         when(val result = exercisesPresenter.deleteExercise(exercise)) {
             is ResultSuccess -> {
-                // todo https://stackoverflow.com/a/57201281/13091576
-                postEvent(ActionSuccess("Deleted"))
+                postEvent(ActionSuccess(resourcesHelper.getString(R.string.txt_deleted)))
             }
             is ResultFailure -> {
                 postEvent(ActionFailed(result.reason.message.toString()))
@@ -34,7 +36,7 @@ class ExercisesViewModel @Inject constructor(
         viewState = Loading
         when(val result = exercisesPresenter.updateExercise(exercise)) {
             is ResultSuccess -> {
-                postEvent(ActionSuccess("Updated"))
+                postEvent(ActionSuccess(resourcesHelper.getString(R.string.txt_updated)))
             }
             is ResultFailure -> {
                 postEvent(ActionFailed(result.reason.message.toString()))
@@ -49,7 +51,7 @@ class ExercisesViewModel @Inject constructor(
     ) = execute {
         when(val result = exercisesPresenter.addExerciseToWorkout(exercise, workoutId)) {
             is ResultSuccess -> {
-                postEvent(ActionSuccess("Added"))
+                postEvent(ActionSuccess(resourcesHelper.getString(R.string.txt_added)))
             }
             is ResultFailure -> {
                 postEvent(ActionFailed(result.reason.message.toString()))

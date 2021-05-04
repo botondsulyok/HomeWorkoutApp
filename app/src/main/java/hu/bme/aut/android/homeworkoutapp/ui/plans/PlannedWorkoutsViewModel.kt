@@ -4,11 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
+import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.ActionFailed
 import hu.bme.aut.android.homeworkoutapp.ui.ActionSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
+import hu.bme.aut.android.homeworkoutapp.utils.ResourcesHelper
 import hu.bme.aut.android.homeworkoutapp.utils.dayMonthYearFormatter
 import hu.bme.aut.android.homeworkoutapp.utils.toDate
 import hu.bme.aut.android.homeworkoutapp.utils.toMonthStr
@@ -17,7 +19,8 @@ import java.util.*
 import javax.inject.Inject
 
 class PlannedWorkoutsViewModel @Inject constructor(
-    private val plannedWorkoutsPresenter: PlannedWorkoutsPresenter
+    private val plannedWorkoutsPresenter: PlannedWorkoutsPresenter,
+    private val resourcesHelper: ResourcesHelper
 ) : PlannedWorkoutsViewModelBase() {
 
     override var selectedDate: LocalDate = LocalDate.now()
@@ -57,7 +60,7 @@ class PlannedWorkoutsViewModel @Inject constructor(
         viewState = PlannedWorkoutsLoading
         when(val result = plannedWorkoutsPresenter.addPlannedWorkoutToDate(selectedDate, workout)) {
             is ResultSuccess -> {
-                postEvent(ActionSuccess("Added"))
+                postEvent(ActionSuccess(resourcesHelper.getString(R.string.txt_added)))
             }
             is ResultFailure -> {
                 postEvent(ActionFailed(result.reason.message.toString()))
@@ -70,7 +73,7 @@ class PlannedWorkoutsViewModel @Inject constructor(
         viewState = PlannedWorkoutsLoading
         when(val result = plannedWorkoutsPresenter.deletePlannedWorkoutFromDate(selectedDate, workout)) {
             is ResultSuccess -> {
-                postEvent(ActionSuccess("Deleted"))
+                postEvent(ActionSuccess(resourcesHelper.getString(R.string.txt_deleted)))
             }
             is ResultFailure -> {
                 postEvent(ActionFailed(result.reason.message.toString()))

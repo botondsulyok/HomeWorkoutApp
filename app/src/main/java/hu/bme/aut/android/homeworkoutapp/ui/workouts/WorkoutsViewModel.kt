@@ -1,14 +1,17 @@
 package hu.bme.aut.android.homeworkoutapp.ui.workouts
 
+import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.ActionFailed
 import hu.bme.aut.android.homeworkoutapp.ui.ActionSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
+import hu.bme.aut.android.homeworkoutapp.utils.ResourcesHelper
 import javax.inject.Inject
 
 class WorkoutsViewModel @Inject constructor(
-    private val workoutsPresenter: WorkoutsPresenter
+    private val workoutsPresenter: WorkoutsPresenter,
+    private val resourcesHelper: ResourcesHelper
 ) : WorkoutsViewModelBase() {
 
     override fun loadWorkouts() = execute {
@@ -19,7 +22,7 @@ class WorkoutsViewModel @Inject constructor(
         viewState = Loading
         when(val result = workoutsPresenter.deleteWorkout(workout)) {
             is ResultSuccess -> {
-                postEvent(ActionSuccess("Deleted"))
+                postEvent(ActionSuccess(resourcesHelper.getString(R.string.txt_deleted)))
             }
             is ResultFailure -> {
                 postEvent(ActionFailed(result.reason.message.toString()))

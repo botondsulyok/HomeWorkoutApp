@@ -9,9 +9,13 @@ import hu.bme.aut.android.homeworkoutapp.ui.ActionFailed
 import hu.bme.aut.android.homeworkoutapp.ui.ActionSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.*
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
+import hu.bme.aut.android.homeworkoutapp.utils.ResourcesHelper
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -26,9 +30,17 @@ class ExercisesViewModelTest : ViewModelTest() {
             UiExercise(it.toString(), "Exercise${it}")
         }
         private val FAILURE_REASON = Exception("Something went wrong")
+        private const val MOCK_RESOURCES_HELPER_STRING = "MockResourcesHelperString"
     }
 
     private lateinit var viewModel: ExercisesViewModel
+
+    private val mockResourcesHelper = mock<ResourcesHelper>()
+
+    @Before
+    fun initResourcesHelperMock() {
+        whenever(mockResourcesHelper.getString(anyInt())) doReturn MOCK_RESOURCES_HELPER_STRING
+    }
 
     @Test
     fun testLoadExercisesResultSuccess() = runBlockingTest {
@@ -36,7 +48,7 @@ class ExercisesViewModelTest : ViewModelTest() {
         val mockExercisesPresenter = mock<ExercisesPresenter>()
         whenever(mockExercisesPresenter.getExercises()) doReturn ResultSuccess(value = EXERCISES)
 
-        viewModel = ExercisesViewModel(mockExercisesPresenter)
+        viewModel = ExercisesViewModel(mockExercisesPresenter, mockResourcesHelper)
 
         //When, Then
         viewModel.observeStateAndEvents { stateObserver, eventsObserver ->
@@ -52,7 +64,7 @@ class ExercisesViewModelTest : ViewModelTest() {
         val mockExercisePresenter = mock<ExercisesPresenter>()
         whenever(mockExercisePresenter.getExercises()) doReturn ResultFailure(FAILURE_REASON)
 
-        viewModel = ExercisesViewModel(mockExercisePresenter)
+        viewModel = ExercisesViewModel(mockExercisePresenter, mockResourcesHelper)
 
         //When, Then
         viewModel.observeStateAndEvents { stateObserver, eventsObserver ->
@@ -69,12 +81,13 @@ class ExercisesViewModelTest : ViewModelTest() {
         whenever(mockExercisePresenter.deleteExercise(EXERCISES[0])) doReturn ResultSuccess(Unit)
         whenever(mockExercisePresenter.getExercises()) doReturn ResultSuccess(value = EXERCISES)
 
-        viewModel = ExercisesViewModel(mockExercisePresenter)
+        viewModel = ExercisesViewModel(mockExercisePresenter, mockResourcesHelper)
 
         //When, Then
         viewModel.observeStateAndEvents { stateObserver, eventsObserver ->
             viewModel.deleteExercise(EXERCISES[0])
             stateObserver.assertObserved(Loading, Loaded(EXERCISES))
+            eventsObserver.assertObserved(ActionSuccess(MOCK_RESOURCES_HELPER_STRING))
         }
         verify(mockExercisePresenter).deleteExercise(EXERCISES[0])
         verify(mockExercisePresenter).getExercises()
@@ -87,7 +100,7 @@ class ExercisesViewModelTest : ViewModelTest() {
         whenever(mockExercisePresenter.deleteExercise(EXERCISES[0])) doReturn ResultFailure(FAILURE_REASON)
         whenever(mockExercisePresenter.getExercises()) doReturn ResultSuccess(value = EXERCISES)
 
-        viewModel = ExercisesViewModel(mockExercisePresenter)
+        viewModel = ExercisesViewModel(mockExercisePresenter, mockResourcesHelper)
 
         //When, Then
         viewModel.observeStateAndEvents { stateObserver, eventsObserver ->

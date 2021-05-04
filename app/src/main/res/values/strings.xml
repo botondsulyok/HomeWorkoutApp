@@ -54,4 +54,10 @@
     <string name="tv_day_thu">THU</string>
     <string name="tv_day_fri">FRI</string>
     <string name="tv_day_sat">SAT</string>
+    <string name="txt_captured">Captured</string>
+    <string name="txt_deleted">Deleted</string>
+    <string name="txt_updated">Updated</string>
+    <string name="txt_added">Added</string>
+    <string name="txt_created">Created</string>
+    <string name="txt_upload_failed">Upload failed</string>
 </resources>

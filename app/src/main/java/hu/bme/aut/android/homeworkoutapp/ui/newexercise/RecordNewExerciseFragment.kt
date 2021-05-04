@@ -211,7 +211,7 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
                 override fun onVideoSaved(file: File) {
                     val savedUri = Uri.fromFile(videoFile)
                     val msg = "Video capture succeeded: $savedUri"
-                    Toast.makeText(requireContext(), "Captured", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.txt_captured), Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
 
                     val mp: MediaPlayer = MediaPlayer.create(activity, savedUri)
