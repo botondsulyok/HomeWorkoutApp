@@ -5,6 +5,7 @@ import co.zsmb.rainbowcake.test.base.ViewModelTest
 import co.zsmb.rainbowcake.test.observeStateAndEvents
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
+import hu.bme.aut.android.homeworkoutapp.ui.ActionFailed
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.*
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import kotlinx.coroutines.test.runBlockingTest
@@ -31,17 +32,17 @@ class WorkoutsViewModelTest : ViewModelTest() {
     @Test
     fun testLoadWorkoutsResultSuccess() = runBlockingTest {
         // Given
-        val mockWorkoutPresenter = mock<WorkoutsPresenter>()
-        whenever(mockWorkoutPresenter.getWorkouts()) doReturn ResultSuccess(value = WORKOUTS)
+        val mockWorkoutsPresenter = mock<WorkoutsPresenter>()
+        whenever(mockWorkoutsPresenter.getWorkouts()) doReturn ResultSuccess(value = WORKOUTS)
 
-        viewModel = WorkoutsViewModel(mockWorkoutPresenter)
+        viewModel = WorkoutsViewModel(mockWorkoutsPresenter)
 
         //When, Then
         viewModel.observeStateAndEvents { stateObserver, eventsObserver ->
             viewModel.loadWorkouts()
             stateObserver.assertObserved(Loading, Loaded(WORKOUTS))
         }
-        verify(mockWorkoutPresenter).getWorkouts()
+        verify(mockWorkoutsPresenter).getWorkouts()
     }
 
     @Test
@@ -63,19 +64,38 @@ class WorkoutsViewModelTest : ViewModelTest() {
     @Test
     fun testDeleteWorkoutResultSuccess() = runBlockingTest {
         // Given
-        val mockWorkoutPresenter = mock<WorkoutsPresenter>()
-        whenever(mockWorkoutPresenter.deleteWorkout(WORKOUTS[0])) doReturn ResultSuccess(Unit)
-        whenever(mockWorkoutPresenter.getWorkouts()) doReturn ResultSuccess(value = WORKOUTS)
+        val mockWorkoutsPresenter = mock<WorkoutsPresenter>()
+        whenever(mockWorkoutsPresenter.deleteWorkout(WORKOUTS[0])) doReturn ResultSuccess(Unit)
+        whenever(mockWorkoutsPresenter.getWorkouts()) doReturn ResultSuccess(value = WORKOUTS)
 
-        viewModel = WorkoutsViewModel(mockWorkoutPresenter)
+        viewModel = WorkoutsViewModel(mockWorkoutsPresenter)
 
         //When, Then
         viewModel.observeStateAndEvents { stateObserver, eventsObserver ->
             viewModel.deleteWorkout(WORKOUTS[0])
             stateObserver.assertObserved(Loading, Loaded(WORKOUTS))
         }
-        verify(mockWorkoutPresenter).deleteWorkout(WORKOUTS[0])
-        verify(mockWorkoutPresenter).getWorkouts()
+        verify(mockWorkoutsPresenter).deleteWorkout(WORKOUTS[0])
+        verify(mockWorkoutsPresenter).getWorkouts()
+    }
+
+    @Test
+    fun testDeleteWorkoutResultFailed() = runBlockingTest {
+        // Given
+        val mockWorkoutsPresenter = mock<WorkoutsPresenter>()
+        whenever(mockWorkoutsPresenter.deleteWorkout(WORKOUTS[0])) doReturn ResultFailure(FAILURE_REASON)
+        whenever(mockWorkoutsPresenter.getWorkouts()) doReturn ResultSuccess(value = WORKOUTS)
+
+        viewModel = WorkoutsViewModel(mockWorkoutsPresenter)
+
+        //When, Then
+        viewModel.observeStateAndEvents { stateObserver, eventsObserver ->
+            viewModel.deleteWorkout(WORKOUTS[0])
+            stateObserver.assertObserved(Loading, Loaded(WORKOUTS))
+            eventsObserver.assertObserved(ActionFailed(FAILURE_REASON.message.toString()))
+        }
+        verify(mockWorkoutsPresenter).deleteWorkout(WORKOUTS[0])
+        verify(mockWorkoutsPresenter).getWorkouts()
     }
 
 }

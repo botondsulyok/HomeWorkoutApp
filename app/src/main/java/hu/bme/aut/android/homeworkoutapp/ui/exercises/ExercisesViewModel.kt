@@ -20,6 +20,7 @@ class ExercisesViewModel @Inject constructor(
         viewState = Loading
         when(val result = exercisesPresenter.deleteExercise(exercise)) {
             is ResultSuccess -> {
+                // todo https://stackoverflow.com/a/57201281/13091576
                 postEvent(ActionSuccess("Deleted"))
             }
             is ResultFailure -> {
