@@ -11,7 +11,7 @@ class TestWorkoutViewModel @Inject constructor(
 
     override var workoutId: String = "0"
 
-    override fun getWorkoutExercises() {
+    override fun loadWorkoutExercises() {
         viewState = Loaded(exercisesList)
     }
 

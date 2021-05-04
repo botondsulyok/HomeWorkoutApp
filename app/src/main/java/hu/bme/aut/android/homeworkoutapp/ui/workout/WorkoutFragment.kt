@@ -88,7 +88,7 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModelBa
             }
         }
 
-        viewModel.getWorkoutExercises()
+        viewModel.loadWorkoutExercises()
 
     }
 

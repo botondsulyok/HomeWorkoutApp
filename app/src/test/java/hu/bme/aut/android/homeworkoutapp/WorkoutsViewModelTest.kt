@@ -47,17 +47,17 @@ class WorkoutsViewModelTest : ViewModelTest() {
     @Test
     fun testLoadWorkoutsResultFailed() = runBlockingTest {
         // Given
-        val mockWorkoutPresenter = mock<WorkoutsPresenter>()
-        whenever(mockWorkoutPresenter.getWorkouts()) doReturn ResultFailure(FAILURE_REASON)
+        val mockWorkoutsPresenter = mock<WorkoutsPresenter>()
+        whenever(mockWorkoutsPresenter.getWorkouts()) doReturn ResultFailure(FAILURE_REASON)
 
-        viewModel = WorkoutsViewModel(mockWorkoutPresenter)
+        viewModel = WorkoutsViewModel(mockWorkoutsPresenter)
 
         //When, Then
         viewModel.observeStateAndEvents { stateObserver, eventsObserver ->
             viewModel.loadWorkouts()
             stateObserver.assertObserved(Loading, Failed(FAILURE_REASON.message.toString()))
         }
-        verify(mockWorkoutPresenter).getWorkouts()
+        verify(mockWorkoutsPresenter).getWorkouts()
     }
 
     @Test

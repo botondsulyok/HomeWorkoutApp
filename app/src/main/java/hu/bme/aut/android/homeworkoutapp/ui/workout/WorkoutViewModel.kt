@@ -1,6 +1,5 @@
 package hu.bme.aut.android.homeworkoutapp.ui.workout
 
-import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
@@ -12,17 +11,8 @@ class WorkoutViewModel @Inject constructor(
 
     override var workoutId = ""
 
-    override fun getWorkoutExercises() = execute {
-        viewState = Loading
-        val result = workoutPresenter.getWorkoutExercises(workoutId)
-        viewState = when(result) {
-            is ResultSuccess -> {
-                Loaded(result.value)
-            }
-            is ResultFailure -> {
-                Failed(result.reason.message.toString())
-            }
-        }
+    override fun loadWorkoutExercises() = execute {
+        getWorkoutExercises()
     }
 
     override fun deleteWorkoutExercise(exercise: UiExercise) = execute {
@@ -47,6 +37,19 @@ class WorkoutViewModel @Inject constructor(
             is ResultFailure -> {
                 viewState =
                     Failed(result.reason.message.toString())
+            }
+        }
+    }
+
+    private suspend fun getWorkoutExercises() {
+        viewState = Loading
+        val result = workoutPresenter.getWorkoutExercises(workoutId)
+        viewState = when (result) {
+            is ResultSuccess -> {
+                Loaded(result.value)
+            }
+            is ResultFailure -> {
+                Failed(result.reason.message.toString())
             }
         }
     }

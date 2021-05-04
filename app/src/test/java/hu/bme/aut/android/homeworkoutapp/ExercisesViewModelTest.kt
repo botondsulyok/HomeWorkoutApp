@@ -31,17 +31,17 @@ class ExercisesViewModelTest : ViewModelTest() {
     @Test
     fun testLoadExercisesResultSuccess() = runBlockingTest {
         // Given
-        val mockExercisePresenter = mock<ExercisesPresenter>()
-        whenever(mockExercisePresenter.getExercises()) doReturn ResultSuccess(value = EXERCISES)
+        val mockExercisesPresenter = mock<ExercisesPresenter>()
+        whenever(mockExercisesPresenter.getExercises()) doReturn ResultSuccess(value = EXERCISES)
 
-        viewModel = ExercisesViewModel(mockExercisePresenter)
+        viewModel = ExercisesViewModel(mockExercisesPresenter)
 
         //When, Then
         viewModel.observeStateAndEvents { stateObserver, eventsObserver ->
             viewModel.loadExercises()
             stateObserver.assertObserved(Loading, Loaded(EXERCISES))
         }
-        verify(mockExercisePresenter).getExercises()
+        verify(mockExercisesPresenter).getExercises()
     }
 
     @Test
