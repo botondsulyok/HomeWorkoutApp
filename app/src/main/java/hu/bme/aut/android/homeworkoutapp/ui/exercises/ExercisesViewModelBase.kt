@@ -4,7 +4,7 @@ import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 
 abstract class ExercisesViewModelBase : RainbowCakeViewModel<ExercisesViewState>(Loading) {
-    abstract fun getExercises()
+    abstract fun loadExercises()
 
     abstract fun deleteExercise(exercise: UiExercise)
 

@@ -9,7 +9,7 @@ class TestExercisesViewModel @Inject constructor(
     val exercisesList: List<UiExercise>
 ) : ExercisesViewModelBase() {
 
-    override fun getExercises() {
+    override fun loadExercises() {
         viewState = Loaded(exercisesList)
     }
 

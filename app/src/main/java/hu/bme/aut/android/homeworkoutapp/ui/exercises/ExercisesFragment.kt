@@ -69,7 +69,7 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
             findNavController().navigate(action)
         }
 
-        viewModel.getExercises()
+        viewModel.loadExercises()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
