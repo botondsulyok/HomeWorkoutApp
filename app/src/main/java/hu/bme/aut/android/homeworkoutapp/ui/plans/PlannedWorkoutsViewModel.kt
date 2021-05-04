@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
+import hu.bme.aut.android.homeworkoutapp.ui.ActionFailed
+import hu.bme.aut.android.homeworkoutapp.ui.ActionSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import hu.bme.aut.android.homeworkoutapp.utils.dayMonthYearFormatter
 import hu.bme.aut.android.homeworkoutapp.utils.toDate
@@ -44,7 +46,7 @@ class PlannedWorkoutsViewModel @Inject constructor(
                 plannedWorkoutsFromMonthLiveData.postValue(result.value)
             }
             is ResultFailure -> {
-                viewState = PlannedWorkoutsFailed(result.reason.message.toString())
+                postEvent(ActionFailed(result.reason.message.toString()))
             }
         }
     }
@@ -52,27 +54,29 @@ class PlannedWorkoutsViewModel @Inject constructor(
     override fun addPlannedWorkoutToDate(
         workout: UiWorkout
     ) = execute {
-        viewState = PlannedWorkoutUploading
+        viewState = PlannedWorkoutsLoading
         when(val result = plannedWorkoutsPresenter.addPlannedWorkoutToDate(selectedDate, workout)) {
             is ResultSuccess -> {
-                getPlannedWorkoutsFromDate()
+                postEvent(ActionSuccess("Added"))
             }
             is ResultFailure -> {
-                viewState = PlannedWorkoutUploadFailed(result.reason.message.toString())
+                postEvent(ActionFailed(result.reason.message.toString()))
             }
         }
+        getPlannedWorkoutsFromDate()
     }
 
     override fun deletePlannedWorkoutFromDate(workout: UiWorkout) = execute {
         viewState = PlannedWorkoutsLoading
         when(val result = plannedWorkoutsPresenter.deletePlannedWorkoutFromDate(selectedDate, workout)) {
             is ResultSuccess -> {
-                getPlannedWorkoutsFromDate()
+                postEvent(ActionSuccess("Deleted"))
             }
             is ResultFailure -> {
-                viewState = PlannedWorkoutsFailed(result.reason.message.toString())
+                postEvent(ActionFailed(result.reason.message.toString()))
             }
         }
+        getPlannedWorkoutsFromDate()
     }
 
 

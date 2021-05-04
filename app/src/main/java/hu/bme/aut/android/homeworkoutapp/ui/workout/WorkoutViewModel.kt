@@ -2,6 +2,8 @@ package hu.bme.aut.android.homeworkoutapp.ui.workout
 
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
+import hu.bme.aut.android.homeworkoutapp.ui.ActionFailed
+import hu.bme.aut.android.homeworkoutapp.ui.ActionSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import javax.inject.Inject
 
@@ -19,26 +21,26 @@ class WorkoutViewModel @Inject constructor(
         viewState = Loading
         when(val result = workoutPresenter.deleteWorkoutExercise(workoutId, exercise)) {
             is ResultSuccess -> {
-                getWorkoutExercises()
+                postEvent(ActionSuccess("Deleted"))
             }
             is ResultFailure -> {
-                viewState =
-                    Failed(result.reason.message.toString())
+                postEvent(ActionFailed(result.reason.message.toString()))
             }
         }
+        getWorkoutExercises()
     }
 
     override fun updateWorkoutExercise(exercise: UiExercise) = execute {
         viewState = Loading
         when(val result = workoutPresenter.updateWorkoutExercise(workoutId, exercise)) {
             is ResultSuccess -> {
-                getWorkoutExercises()
+                postEvent(ActionSuccess("Updated"))
             }
             is ResultFailure -> {
-                viewState =
-                    Failed(result.reason.message.toString())
+                postEvent(ActionFailed(result.reason.message.toString()))
             }
         }
+        getWorkoutExercises()
     }
 
     private suspend fun getWorkoutExercises() {

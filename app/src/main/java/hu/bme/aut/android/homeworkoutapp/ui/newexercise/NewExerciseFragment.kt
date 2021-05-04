@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
@@ -19,6 +20,8 @@ import com.bumptech.glide.Glide
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentNewExerciseBinding
+import hu.bme.aut.android.homeworkoutapp.ui.UploadFailed
+import hu.bme.aut.android.homeworkoutapp.ui.UploadSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.newexercise.models.UiNewExercise
 import hu.bme.aut.android.homeworkoutapp.utils.Duration
 import hu.bme.aut.android.homeworkoutapp.utils.hideKeyboard
@@ -157,15 +160,20 @@ class NewExerciseFragment : RainbowCakeFragment<NewExerciseViewState, NewExercis
                 binding.progressBar.visibility = View.VISIBLE
                 binding.btnCreate.visibility = View.INVISIBLE
             }
+        }.exhaustive
+    }
+
+    override fun onEvent(event: OneShotEvent) {
+        when (event) {
             is UploadFailed -> {
-                Toast.makeText(activity, "Upload failed", Toast.LENGTH_LONG).show()
-                viewModel.toInitialState()
+                Toast.makeText(activity, event.message, Toast.LENGTH_LONG).show()
             }
             is UploadSuccess -> {
+                Toast.makeText(activity, event.message, Toast.LENGTH_LONG).show()
                 findNavController().popBackStack()
                 return
             }
-        }.exhaustive
+        }
     }
 
     @NeedsPermission(

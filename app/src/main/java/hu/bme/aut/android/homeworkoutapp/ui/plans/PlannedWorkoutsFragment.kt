@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
@@ -26,6 +27,8 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.*
+import hu.bme.aut.android.homeworkoutapp.ui.ActionFailed
+import hu.bme.aut.android.homeworkoutapp.ui.ActionSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.plans.recyclerview.PlannedWorkoutRecyclerViewAdapter
 import hu.bme.aut.android.homeworkoutapp.ui.workoutpicker.WorkoutPickedListener
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
@@ -85,15 +88,20 @@ class PlannedWorkoutsFragment : RainbowCakeFragment<PlannedWorkoutsViewState, Pl
                 binding.progressBar.visibility = View.GONE
                 Toast.makeText(activity, viewState.message, Toast.LENGTH_LONG).show()
             }
-            is PlannedWorkoutUploading -> {
-                binding.progressBar.visibility = View.VISIBLE
-            }
-            is PlannedWorkoutUploadFailed -> {
-                binding.progressBar.visibility = View.GONE
-                Toast.makeText(activity, viewState.message, Toast.LENGTH_LONG).show()
-            }
         }.exhaustive
+    }
 
+    override fun onEvent(event: OneShotEvent) {
+        when (event) {
+            is ActionFailed -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(activity, event.message, Toast.LENGTH_LONG).show()
+            }
+            is ActionSuccess -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

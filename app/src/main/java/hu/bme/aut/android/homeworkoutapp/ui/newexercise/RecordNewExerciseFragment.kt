@@ -98,6 +98,8 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
 
     }
 
+    // todo laggol a videó
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         fun handleSpeechResult(result: String) {
@@ -247,7 +249,7 @@ class RecordNewExerciseFragment : Fragment(), LifecycleOwner {
     private fun muteAudio(shouldMute: Boolean, context: Context) {
         val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         val muteValue = if (shouldMute) AudioManager.ADJUST_MUTE else AudioManager.ADJUST_UNMUTE
-        audioManager.setStreamVolume(AudioManager.STREAM_RING, muteValue, 0)
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, muteValue, 0)
     }
 
     override fun onDestroy() {

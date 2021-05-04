@@ -11,7 +11,3 @@ object Loading : ExercisesViewState()
 data class Loaded(val exercisesList: List<UiExercise> = listOf()) : ExercisesViewState()
 
 data class Failed(val message: String) : ExercisesViewState()
-
-object Uploading : ExercisesViewState()
-
-object UploadSuccess : ExercisesViewState()

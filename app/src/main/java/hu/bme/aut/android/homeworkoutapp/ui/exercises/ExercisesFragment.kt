@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
@@ -16,6 +17,9 @@ import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.ExercisesRowBinding
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentExercisesBinding
+import hu.bme.aut.android.homeworkoutapp.ui.ActionFailed
+import hu.bme.aut.android.homeworkoutapp.ui.ActionSuccess
+import hu.bme.aut.android.homeworkoutapp.ui.UploadFailed
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.EditExerciseBottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.StartExerciseBottomSheetDialogFragment
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
@@ -91,14 +95,20 @@ class ExercisesFragment : RainbowCakeFragment<ExercisesViewState, ExercisesViewM
                 binding.progressBar.visibility = View.GONE
                 Toast.makeText(activity, viewState.message, Toast.LENGTH_LONG).show()
             }
-            is Uploading -> {
-                binding.progressBar.visibility = View.VISIBLE
-            }
-            is UploadSuccess -> {
-                binding.progressBar.visibility = View.GONE
-                Toast.makeText(requireContext(), "Added", Toast.LENGTH_SHORT).show()
-            }
         }.exhaustive
+    }
+
+    override fun onEvent(event: OneShotEvent) {
+        when (event) {
+            is ActionFailed -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(activity, event.message, Toast.LENGTH_LONG).show()
+            }
+            is ActionSuccess -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onItemLongClick(exerciseRowBinding: ExercisesRowBinding?): Boolean {

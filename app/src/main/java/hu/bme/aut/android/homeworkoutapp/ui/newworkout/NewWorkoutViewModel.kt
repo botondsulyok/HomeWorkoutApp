@@ -3,6 +3,8 @@ package hu.bme.aut.android.homeworkoutapp.ui.newworkout
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
+import hu.bme.aut.android.homeworkoutapp.ui.UploadFailed
+import hu.bme.aut.android.homeworkoutapp.ui.UploadSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.newworkout.models.UiNewWorkout
 import javax.inject.Inject
 
@@ -12,19 +14,15 @@ class NewWorkoutViewModel @Inject constructor(
 
     override fun addWorkout(workout: UiNewWorkout) = execute {
         viewState = Uploading
-        val result = newWorkoutPresenter.addWorkout(workout)
-        viewState = when(result) {
+        when(val result = newWorkoutPresenter.addWorkout(workout)) {
             is ResultSuccess -> {
-                UploadSuccess
+                postEvent(UploadSuccess("Created"))
             }
             is ResultFailure -> {
-                UploadFailed(result.reason.message.toString())
+                postEvent(UploadFailed("Upload failed: ${result.reason.message.toString()}"))
+                viewState = Initial
             }
         }
-    }
-
-    override fun toInitialState() {
-        viewState = Initial
     }
 
 }

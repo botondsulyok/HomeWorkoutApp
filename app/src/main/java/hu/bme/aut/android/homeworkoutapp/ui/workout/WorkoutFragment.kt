@@ -9,12 +9,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
 import hu.bme.aut.android.homeworkoutapp.MainActivity
 import hu.bme.aut.android.homeworkoutapp.R
 import hu.bme.aut.android.homeworkoutapp.databinding.FragmentWorkoutBinding
+import hu.bme.aut.android.homeworkoutapp.ui.ActionFailed
+import hu.bme.aut.android.homeworkoutapp.ui.ActionSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.doingexercise.DoingExerciseFragmentDirections
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.ExerciseListener
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.dialogfragments.EditExerciseBottomSheetDialogFragment
@@ -107,6 +110,21 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModelBa
             }
         }.exhaustive
     }
+
+    override fun onEvent(event: OneShotEvent) {
+        when (event) {
+            is ActionFailed -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(activity, event.message, Toast.LENGTH_LONG).show()
+            }
+            is ActionSuccess -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

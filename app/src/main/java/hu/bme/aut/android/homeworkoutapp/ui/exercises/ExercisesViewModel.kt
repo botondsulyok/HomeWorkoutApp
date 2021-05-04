@@ -3,6 +3,8 @@ package hu.bme.aut.android.homeworkoutapp.ui.exercises
 import android.util.Log
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
+import hu.bme.aut.android.homeworkoutapp.ui.ActionFailed
+import hu.bme.aut.android.homeworkoutapp.ui.ActionSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.exercises.models.UiExercise
 import javax.inject.Inject
 
@@ -18,41 +20,38 @@ class ExercisesViewModel @Inject constructor(
         viewState = Loading
         when(val result = exercisesPresenter.deleteExercise(exercise)) {
             is ResultSuccess -> {
-                getExercises()
+                postEvent(ActionSuccess("Deleted"))
             }
             is ResultFailure -> {
-                viewState = Failed(result.reason.message.toString())
+                postEvent(ActionFailed(result.reason.message.toString()))
             }
         }
+        getExercises()
     }
 
     override fun updateExercise(exercise: UiExercise) = execute {
         viewState = Loading
         when(val result = exercisesPresenter.updateExercise(exercise)) {
             is ResultSuccess -> {
-                getExercises()
+                postEvent(ActionSuccess("Updated"))
             }
             is ResultFailure -> {
-                viewState = Failed(result.reason.message.toString())
+                postEvent(ActionFailed(result.reason.message.toString()))
             }
         }
+        getExercises()
     }
 
     override fun addExerciseToWorkout(
         exercise: UiExercise,
         workoutId: String
     ) = execute {
-
-        Log.i("asd", "asd")
-
-        viewState = Uploading
-        val result = exercisesPresenter.addExerciseToWorkout(exercise, workoutId)
-        viewState = when(result) {
+        when(val result = exercisesPresenter.addExerciseToWorkout(exercise, workoutId)) {
             is ResultSuccess -> {
-                UploadSuccess
+                postEvent(ActionSuccess("Added"))
             }
             is ResultFailure -> {
-                Failed(result.reason.message.toString())
+                postEvent(ActionFailed(result.reason.message.toString()))
             }
         }
     }

@@ -2,6 +2,8 @@ package hu.bme.aut.android.homeworkoutapp.ui.workouts
 
 import hu.bme.aut.android.homeworkoutapp.data.ResultFailure
 import hu.bme.aut.android.homeworkoutapp.data.ResultSuccess
+import hu.bme.aut.android.homeworkoutapp.ui.ActionFailed
+import hu.bme.aut.android.homeworkoutapp.ui.ActionSuccess
 import hu.bme.aut.android.homeworkoutapp.ui.workouts.models.UiWorkout
 import javax.inject.Inject
 
@@ -17,12 +19,13 @@ class WorkoutsViewModel @Inject constructor(
         viewState = Loading
         when(val result = workoutsPresenter.deleteWorkout(workout)) {
             is ResultSuccess -> {
-                getWorkouts()
+                postEvent(ActionSuccess("Deleted"))
             }
             is ResultFailure -> {
-                viewState = Failed(result.reason.message.toString())
+                postEvent(ActionFailed(result.reason.message.toString()))
             }
         }
+        getWorkouts()
     }
 
     private suspend fun getWorkouts() {

@@ -6,7 +6,3 @@ object Initial : NewWorkoutViewState()
 
 object Uploading : NewWorkoutViewState()
 
-data class UploadFailed(val message: String) : NewWorkoutViewState()
-
-object UploadSuccess : NewWorkoutViewState()
-
