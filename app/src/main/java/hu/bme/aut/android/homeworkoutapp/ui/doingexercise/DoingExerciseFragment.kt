@@ -105,7 +105,6 @@ class DoingExerciseFragment :
                 player?.playWhenReady = false
                 initializePlayer()
                 binding.motionLayoutDoingExercise.transitionToState(R.id.doingExerciseReady)
-                // todo transitionlistener vagy valami, mert nem szép a visszaszámláló
                 binding.pulseCountDownDoingExercise.start {
                     textToSpeech?.speak("Go!", TextToSpeech.QUEUE_FLUSH, null, null)
                     binding.motionLayoutDoingExercise.apply {

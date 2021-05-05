@@ -91,11 +91,17 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModelBa
             }
         }
 
+        binding.btnAddSomeExercises.setOnClickListener {
+            val action = DoingExerciseFragmentDirections.actionGlobalNavigationExercises()
+            findNavController().navigate(action)
+        }
+
         viewModel.loadWorkoutExercises()
 
     }
 
     override fun render(viewState: WorkoutViewState) {
+        binding.workoutNoExercises.visibility = View.GONE
         when(viewState) {
             is Loading -> {
                 binding.progressBar.visibility = View.VISIBLE
@@ -103,6 +109,12 @@ class WorkoutFragment : RainbowCakeFragment<WorkoutViewState, WorkoutViewModelBa
             is Loaded -> {
                 binding.progressBar.visibility = View.GONE
                 recyclerViewAdapter.submitList(viewState.exercisesList)
+                if(viewState.exercisesList.isEmpty()) {
+                    binding.workoutNoExercises.visibility = View.VISIBLE
+                }
+                else {
+                    binding.workoutNoExercises.visibility = View.GONE
+                }
             }
             is Failed -> {
                 binding.progressBar.visibility = View.GONE
