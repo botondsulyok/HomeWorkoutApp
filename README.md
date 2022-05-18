@@ -1,2 +1,2 @@
 # HomeWorkoutApp
- Önálló labor feladat.
+ An application to help people who do their workouts at home.
